@@ -687,424 +687,239 @@
     <script>
         let currentProject = {
             name: '',
-            budget: 0,
+            budget: '',
             urgency: '',
             category: '',
             vendorType: '',
-            description: ''
+            description: '',
+            method: ''
         };
 
-        let procurementMethods = {
-            'เฉพาะเจาะจง': {
-                name: 'เฉพาะเจาะจง',
-                budgetMin: 0,
-                budgetMax: 500000,
-                timeFrame: '15-30 วัน',
-                description: 'สำหรับพัสดุที่มีผู้ขายจำกัดหรือต้องการคุณสมบัติเฉพาะ',
-                suitable: ['specialized', 'limited', 'single'],
-                urgency: ['high', 'medium']
+        const procurementMethods = [
+            {
+                name: "วิธีเฉพาะเจาะจง",
+                id: "specific",
+                description: "สำหรับกรณีเร่งด่วน ซับซ้อน หรือผู้ขายรายเดียว",
+                budgetRange: "ไม่เกิน 500,000 บาท",
+                timeFrame: "สั้น (1-7 วัน)",
+                suitability: {
+                    urgency: ["สูงมาก", "สูง"],
+                    budget: ["ต่ำ", "ปานกลาง"],
+                    complexity: ["สูง"],
+                    vendorType: ["ผู้ผลิต/ตัวแทนจำหน่ายโดยตรง", "ผู้ให้บริการเฉพาะทาง"]
+                }
             },
-            'สืบราคา': {
-                name: 'สืบราคา',
-                budgetMin: 0,
-                budgetMax: 100000,
-                timeFrame: '7-15 วัน',
-                description: 'สำหรับพัสดุทั่วไปที่มีผู้ขายหลายราย',
-                suitable: ['general'],
-                urgency: ['high', 'medium', 'low']
+            {
+                name: "วิธีคัดเลือก",
+                id: "selection",
+                description: "เมื่อต้องการคุณภาพหรือเทคนิคพิเศษจากผู้ขายที่ผ่านเกณฑ์",
+                budgetRange: "ไม่มีวงเงินจำกัด",
+                timeFrame: "ปานกลาง (14-30 วัน)",
+                suitability: {
+                    urgency: ["ปานกลาง"],
+                    budget: ["ปานกลาง", "สูง"],
+                    complexity: ["ปานกลาง", "สูง"],
+                    vendorType: ["ผู้ผลิต/ตัวแทนจำหน่ายโดยตรง", "ผู้ให้บริการเฉพาะทาง", "ทั่วไป"]
+                }
             },
-            'คัดเลือก': {
-                name: 'คัดเลือก',
-                budgetMin: 100000,
-                budgetMax: 2000000,
-                timeFrame: '30-45 วัน',
-                description: 'สำหรับโครงการขนาดกลางที่ต้องการเปรียบเทียบอย่างละเอียด',
-                suitable: ['general', 'specialized'],
-                urgency: ['medium', 'low']
+            {
+                name: "วิธีประกวดราคาอิเล็กทรอนิกส์ (e-bidding)",
+                id: "ebidding",
+                description: "สำหรับจัดซื้อจัดจ้างทั่วไป โปร่งใส แข่งขันสูง",
+                budgetRange: "เกิน 500,000 บาท",
+                timeFrame: "ยาว (30-60 วัน)",
+                suitability: {
+                    urgency: ["ต่ำ"],
+                    budget: ["สูง"],
+                    complexity: ["ต่ำ", "ปานกลาง"],
+                    vendorType: ["ทั่วไป"]
+                }
             },
-            'ประกวดราคา': {
-                name: 'ประกวดราคา',
-                budgetMin: 2000000,
-                budgetMax: 50000000,
-                timeFrame: '45-60 วัน',
-                description: 'สำหรับโครงการขนาดใหญ่ที่ต้องการความโปร่งใส',
-                suitable: ['general', 'specialized'],
-                urgency: ['low']
+            {
+                name: "วิธีประกาศเชิญชวนทั่วไป",
+                id: "general_invitation",
+                description: "เทียบเท่า e-bidding แต่ใช้สำหรับงานก่อสร้างที่มีคุณลักษณะเฉพาะซับซ้อน",
+                budgetRange: "เกิน 500,000 บาท",
+                timeFrame: "ยาว (30-60 วัน)",
+                suitability: {
+                    urgency: ["ต่ำ"],
+                    budget: ["สูง"],
+                    complexity: ["สูง"],
+                    vendorType: ["ผู้รับเหมา"]
+                }
             },
-            'e-bidding': {
-                name: 'e-bidding',
-                budgetMin: 500000,
-                budgetMax: 999999999,
-                timeFrame: '30-45 วัน',
-                description: 'ระบบประมูลอิเล็กทรอนิกส์ สำหรับโครงการที่ต้องการความโปร่งใส',
-                suitable: ['general', 'specialized'],
-                urgency: ['medium', 'low']
-            },
-            'e-market': {
-                name: 'e-market',
-                budgetMin: 0,
-                budgetMax: 200000,
-                timeFrame: '7-14 วัน',
-                description: 'ซื้อผ่านตลาดกลางอิเล็กทรอนิกส์ รวดเร็วและสะดวก',
-                suitable: ['general'],
-                urgency: ['high', 'medium']
+            {
+                name: "วิธีตลาดอิเล็กทรอนิกส์ (e-market)",
+                id: "emarket",
+                description: "เหมาะสำหรับสินค้าที่มีมาตรฐาน ซับซ้อนน้อย",
+                budgetRange: "เกิน 100,000 บาท",
+                timeFrame: "สั้น (7-14 วัน)",
+                suitability: {
+                    urgency: ["ปานกลาง", "สูง"],
+                    budget: ["ต่ำ", "ปานกลาง"],
+                    complexity: ["ต่ำ"],
+                    vendorType: ["ทั่วไป"]
+                }
             }
-        };
+        ];
+
+        function showNotification(message) {
+            // Placeholder for a nicer notification system
+            alert(message);
+        }
 
         function analyzeProject() {
-            // Get form values
-            currentProject.name = document.getElementById('projectName').value;
-            currentProject.budget = parseInt(document.getElementById('budget').value) || 0;
-            currentProject.urgency = document.getElementById('urgency').value;
-            currentProject.category = document.getElementById('category').value;
-            currentProject.vendorType = document.getElementById('vendorType').value;
-            currentProject.description = document.getElementById('description').value;
+            const name = document.getElementById('projectName').value;
+            const budget = parseFloat(document.getElementById('budget').value);
+            const urgency = document.getElementById('urgency').value;
+            const category = document.getElementById('category').value;
+            const vendorType = document.getElementById('vendorType').value;
+            const description = document.getElementById('description').value;
 
-            // Check if minimum required fields are filled
-            if (currentProject.name && currentProject.budget > 0 && currentProject.urgency && currentProject.category && currentProject.vendorType) {
-                showAnalyzing();
-                setTimeout(() => {
-                    generateRecommendations();
-                }, 1500);
-            } else {
-                hideRecommendations();
+            // Update current project data
+            currentProject = { name, budget, urgency, category, vendorType, description };
+
+            if (!name || isNaN(budget) || !urgency || !category || !vendorType) {
+                showNotification('กรุณากรอกข้อมูลโครงการให้ครบถ้วนเพื่อรับคำแนะนำ 💡');
+                document.getElementById('recommendationResult').style.display = 'none';
+                return;
             }
 
-            // Update continue button state
-            updateContinueButton();
-        }
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('recommendationResult').style.display = 'none';
+            document.getElementById('methodCardsContainer').innerHTML = ''; // Clear previous cards
 
-        function showAnalyzing() {
-            const section = document.getElementById('methodSection');
-            const status = document.getElementById('recommendationStatus');
-            
-            section.style.display = 'block';
-            status.className = 'recommendation-status analyzing';
-            status.innerHTML = '<div class="loading-spinner"></div><span>🔍 กำลังวิเคราะห์ข้อมูล...</span>';
-        }
+            // Simulate AI analysis delay
+            setTimeout(() => {
+                let recommendedMethod = '';
+                let displayMethodName = 'ไม่สามารถระบุได้';
+                let suitableMethods = [];
 
-        function hideRecommendations() {
-            const section = document.getElementById('methodSection');
-            const status = document.getElementById('recommendationStatus');
-            
-            section.style.display = 'none';
-            status.className = 'recommendation-status';
-            status.innerHTML = '<span>💡</span><span>กรอกข้อมูลโครงการเพื่อให้ระบบวิเคราะห์วิธีการจัดซื้อที่เหมาะสม</span>';
-            
-            document.getElementById('recommendations').style.display = 'none';
-            document.getElementById('explanation').style.display = 'none';
-        }
+                procurementMethods.forEach(method => {
+                    let score = 0;
+                    // Urgency
+                    if (method.suitability.urgency && method.suitability.urgency.includes(urgency)) {
+                        score += 1;
+                    }
+                    // Budget
+                    if (method.suitability.budget) {
+                        if (method.id === "specific" && budget <= 500000) score += 1;
+                        if ((method.id === "ebidding" || method.id === "general_invitation") && budget > 500000) score += 1;
+                        if (method.id === "emarket" && budget > 100000) score += 1;
+                    }
+                    // Vendor Type
+                    if (method.suitability.vendorType && method.suitability.vendorType.includes(vendorType)) {
+                        score += 1;
+                    }
+                    // Category (simple matching for now, can be expanded)
+                    if (category.includes('ก่อสร้าง') && method.id === 'general_invitation') score += 1;
+                    if (category.includes('สินค้า') && (method.id === 'ebidding' || method.id === 'emarket' || method.id === 'specific')) score += 1;
+                    if (category.includes('บริการ') && (method.id === 'ebidding' || method.id === 'selection' || method.id === 'specific')) score += 1;
 
-        function generateRecommendations() {
-            const recommendations = [];
-            
-            // Analyze each method
-            for (const [key, method] of Object.entries(procurementMethods)) {
-                let score = 0;
-                let reasons = [];
-
-                // Budget suitability
-                if (currentProject.budget >= method.budgetMin && currentProject.budget <= method.budgetMax) {
-                    score += 40;
-                    reasons.push(`เหมาะสมกับงบประมาณ ${currentProject.budget.toLocaleString()} บาท`);
-                }
-
-                // Vendor type suitability
-                if (method.suitable.includes(currentProject.vendorType)) {
-                    score += 30;
-                    reasons.push(`เหมาะสมกับลักษณะผู้ขาย`);
-                }
-
-                // Urgency suitability
-                if (method.urgency.includes(currentProject.urgency)) {
-                    score += 30;
-                    reasons.push(`เหมาะสมกับระดับความเร่งด่วน`);
-                }
-
-                recommendations.push({
-                    method: method,
-                    score: score,
-                    reasons: reasons
+                    if (score >= 2) { // Adjust threshold as needed
+                        suitableMethods.push({ method: method, score: score });
+                    }
                 });
-            }
 
-            // Sort by score
-            recommendations.sort((a, b) => b.score - a.score);
+                // Sort by score descending
+                suitableMethods.sort((a, b) => b.score - a.score);
 
-            // Display recommendations
-            displayRecommendations(recommendations);
+                if (suitableMethods.length > 0) {
+                    recommendedMethod = suitableMethods[0].method.id;
+                    displayMethodName = suitableMethods[0].method.name;
 
-            // Show status as ready
-            const status = document.getElementById('recommendationStatus');
-            status.className = 'recommendation-status ready';
-            status.innerHTML = '<span>✅</span><span>วิเคราะห์เสร็จสิ้น - แนะนำวิธีการจัดซื้อแล้ว</span>';
-
-            // Update progress bar
-            const progressBar = document.querySelector('.progress-bar');
-            progressBar.style.width = '60%';
-        }
-
-        function displayRecommendations(recommendations) {
-            const container = document.getElementById('recommendations');
-            const explanation = document.getElementById('explanation');
-            
-            container.innerHTML = '';
-            
-            // Show only top 3 recommendations
-            const topRecommendations = recommendations.slice(0, 3);
-            
-            topRecommendations.forEach((rec, index) => {
-                let badgeClass = 'badge-suitable';
-                let badgeText = 'เหมาะสม';
-
-                // Only the first (highest scoring) gets "แนะนำ" badge
-                if (index === 0 && rec.score >= 70) {
-                    badgeClass = 'badge-recommended';
-                    badgeText = 'แนะนำ';
+                    suitableMethods.forEach(item => {
+                        createMethodCard(item.method, item.method.id === recommendedMethod);
+                    });
+                    document.getElementById('recommendedMethodContainer').style.display = 'block';
+                } else {
+                    displayMethodName = 'ไม่มีวิธีที่แนะนำ';
+                    document.getElementById('recommendedMethodContainer').style.display = 'none';
                 }
 
-                const card = document.createElement('div');
-                card.className = 'method-card';
-                card.innerHTML = `
-                    <div class="method-header">
-                        <div class="method-name">${rec.method.name}</div>
-                        <div class="method-badge ${badgeClass}">${badgeText}</div>
-                    </div>
-                    <div class="method-description">${rec.method.description}</div>
-                    <div class="method-details">
-                        <div class="method-budget">
-                            <span>💰</span>
-                            <span>฿${rec.method.budgetMin.toLocaleString()} - ฿${rec.method.budgetMax.toLocaleString()}</span>
-                        </div>
-                        <div class="method-time">
-                            <span>⏱️</span>
-                            <span>${rec.method.timeFrame}</span>
-                        </div>
-                    </div>
-                `;
-                
-                card.onclick = () => selectMethod(rec.method, card);
-                container.appendChild(card);
-            });
+                currentProject.method = recommendedMethod; // Save the recommended method ID
 
-            // Show explanation for top recommendation
-            const topRec = topRecommendations[0];
-            if (topRec && topRec.score >= 70) {
-                document.getElementById('explanationText').textContent = 
-                    `แนะนำวิธี "${topRec.method.name}" เพราะ ${topRec.reasons.join(', ')}. ระยะเวลาดำเนินการประมาณ ${topRec.method.timeFrame}`;
-                explanation.style.display = 'block';
-            } else {
-                explanation.style.display = 'none';
-            }
+                document.getElementById('displayProjectName').textContent = name;
+                document.getElementById('displayBudget').textContent = budget.toLocaleString() + ' บาท';
+                document.getElementById('displayUrgency').textContent = urgency;
+                document.getElementById('displayCategory').textContent = category;
+                document.getElementById('displayVendorType').textContent = vendorType;
+                document.getElementById('displayRecommendedMethod').textContent = displayMethodName;
+                document.getElementById('displayDescription').textContent = description || 'ไม่มี';
 
-            container.style.display = 'grid';
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('recommendationResult').style.display = 'block';
+            }, 1500); // 1.5 second delay
         }
 
-        function selectMethod(method, selectedCard) {
-            // Store selected method
-            currentProject.selectedMethod = method.name;
-            
-            // Visual feedback - remove previous selection
+        function createMethodCard(method, isRecommended) {
+            const container = document.getElementById('methodCardsContainer');
+            const card = document.createElement('div');
+            card.className = `method-card ${isRecommended ? 'method-selected' : ''}`;
+            card.onclick = () => selectMethod(method.id);
+
+            card.innerHTML = `
+                <div class="method-header">
+                    <div class="method-name">${method.name}</div>
+                    ${isRecommended ? '<span class="method-badge badge-recommended">แนะนำ</span>' : ''}
+                </div>
+                <div class="method-description">${method.description}</div>
+                <div class="method-details">
+                    <div class="method-budget">
+                        งบประมาณ: ${method.budgetRange}
+                    </div>
+                    <div class="method-time">
+                        ระยะเวลา: ${method.timeFrame}
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        }
+
+        function selectMethod(methodId) {
+            currentProject.method = methodId; // Update the selected method
             const cards = document.querySelectorAll('.method-card');
             cards.forEach(card => {
                 card.classList.remove('method-selected');
+                // Remove the "แนะนำ" badge if it exists
+                const recommendedBadge = card.querySelector('.badge-recommended');
+                if (recommendedBadge) {
+                    recommendedBadge.remove();
+                }
             });
-            
-            // Add selection to clicked card
-            selectedCard.classList.add('method-selected');
 
-            // Enable continue button
-            document.getElementById('continueBtn').disabled = false;
-            
-            // Update progress bar
-            const progressBar = document.querySelector('.progress-bar');
-            progressBar.style.width = '100%';
-            
-            // Show notification
-            showNotification(`✅ เลือกวิธี "${method.name}" แล้ว`);
-        }
-
-        function updateContinueButton() {
-            const btn = document.getElementById('continueBtn');
-            const hasRequiredFields = currentProject.name && currentProject.budget > 0 && 
-                                    currentProject.urgency && currentProject.category && 
-                                    currentProject.vendorType;
-            
-            if (hasRequiredFields && currentProject.selectedMethod) {
-                btn.disabled = false;
-                btn.style.opacity = '1';
-            } else {
-                btn.disabled = true;
-                btn.style.opacity = '0.5';
+            const selectedMethod = procurementMethods.find(m => m.id === methodId);
+            if (selectedMethod) {
+                const selectedCard = document.querySelector(`.method-card[onclick*='${methodId}']`);
+                if (selectedCard) {
+                    selectedCard.classList.add('method-selected');
+                    // Add "เลือกแล้ว" badge
+                    const badge = document.createElement('span');
+                    badge.className = 'method-badge badge-suitable';
+                    badge.textContent = 'เลือกแล้ว';
+                    selectedCard.querySelector('.method-header').appendChild(badge);
+                }
+                document.getElementById('displayRecommendedMethod').textContent = selectedMethod.name;
+                showNotification(`💡 คุณเลือกวิธีการจัดซื้อ: ${selectedMethod.name}`);
             }
         }
+
 
         function saveDraft() {
-            // Save to localStorage (in real app, this would be sent to server)
             localStorage.setItem('procurementDraft', JSON.stringify(currentProject));
-            showNotification('💾 บันทึกร่างเรียบร้อยแล้ว');
+            showNotification('✅ ร่างถูกบันทึกอัตโนมัติแล้ว');
         }
 
-        function previewRequest() {
-            if (!currentProject.name || !currentProject.budget) {
-                showNotification('⚠️ กรุณากรอกข้อมูลโครงการก่อน');
-                return;
-            }
-
-            // Create preview modal
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.5);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 1000;
-            `;
-
-            const content = document.createElement('div');
-            content.style.cssText = `
-                background: white;
-                padding: 32px;
-                border-radius: 16px;
-                max-width: 600px;
-                width: 90%;
-                max-height: 80vh;
-                overflow-y: auto;
-            `;
-
-            content.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                    <h2 style="margin: 0; color: #1e293b;">👁️ ตัวอย่างคำขอจัดซื้อ</h2>
-                    <button onclick="this.closest('div').remove()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #64748b;">×</button>
-                </div>
-                
-                <div style="background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 16px;">
-                    <h3 style="margin: 0 0 12px 0; color: #1e293b;">📋 ข้อมูลโครงการ</h3>
-                    <p><strong>ชื่อโครงการ:</strong> ${currentProject.name}</p>
-                    <p><strong>วงเงิน:</strong> ${currentProject.budget.toLocaleString()} บาท</p>
-                    <p><strong>ความเร่งด่วน:</strong> ${getUrgencyText(currentProject.urgency)}</p>
-                    <p><strong>ประเภท:</strong> ${getCategoryText(currentProject.category)}</p>
-                    <p><strong>ลักษณะผู้ขาย:</strong> ${getVendorTypeText(currentProject.vendorType)}</p>
-                    ${currentProject.selectedMethod ? `<p><strong>วิธีการจัดซื้อ:</strong> ${currentProject.selectedMethod}</p>` : ''}
-                </div>
-
-                ${currentProject.description ? `
-                <div style="background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 16px;">
-                    <h3 style="margin: 0 0 12px 0; color: #1e293b;">📝 รายละเอียด</h3>
-                    <p style="white-space: pre-wrap;">${currentProject.description}</p>
-                </div>
-                ` : ''}
-
-                <div style="display: flex; gap: 12px; justify-content: flex-end;">
-                    <button onclick="this.closest('div').remove()" style="padding: 8px 16px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer;">ปิด</button>
-                </div>
-            `;
-
-            modal.appendChild(content);
-            document.body.appendChild(modal);
-
-            // Close on backdrop click
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.remove();
-                }
-            });
-        }
-
-        function continueToNext() {
-            if (!currentProject.selectedMethod) {
-                showNotification('⚠️ กรุณาเลือกวิธีการจัดซื้อก่อน');
-                return;
-            }
-
-            // Save progress
+        function nextStep() {
+            // Save current project data to localStorage
             saveDraft();
-            
-            // Show next step simulation
-            showNotification('🎉 ดำเนินการต่อไปขั้นตอน "การสร้างเอกสาร" กำลังโหลด...');
-            
-            // Simulate loading next page
-            setTimeout(() => {
-                // In real app, this would navigate to next page
-                window.location.href = 'upload_documents.html?' + queryString;
-            }, 1500);
+
+            // Redirect to upload_documents.html with project data
+            const projectData = currentProject;
+            const queryString = new URLSearchParams(projectData).toString();
+            window.location.href = 'upload_documents.html?' + queryString; // <--- แก้ไขตรงนี้
         }
 
-        function getUrgencyText(urgency) {
-            const texts = {
-                'low': 'ไม่เร่งด่วน (มากกว่า 3 เดือน)',
-                'medium': 'ปานกลาง (1-3 เดือน)',
-                'high': 'เร่งด่วน (น้อยกว่า 1 เดือน)'
-            };
-            return texts[urgency] || urgency;
-        }
-
-        function getCategoryText(category) {
-            const texts = {
-                'goods': 'พัสดุ (สินค้า)',
-                'services': 'งานบริการ',
-                'construction': 'งานก่อสร้าง',
-                'consulting': 'งานที่ปรึกษา'
-            };
-            return texts[category] || category;
-        }
-
-        function getVendorTypeText(vendorType) {
-            const texts = {
-                'general': 'ผู้ขายทั่วไป',
-                'specialized': 'ผู้ขายเฉพาะทาง',
-                'limited': 'ผู้ขายจำกัด',
-                'single': 'ผู้ขายรายเดียว'
-            };
-            return texts[vendorType] || vendorType;
-        }
-
-        function showNotification(message) {
-            // Create notification element
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: #10b981;
-                color: white;
-                padding: 16px 24px;
-                border-radius: 12px;
-                font-size: 14px;
-                font-weight: 600;
-                z-index: 1000;
-                box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-                animation: slideIn 0.3s ease-out;
-            `;
-
-            // Add animation
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes slideIn {
-                    from { transform: translateX(100%); opacity: 0; }
-                    to { transform: translateX(0); opacity: 1; }
-                }
-            `;
-            document.head.appendChild(style);
-
-            notification.textContent = message;
-            document.body.appendChild(notification);
-
-            // Remove after 3 seconds
-            setTimeout(() => {
-                notification.style.animation = 'slideIn 0.3s ease-out reverse';
-                setTimeout(() => {
-                    notification.remove();
-                }, 300);
-            }, 3000);
-        }
-
-        // Load draft on page load
         document.addEventListener('DOMContentLoaded', function() {
             const draft = localStorage.getItem('procurementDraft');
             if (draft) {
