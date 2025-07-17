@@ -1031,7 +1031,7 @@
             // Simulate loading next page
             setTimeout(() => {
                 // In real app, this would navigate to next page
-                window.location.href = `create-documents.html?method=${encodeURIComponent(currentProject.selectedMethod)}`;
+                window.location.href = 'upload_documents.html?' + queryString;
             }, 1500);
         }
 
