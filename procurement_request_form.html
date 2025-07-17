@@ -47,265 +47,191 @@
         .logo {
             width: 48px;
             height: 48px;
-            background: #4f46e5;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
             color: white;
-            font-size: 24px;
+            font-weight: 700;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
-        .app-name {
+        .logo-text h1 {
             font-size: 24px;
             font-weight: 700;
             color: #1e293b;
+            margin: 0;
         }
 
-        .nav-links a {
-            color: #475569;
+        .logo-text p {
+            font-size: 14px;
+            color: #64748b;
+            margin: 0;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .breadcrumb a {
+            color: #3b82f6;
             text-decoration: none;
-            margin-left: 24px;
-            font-weight: 500;
-            transition: color 0.3s ease;
         }
 
-        .nav-links a:hover {
-            color: #1e293b;
+        .breadcrumb a:hover {
+            text-decoration: underline;
         }
 
         /* Main Content */
         .main-content {
-            padding: 48px 0;
+            padding: 32px 0;
         }
 
-        .form-section, .recommendation-section {
-            background: white;
-            padding: 32px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
             margin-bottom: 32px;
         }
 
-        h2 {
+        .page-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
             font-size: 28px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 700;
             color: #1e293b;
-            margin-bottom: 24px;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 16px;
+            margin-bottom: 4px;
+        }
+
+        .page-title p {
+            font-size: 16px;
+            color: #64748b;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 32px;
+        }
+
+        .main-form {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .form-header {
+            background: #f8fafc;
+            padding: 24px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .form-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .form-body {
+            padding: 32px;
         }
 
         .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #334155;
-        }
-
-        .form-group input[type="text"],
-        .form-group input[type="number"],
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 16px;
-            color: #1e293b;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .form-group input[type="text"]:focus,
-        .form-group input[type="number"]:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-            outline: none;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 90px;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 16px;
-            margin-top: 32px;
-            justify-content: flex-end;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .btn-primary {
-            background-color: #4f46e5;
-            color: white;
-            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.2);
-        }
-
-        .btn-primary:hover {
-            background-color: #4338ca;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-        }
-
-        .btn-secondary {
-            background-color: #e2e8f0;
-            color: #334155;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .btn-secondary:hover {
-            background-color: #cbd5e1;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Recommendation Section */
-        .recommendation-result {
-            margin-top: 24px;
-            padding-top: 24px;
-            border-top: 1px solid #e2e8f0;
-            display: none; /* Hidden by default */
-        }
-
-        .recommendation-result h3 {
-            font-size: 22px;
-            color: #1e293b;
-            margin-bottom: 20px;
-        }
-
-        .project-summary {
-            background-color: #f0f4f8;
-            padding: 20px;
-            border-radius: 8px;
             margin-bottom: 24px;
         }
 
-        .project-summary .info-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px dashed #cbd5e1;
-        }
-
-        .project-summary .info-item:last-child {
-            border-bottom: none;
-        }
-
-        .project-summary .info-item span:first-child {
-            font-weight: 600;
-            color: #475569;
-        }
-
-        .project-summary .info-item span:last-child {
-            color: #1e293b;
-            text-align: right;
-            flex-grow: 1; /* Allow to take available space */
-            word-break: break-word; /* Break long words */
-            padding-left: 10px; /* Add some padding if text is too close */
-        }
-
-        .method-cards-container {
+        .form-group.half {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
         }
 
-        .method-card {
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .method-card:hover {
-            border-color: #4f46e5;
-            box-shadow: 0 4px 16px rgba(79, 70, 229, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .method-card.method-selected {
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
-            background-color: #eff6ff; /* Light blue background for selected */
-        }
-
-        .method-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .method-name {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1e293b;
-        }
-
-        .method-badge {
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 13px;
+        .form-label {
+            display: block;
             font-weight: 600;
-        }
-
-        .badge-recommended {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-
-        .badge-suitable {
-            background-color: #bfdbfe;
-            color: #1d4ed8;
-        }
-
-        .method-description {
-            font-size: 15px;
-            color: #475569;
-            margin-bottom: 16px;
-        }
-
-        .method-details {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            color: #374151;
+            margin-bottom: 8px;
             font-size: 14px;
-            color: #475569;
         }
 
-        .method-budget, .method-time {
-            font-weight: 500;
+        .required {
+            color: #ef4444;
         }
 
-        /* Loading Spinner */
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        /* AI Recommendation Panel - Remove all AI-related styles */
+
         .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #4f46e5;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #e2e8f0;
+            border-top: 2px solid #3b82f6;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
             animation: spin 1s linear infinite;
-            margin: 20px auto;
-            display: none; /* Hidden by default */
         }
 
         @keyframes spin {
@@ -313,399 +239,861 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Notification */
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-            z-index: 1000;
-        }
-        .notification.show {
-            opacity: 1;
+        .method-recommendations {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
         }
 
-        /* Footer */
-        .footer {
-            text-align: center;
+        .method-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
             padding: 24px;
-            color: #64748b;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: white;
+            height: 220px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .method-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .method-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .method-name {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 18px;
+            line-height: 1.2;
+            max-width: 70%;
+        }
+
+        .method-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            white-space: nowrap;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .badge-recommended {
+            background: #10b981;
+            color: white;
+        }
+
+        .badge-suitable {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .method-description {
             font-size: 14px;
+            color: #64748b;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .method-details {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .method-budget {
+            color: #059669;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .method-time {
+            color: #7c3aed;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .method-selected {
+            background: #10b981 !important;
+            color: white !important;
+            border-color: #10b981 !important;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .method-selected .method-name,
+        .method-selected .method-description,
+        .method-selected .method-budget,
+        .method-selected .method-time {
+            color: white !important;
+        }
+
+        .method-selected .method-badge {
+            background: rgba(255, 255, 255, 0.2) !important;
+            color: white !important;
+        }
+
+        /* Responsive for method cards */
+        @media (max-width: 1024px) {
+            .method-recommendations {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+            
+            .method-card {
+                height: 200px;
+                padding: 20px;
+            }
+            
+            .method-name {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .method-recommendations {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .method-card {
+                height: 180px;
+                padding: 20px;
+            }
+            
+            .method-name {
+                font-size: 16px;
+                max-width: 60%;
+            }
+            
+            .method-badge {
+                font-size: 11px;
+                padding: 4px 8px;
+                min-width: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .method-recommendations {
+                gap: 12px;
+            }
+            
+            .method-card {
+                height: 160px;
+                padding: 16px;
+            }
+            
+            .method-name {
+                font-size: 15px;
+            }
+            
+            .method-description {
+                font-size: 13px;
+            }
+            
+            .method-budget,
+            .method-time {
+                font-size: 13px;
+            }
+        }
+
+        .ai-explanation {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .ai-explanation h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .ai-explanation p {
+            font-size: 12px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            padding: 24px 32px;
+            background: #f8fafc;
             border-top: 1px solid #e2e8f0;
-            margin-top: 48px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+        }
+
+        .btn-outline:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: #f1f5f9;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            width: 20%;
+            transition: width 0.3s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-group.half {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container header-content">
-            <div class="logo-section">
-                <div class="logo">EP</div>
-                <span class="app-name">Easy Procure</span>
-            </div>
-            <nav class="nav-links">
-                <a href="index.html">หน้าหลัก</a>
-                <a href="#">ประวัติคำขอ</a>
-                <a href="#">คู่มือ</a>
-            </nav>
-        </div>
-    </header>
-
-    <main class="main-content">
+    <div class="header">
         <div class="container">
-            <div class="form-section">
-                <h2>สร้างคำขอจัดซื้อจัดจ้างใหม่</h2>
-                <form id="procurementForm">
-                    <div class="form-group">
-                        <label for="projectName">ชื่อโครงการ/เรื่อง</label>
-                        <input type="text" id="projectName" placeholder="เช่น โครงการจัดซื้อเครื่องคอมพิวเตอร์" required>
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">EP</div>
+                    <div class="logo-text">
+                        <h1>Easy Procure</h1>
+                        <p>ระบบช่วยเลือกแบบจัดซื้ออัจฉริยะ</p>
                     </div>
-                    <div class="form-group">
-                        <label for="budget">งบประมาณ (บาท)</label>
-                        <input type="number" id="budget" placeholder="เช่น 500000" required min="0">
-                    </div>
-                    <div class="form-group">
-                        <label for="urgency">ความเร่งด่วน</label>
-                        <select id="urgency" required>
-                            <option value="">เลือกความเร่งด่วน</option>
-                            <option value="สูงมาก">สูงมาก (เร่งด่วนที่สุด)</option>
-                            <option value="สูง">สูง</option>
-                            <option value="ปานกลาง">ปานกลาง</option>
-                            <option value="ต่ำ">ต่ำ (ไม่เร่งด่วน)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="category">ประเภทสิ่งของ/งาน/บริการ</label>
-                        <select id="category" required>
-                            <option value="">เลือกประเภท</option>
-                            <option value="สินค้า">สินค้า</option>
-                            <option value="งานก่อสร้าง">งานก่อสร้าง</option>
-                            <option value="งานบริการ">งานบริการ</option>
-                            <option value="งานจ้างที่ปรึกษา">งานจ้างที่ปรึกษา</option>
-                            <option value="งานจ้างออกแบบและควบคุมงาน">งานจ้างออกแบบและควบคุมงาน</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="vendorType">ประเภทผู้ขายที่ต้องการ</label>
-                        <select id="vendorType" required>
-                            <option value="">เลือกประเภทผู้ขาย</option>
-                            <option value="ทั่วไป">ทั่วไป (ผู้ขายทั่วไปหลายราย)</option>
-                            <option value="ผู้ผลิต/ตัวแทนจำหน่ายโดยตรง">ผู้ผลิต/ตัวแทนจำหน่ายโดยตรง</option>
-                            <option value="ผู้ให้บริการเฉพาะทาง">ผู้ให้บริการเฉพาะทาง</option>
-                            <option value="ผู้รับเหมา">ผู้รับเหมา (สำหรับงานก่อสร้าง)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="description">รายละเอียดเพิ่มเติม (คุณลักษณะเฉพาะ/TOR โดยย่อ)</label>
-                        <textarea id="description" placeholder="ระบุคุณลักษณะสำคัญ หรือขอบเขตของงานโดยย่อ"></textarea>
-                    </div>
-                    <div class="button-group">
-                        <button type="button" class="btn btn-secondary" onclick="saveDraft()">บันทึกฉบับร่าง</button>
-                        <button type="button" class="btn btn-primary" onclick="analyzeProject()">วิเคราะห์วิธีการจัดซื้อ</button>
-                    </div>
-                </form>
+                </div>
+                <div class="breadcrumb">
+                    <a href="index.html">Dashboard</a>
+                    <span>→</span>
+                    <span>สร้างคำขอใหม่</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="page-header">
+                <div class="page-icon">📝</div>
+                <div class="page-title">
+                    <h1>สร้างคำขอจัดซื้อใหม่</h1>
+                    <p>กรอกข้อมูลพื้นฐานเพื่อให้ระบบแนะนำวิธีการจัดซื้อที่เหมาะสม</p>
+                </div>
             </div>
 
-            <div id="recommendationResult" class="recommendation-section" style="display: none;">
-                <h2>สรุปผลการวิเคราะห์และคำแนะนำ</h2>
-                <div class="project-summary">
-                    <div class="info-item">
-                        <span>ชื่อโครงการ:</span>
-                        <span id="displayProjectName">N/A</span>
+            <div class="main-form">
+                <div class="form-header">
+                    <div class="form-step">
+                        <div class="step-number">1</div>
+                        <span>ข้อมูลโครงการ</span>
                     </div>
-                    <div class="info-item">
-                        <span>งบประมาณ:</span>
-                        <span id="displayBudget">N/A</span>
-                    </div>
-                    <div class="info-item">
-                        <span>ความเร่งด่วน:</span>
-                        <span id="displayUrgency">N/A</span>
-                    </div>
-                    <div class="info-item">
-                        <span>ประเภท:</span>
-                        <span id="displayCategory">N/A</span>
-                    </div>
-                    <div class="info-item">
-                        <span>ประเภทผู้ขาย:</span>
-                        <span id="displayVendorType">N/A</span>
-                    </div>
-                    <div class="info-item">
-                        <span>รายละเอียด:</span>
-                        <span id="displayDescription">ไม่มี</span>
-                    </div>
-                    <div class="info-item">
-                        <span>วิธีการจัดซื้อที่แนะนำ:</span>
-                        <span id="displayRecommendedMethod">N/A</span>
+                    <div class="progress-container">
+                        <div class="progress-bar"></div>
                     </div>
                 </div>
 
-                <h3>วิธีการจัดซื้อที่เหมาะสมอื่นๆ:</h3>
-                <div id="methodCardsContainer" class="method-cards-container">
+                <div class="form-body">
+                    <div class="form-group half">
+                        <div>
+                            <label class="form-label">ชื่อโครงการ <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="projectName" placeholder="เช่น ซื้อเครื่องคอมพิวเตอร์" oninput="analyzeProject()">
+                            <div class="form-help">ระบุชื่อโครงการหรือสิ่งที่ต้องการจัดซื้อ</div>
+                        </div>
+                        <div>
+                            <label class="form-label">วงเงินประมาณ (บาท) <span class="required">*</span></label>
+                            <input type="number" class="form-input" id="budget" placeholder="เช่น 500000" oninput="analyzeProject()">
+                            <div class="form-help">วงเงินที่ประมาณการไว้</div>
+                        </div>
                     </div>
 
-                <div class="button-group">
-                    <button type="button" class="btn btn-secondary" onclick="window.location.reload()">แก้ไขข้อมูล</button>
-                    <button type="button" class="btn btn-primary" onclick="nextStep()">ดำเนินการต่อ</button>
+                    <div class="form-group half">
+                        <div>
+                            <label class="form-label">ความเร่งด่วน <span class="required">*</span></label>
+                            <select class="form-select" id="urgency" onchange="analyzeProject()">
+                                <option value="">เลือกความเร่งด่วน</option>
+                                <option value="low">ไม่เร่งด่วน (มากกว่า 3 เดือน)</option>
+                                <option value="medium">ปานกลาง (1-3 เดือน)</option>
+                                <option value="high">เร่งด่วน (น้อยกว่า 1 เดือน)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label">ประเภทพัสดุ/งาน <span class="required">*</span></label>
+                            <select class="form-select" id="category" onchange="analyzeProject()">
+                                <option value="">เลือกประเภทพัสดุ/งาน</option>
+                                <option value="goods">พัสดุ (สินค้า)</option>
+                                <option value="services">งานบริการ</option>
+                                <option value="construction">งานก่อสร้าง</option>
+                                <option value="consulting">งานที่ปรึกษา</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">ลักษณะผู้ขาย <span class="required">*</span></label>
+                        <select class="form-select" id="vendorType" onchange="analyzeProject()">
+                            <option value="">เลือกลักษณะผู้ขาย</option>
+                            <option value="general">ผู้ขายทั่วไป</option>
+                            <option value="specialized">ผู้ขายเฉพาะทาง</option>
+                            <option value="limited">ผู้ขายจำกัด</option>
+                            <option value="single">ผู้ขายรายเดียว</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">รายละเอียด/ขอบเขตงาน (TOR)</label>
+                        <textarea class="form-textarea" id="description" placeholder="ใส่รายละเอียดของโครงการ"></textarea>
+                        <div class="form-help">อธิบายรายละเอียดสิ่งที่ต้องการจัดซื้อ</div>
+                    </div>
+
+                    <div class="form-group half">
+                        <div>
+                            <label class="form-label">ผู้ประสานงาน <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="coordinator" placeholder="ชื่อ-นามสกุล ผู้ประสานงาน">
+                        </div>
+                        <div>
+                            <label class="form-label">เบอร์โทรศัพท์ <span class="required">*</span></label>
+                            <input type="tel" class="form-input" id="phone" placeholder="เช่น 08x-xxxxxxx">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Method Recommendations Section -->
+                <div class="form-section" id="methodSection" style="display: none;">
+                    <div class="form-section-header">
+                        <div class="form-step">
+                            <div class="step-number">2</div>
+                            <span>เลือกวิธีการจัดซื้อ</span>
+                        </div>
+                    </div>
+                    <div class="form-section-body">
+                        <div class="recommendation-status" id="recommendationStatus">
+                            <span>💡</span>
+                            <span>กรอกข้อมูลโครงการเพื่อให้ระบบวิเคราะห์วิธีการจัดซื้อที่เหมาะสม</span>
+                        </div>
+
+                        <div class="method-recommendations" id="recommendations" style="display: none;">
+                            <!-- Recommendations will be populated here -->
+                        </div>
+
+                        <div class="recommendation-explanation" id="explanation" style="display: none;">
+                            <h4>💡 เหตุผลในการแนะนำ</h4>
+                            <p id="explanationText"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="saveDraft()">
+                        💾 บันทึกร่าง
+                    </button>
+                    <button class="btn btn-outline" onclick="previewRequest()">
+                        👁️ ดูตัวอย่าง
+                    </button>
+                    <button class="btn btn-primary" onclick="continueToNext()" id="continueBtn" disabled>
+                        ดำเนินการต่อ →
+                    </button>
                 </div>
             </div>
-            <div id="loadingSpinner" class="loading-spinner"></div>
         </div>
-    </main>
-
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2023 Easy Procure. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <div id="notification" class="notification"></div>
+    </div>
 
     <script>
         let currentProject = {
             name: '',
-            budget: '',
+            budget: 0,
             urgency: '',
             category: '',
             vendorType: '',
-            description: '',
-            method: ''
+            description: ''
         };
 
-        const procurementMethods = [
-            {
-                name: "วิธีเฉพาะเจาะจง",
-                id: "specific",
-                description: "สำหรับกรณีเร่งด่วน ซับซ้อน หรือผู้ขายรายเดียว",
-                budgetRange: "ไม่เกิน 500,000 บาท",
-                timeFrame: "สั้น (1-7 วัน)",
-                suitability: {
-                    urgency: ["สูงมาก", "สูง"],
-                    budget: ["ต่ำ", "ปานกลาง"],
-                    complexity: ["สูง"],
-                    vendorType: ["ผู้ผลิต/ตัวแทนจำหน่ายโดยตรง", "ผู้ให้บริการเฉพาะทาง"]
-                }
+        let procurementMethods = {
+            'เฉพาะเจาะจง': {
+                name: 'เฉพาะเจาะจง',
+                budgetMin: 0,
+                budgetMax: 500000,
+                timeFrame: '15-30 วัน',
+                description: 'สำหรับพัสดุที่มีผู้ขายจำกัดหรือต้องการคุณสมบัติเฉพาะ',
+                suitable: ['specialized', 'limited', 'single'],
+                urgency: ['high', 'medium']
             },
-            {
-                name: "วิธีคัดเลือก",
-                id: "selection",
-                description: "เมื่อต้องการคุณภาพหรือเทคนิคพิเศษจากผู้ขายที่ผ่านเกณฑ์",
-                budgetRange: "ไม่มีวงเงินจำกัด",
-                timeFrame: "ปานกลาง (14-30 วัน)",
-                suitability: {
-                    urgency: ["ปานกลาง"],
-                    budget: ["ปานกลาง", "สูง"],
-                    complexity: ["ปานกลาง", "สูง"],
-                    vendorType: ["ผู้ผลิต/ตัวแทนจำหน่ายโดยตรง", "ผู้ให้บริการเฉพาะทาง", "ทั่วไป"]
-                }
+            'สืบราคา': {
+                name: 'สืบราคา',
+                budgetMin: 0,
+                budgetMax: 100000,
+                timeFrame: '7-15 วัน',
+                description: 'สำหรับพัสดุทั่วไปที่มีผู้ขายหลายราย',
+                suitable: ['general'],
+                urgency: ['high', 'medium', 'low']
             },
-            {
-                name: "วิธีประกวดราคาอิเล็กทรอนิกส์ (e-bidding)",
-                id: "ebidding",
-                description: "สำหรับจัดซื้อจัดจ้างทั่วไป โปร่งใส แข่งขันสูง",
-                budgetRange: "เกิน 500,000 บาท",
-                timeFrame: "ยาว (30-60 วัน)",
-                suitability: {
-                    urgency: ["ต่ำ"],
-                    budget: ["สูง"],
-                    complexity: ["ต่ำ", "ปานกลาง"],
-                    vendorType: ["ทั่วไป"]
-                }
+            'คัดเลือก': {
+                name: 'คัดเลือก',
+                budgetMin: 100000,
+                budgetMax: 2000000,
+                timeFrame: '30-45 วัน',
+                description: 'สำหรับโครงการขนาดกลางที่ต้องการเปรียบเทียบอย่างละเอียด',
+                suitable: ['general', 'specialized'],
+                urgency: ['medium', 'low']
             },
-            {
-                name: "วิธีประกาศเชิญชวนทั่วไป",
-                id: "general_invitation",
-                description: "เทียบเท่า e-bidding แต่ใช้สำหรับงานก่อสร้างที่มีคุณลักษณะเฉพาะซับซ้อน",
-                budgetRange: "เกิน 500,000 บาท",
-                timeFrame: "ยาว (30-60 วัน)",
-                suitability: {
-                    urgency: ["ต่ำ"],
-                    budget: ["สูง"],
-                    complexity: ["สูง"],
-                    vendorType: ["ผู้รับเหมา"]
-                }
+            'ประกวดราคา': {
+                name: 'ประกวดราคา',
+                budgetMin: 2000000,
+                budgetMax: 50000000,
+                timeFrame: '45-60 วัน',
+                description: 'สำหรับโครงการขนาดใหญ่ที่ต้องการความโปร่งใส',
+                suitable: ['general', 'specialized'],
+                urgency: ['low']
             },
-            {
-                name: "วิธีตลาดอิเล็กทรอนิกส์ (e-market)",
-                id: "emarket",
-                description: "เหมาะสำหรับสินค้าที่มีมาตรฐาน ซับซ้อนน้อย",
-                budgetRange: "เกิน 100,000 บาท",
-                timeFrame: "สั้น (7-14 วัน)",
-                suitability: {
-                    urgency: ["ปานกลาง", "สูง"],
-                    budget: ["ต่ำ", "ปานกลาง"],
-                    complexity: ["ต่ำ"],
-                    vendorType: ["ทั่วไป"]
-                }
+            'e-bidding': {
+                name: 'e-bidding',
+                budgetMin: 500000,
+                budgetMax: 999999999,
+                timeFrame: '30-45 วัน',
+                description: 'ระบบประมูลอิเล็กทรอนิกส์ สำหรับโครงการที่ต้องการความโปร่งใส',
+                suitable: ['general', 'specialized'],
+                urgency: ['medium', 'low']
+            },
+            'e-market': {
+                name: 'e-market',
+                budgetMin: 0,
+                budgetMax: 200000,
+                timeFrame: '7-14 วัน',
+                description: 'ซื้อผ่านตลาดกลางอิเล็กทรอนิกส์ รวดเร็วและสะดวก',
+                suitable: ['general'],
+                urgency: ['high', 'medium']
             }
-        ];
-
-        function showNotification(message) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.classList.add('show');
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
+        };
 
         function analyzeProject() {
-            const name = document.getElementById('projectName').value;
-            const budget = parseFloat(document.getElementById('budget').value);
-            const urgency = document.getElementById('urgency').value;
-            const category = document.getElementById('category').value;
-            const vendorType = document.getElementById('vendorType').value;
-            const description = document.getElementById('description').value;
+            // Get form values
+            currentProject.name = document.getElementById('projectName').value;
+            currentProject.budget = parseInt(document.getElementById('budget').value) || 0;
+            currentProject.urgency = document.getElementById('urgency').value;
+            currentProject.category = document.getElementById('category').value;
+            currentProject.vendorType = document.getElementById('vendorType').value;
+            currentProject.description = document.getElementById('description').value;
 
-            // Update current project data
-            currentProject = { name, budget, urgency, category, vendorType, description };
-
-            if (!name || isNaN(budget) || !urgency || !category || !vendorType) {
-                showNotification('กรุณากรอกข้อมูลโครงการให้ครบถ้วนเพื่อรับคำแนะนำ 💡');
-                document.getElementById('recommendationResult').style.display = 'none';
-                return;
+            // Check if minimum required fields are filled
+            if (currentProject.name && currentProject.budget > 0 && currentProject.urgency && currentProject.category && currentProject.vendorType) {
+                showAnalyzing();
+                setTimeout(() => {
+                    generateRecommendations();
+                }, 1500);
+            } else {
+                hideRecommendations();
             }
 
-            document.getElementById('loadingSpinner').style.display = 'block';
-            document.getElementById('recommendationResult').style.display = 'none';
-            document.getElementById('methodCardsContainer').innerHTML = ''; // Clear previous cards
+            // Update continue button state
+            updateContinueButton();
+        }
 
-            // Simulate AI analysis delay
-            setTimeout(() => {
-                let recommendedMethod = '';
-                let displayMethodName = 'ไม่สามารถระบุได้';
-                let suitableMethods = [];
+        function showAnalyzing() {
+            const section = document.getElementById('methodSection');
+            const status = document.getElementById('recommendationStatus');
+            
+            section.style.display = 'block';
+            status.className = 'recommendation-status analyzing';
+            status.innerHTML = '<div class="loading-spinner"></div><span>🔍 กำลังวิเคราะห์ข้อมูล...</span>';
+        }
 
-                procurementMethods.forEach(method => {
-                    let score = 0;
-                    // Urgency
-                    if (method.suitability.urgency && method.suitability.urgency.includes(urgency)) {
-                        score += 1;
-                    }
-                    // Budget
-                    if (method.suitability.budget) {
-                        if (method.id === "specific" && budget <= 500000) score += 1;
-                        if ((method.id === "ebidding" || method.id === "general_invitation") && budget > 500000) score += 1;
-                        if (method.id === "emarket" && budget > 100000) score += 1;
-                    }
-                    // Vendor Type
-                    if (method.suitability.vendorType && method.suitability.vendorType.includes(vendorType)) {
-                        score += 1;
-                    }
-                    // Category (simple matching for now, can be expanded)
-                    if (category.includes('ก่อสร้าง') && method.id === 'general_invitation') score += 1;
-                    if (category.includes('สินค้า') && (method.id === 'ebidding' || method.id === 'emarket' || method.id === 'specific')) score += 1;
-                    if (category.includes('บริการ') && (method.id === 'ebidding' || method.id === 'selection' || method.id === 'specific')) score += 1;
+        function hideRecommendations() {
+            const section = document.getElementById('methodSection');
+            const status = document.getElementById('recommendationStatus');
+            
+            section.style.display = 'none';
+            status.className = 'recommendation-status';
+            status.innerHTML = '<span>💡</span><span>กรอกข้อมูลโครงการเพื่อให้ระบบวิเคราะห์วิธีการจัดซื้อที่เหมาะสม</span>';
+            
+            document.getElementById('recommendations').style.display = 'none';
+            document.getElementById('explanation').style.display = 'none';
+        }
 
-                    if (score >= 2) { // Adjust threshold as needed
-                        suitableMethods.push({ method: method, score: score });
-                    }
-                });
+        function generateRecommendations() {
+            const recommendations = [];
+            
+            // Analyze each method
+            for (const [key, method] of Object.entries(procurementMethods)) {
+                let score = 0;
+                let reasons = [];
 
-                // Sort by score descending
-                suitableMethods.sort((a, b) => b.score - a.score);
-
-                if (suitableMethods.length > 0) {
-                    recommendedMethod = suitableMethods[0].method.id;
-                    displayMethodName = suitableMethods[0].method.name;
-
-                    suitableMethods.forEach(item => {
-                        createMethodCard(item.method, item.method.id === recommendedMethod);
-                    });
-                    document.getElementById('recommendedMethodContainer').style.display = 'block';
-                } else {
-                    displayMethodName = 'ไม่มีวิธีที่แนะนำ';
-                    document.getElementById('recommendedMethodContainer').style.display = 'none';
+                // Budget suitability
+                if (currentProject.budget >= method.budgetMin && currentProject.budget <= method.budgetMax) {
+                    score += 40;
+                    reasons.push(`เหมาะสมกับงบประมาณ ${currentProject.budget.toLocaleString()} บาท`);
                 }
 
-                currentProject.method = recommendedMethod; // Save the recommended method ID
+                // Vendor type suitability
+                if (method.suitable.includes(currentProject.vendorType)) {
+                    score += 30;
+                    reasons.push(`เหมาะสมกับลักษณะผู้ขาย`);
+                }
 
-                document.getElementById('displayProjectName').textContent = name;
-                document.getElementById('displayBudget').textContent = budget.toLocaleString() + ' บาท';
-                document.getElementById('displayUrgency').textContent = urgency;
-                document.getElementById('displayCategory').textContent = category;
-                document.getElementById('displayVendorType').textContent = vendorType;
-                document.getElementById('displayRecommendedMethod').textContent = displayMethodName;
-                document.getElementById('displayDescription').textContent = description || 'ไม่มี';
+                // Urgency suitability
+                if (method.urgency.includes(currentProject.urgency)) {
+                    score += 30;
+                    reasons.push(`เหมาะสมกับระดับความเร่งด่วน`);
+                }
 
-                document.getElementById('loadingSpinner').style.display = 'none';
-                document.getElementById('recommendationResult').style.display = 'block';
-            }, 1500); // 1.5 second delay
+                recommendations.push({
+                    method: method,
+                    score: score,
+                    reasons: reasons
+                });
+            }
+
+            // Sort by score
+            recommendations.sort((a, b) => b.score - a.score);
+
+            // Display recommendations
+            displayRecommendations(recommendations);
+
+            // Show status as ready
+            const status = document.getElementById('recommendationStatus');
+            status.className = 'recommendation-status ready';
+            status.innerHTML = '<span>✅</span><span>วิเคราะห์เสร็จสิ้น - แนะนำวิธีการจัดซื้อแล้ว</span>';
+
+            // Update progress bar
+            const progressBar = document.querySelector('.progress-bar');
+            progressBar.style.width = '60%';
         }
 
-        function createMethodCard(method, isRecommended) {
-            const container = document.getElementById('methodCardsContainer');
-            const card = document.createElement('div');
-            card.className = `method-card ${isRecommended ? 'method-selected' : ''}`;
-            card.onclick = () => selectMethod(method.id);
+        function displayRecommendations(recommendations) {
+            const container = document.getElementById('recommendations');
+            const explanation = document.getElementById('explanation');
+            
+            container.innerHTML = '';
+            
+            // Show only top 3 recommendations
+            const topRecommendations = recommendations.slice(0, 3);
+            
+            topRecommendations.forEach((rec, index) => {
+                let badgeClass = 'badge-suitable';
+                let badgeText = 'เหมาะสม';
 
-            card.innerHTML = `
-                <div class="method-header">
-                    <div class="method-name">${method.name}</div>
-                    ${isRecommended ? '<span class="method-badge badge-recommended">แนะนำ</span>' : ''}
-                </div>
-                <div class="method-description">${method.description}</div>
-                <div class="method-details">
-                    <div class="method-budget">
-                        งบประมาณ: ${method.budgetRange}
+                // Only the first (highest scoring) gets "แนะนำ" badge
+                if (index === 0 && rec.score >= 70) {
+                    badgeClass = 'badge-recommended';
+                    badgeText = 'แนะนำ';
+                }
+
+                const card = document.createElement('div');
+                card.className = 'method-card';
+                card.innerHTML = `
+                    <div class="method-header">
+                        <div class="method-name">${rec.method.name}</div>
+                        <div class="method-badge ${badgeClass}">${badgeText}</div>
                     </div>
-                    <div class="method-time">
-                        ระยะเวลา: ${method.timeFrame}
+                    <div class="method-description">${rec.method.description}</div>
+                    <div class="method-details">
+                        <div class="method-budget">
+                            <span>💰</span>
+                            <span>฿${rec.method.budgetMin.toLocaleString()} - ฿${rec.method.budgetMax.toLocaleString()}</span>
+                        </div>
+                        <div class="method-time">
+                            <span>⏱️</span>
+                            <span>${rec.method.timeFrame}</span>
+                        </div>
                     </div>
-                </div>
-            `;
-            container.appendChild(card);
+                `;
+                
+                card.onclick = () => selectMethod(rec.method, card);
+                container.appendChild(card);
+            });
+
+            // Show explanation for top recommendation
+            const topRec = topRecommendations[0];
+            if (topRec && topRec.score >= 70) {
+                document.getElementById('explanationText').textContent = 
+                    `แนะนำวิธี "${topRec.method.name}" เพราะ ${topRec.reasons.join(', ')}. ระยะเวลาดำเนินการประมาณ ${topRec.method.timeFrame}`;
+                explanation.style.display = 'block';
+            } else {
+                explanation.style.display = 'none';
+            }
+
+            container.style.display = 'grid';
         }
 
-        function selectMethod(methodId) {
-            currentProject.method = methodId; // Update the selected method
+        function selectMethod(method, selectedCard) {
+            // Store selected method
+            currentProject.selectedMethod = method.name;
+            
+            // Visual feedback - remove previous selection
             const cards = document.querySelectorAll('.method-card');
             cards.forEach(card => {
                 card.classList.remove('method-selected');
-                // Remove the "แนะนำ" badge if it exists
-                const recommendedBadge = card.querySelector('.badge-recommended');
-                if (recommendedBadge) {
-                    recommendedBadge.remove();
-                }
             });
+            
+            // Add selection to clicked card
+            selectedCard.classList.add('method-selected');
 
-            const selectedMethod = procurementMethods.find(m => m.id === methodId);
-            if (selectedMethod) {
-                const selectedCard = document.querySelector(`.method-card[onclick*='${methodId}']`);
-                if (selectedCard) {
-                    selectedCard.classList.add('method-selected');
-                    // Add "เลือกแล้ว" badge
-                    const badge = document.createElement('span');
-                    badge.className = 'method-badge badge-suitable';
-                    badge.textContent = 'เลือกแล้ว';
-                    selectedCard.querySelector('.method-header').appendChild(badge);
-                }
-                document.getElementById('displayRecommendedMethod').textContent = selectedMethod.name;
-                showNotification(`💡 คุณเลือกวิธีการจัดซื้อ: ${selectedMethod.name}`);
+            // Enable continue button
+            document.getElementById('continueBtn').disabled = false;
+            
+            // Update progress bar
+            const progressBar = document.querySelector('.progress-bar');
+            progressBar.style.width = '100%';
+            
+            // Show notification
+            showNotification(`✅ เลือกวิธี "${method.name}" แล้ว`);
+        }
+
+        function updateContinueButton() {
+            const btn = document.getElementById('continueBtn');
+            const hasRequiredFields = currentProject.name && currentProject.budget > 0 && 
+                                    currentProject.urgency && currentProject.category && 
+                                    currentProject.vendorType;
+            
+            if (hasRequiredFields && currentProject.selectedMethod) {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            } else {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
             }
         }
 
-
         function saveDraft() {
+            // Save to localStorage (in real app, this would be sent to server)
             localStorage.setItem('procurementDraft', JSON.stringify(currentProject));
-            showNotification('✅ ร่างถูกบันทึกอัตโนมัติแล้ว');
+            showNotification('💾 บันทึกร่างเรียบร้อยแล้ว');
         }
 
-        function nextStep() {
-            // Save current project data to localStorage
+        function previewRequest() {
+            if (!currentProject.name || !currentProject.budget) {
+                showNotification('⚠️ กรุณากรอกข้อมูลโครงการก่อน');
+                return;
+            }
+
+            // Create preview modal
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            `;
+
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: white;
+                padding: 32px;
+                border-radius: 16px;
+                max-width: 600px;
+                width: 90%;
+                max-height: 80vh;
+                overflow-y: auto;
+            `;
+
+            content.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <h2 style="margin: 0; color: #1e293b;">👁️ ตัวอย่างคำขอจัดซื้อ</h2>
+                    <button onclick="this.closest('div').remove()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #64748b;">×</button>
+                </div>
+                
+                <div style="background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 16px;">
+                    <h3 style="margin: 0 0 12px 0; color: #1e293b;">📋 ข้อมูลโครงการ</h3>
+                    <p><strong>ชื่อโครงการ:</strong> ${currentProject.name}</p>
+                    <p><strong>วงเงิน:</strong> ${currentProject.budget.toLocaleString()} บาท</p>
+                    <p><strong>ความเร่งด่วน:</strong> ${getUrgencyText(currentProject.urgency)}</p>
+                    <p><strong>ประเภท:</strong> ${getCategoryText(currentProject.category)}</p>
+                    <p><strong>ลักษณะผู้ขาย:</strong> ${getVendorTypeText(currentProject.vendorType)}</p>
+                    ${currentProject.selectedMethod ? `<p><strong>วิธีการจัดซื้อ:</strong> ${currentProject.selectedMethod}</p>` : ''}
+                </div>
+
+                ${currentProject.description ? `
+                <div style="background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 16px;">
+                    <h3 style="margin: 0 0 12px 0; color: #1e293b;">📝 รายละเอียด</h3>
+                    <p style="white-space: pre-wrap;">${currentProject.description}</p>
+                </div>
+                ` : ''}
+
+                <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                    <button onclick="this.closest('div').remove()" style="padding: 8px 16px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer;">ปิด</button>
+                </div>
+            `;
+
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+
+            // Close on backdrop click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        function continueToNext() {
+            if (!currentProject.selectedMethod) {
+                showNotification('⚠️ กรุณาเลือกวิธีการจัดซื้อก่อน');
+                return;
+            }
+
+            // Save progress
             saveDraft();
-
-            // Redirect to upload_documents.html with project data
-            const projectData = currentProject;
-            const queryString = new URLSearchParams(projectData).toString();
-            window.location.href = 'upload_documents.html?' + queryString;
+            
+            // Show next step simulation
+            showNotification('🎉 ดำเนินการต่อไปขั้นตอน "การสร้างเอกสาร" กำลังโหลด...');
+            
+            // Simulate loading next page
+            setTimeout(() => {
+                // In real app, this would navigate to next page
+                window.location.href = `create-documents.html?method=${encodeURIComponent(currentProject.selectedMethod)}`;
+            }, 1500);
         }
 
+        function getUrgencyText(urgency) {
+            const texts = {
+                'low': 'ไม่เร่งด่วน (มากกว่า 3 เดือน)',
+                'medium': 'ปานกลาง (1-3 เดือน)',
+                'high': 'เร่งด่วน (น้อยกว่า 1 เดือน)'
+            };
+            return texts[urgency] || urgency;
+        }
+
+        function getCategoryText(category) {
+            const texts = {
+                'goods': 'พัสดุ (สินค้า)',
+                'services': 'งานบริการ',
+                'construction': 'งานก่อสร้าง',
+                'consulting': 'งานที่ปรึกษา'
+            };
+            return texts[category] || category;
+        }
+
+        function getVendorTypeText(vendorType) {
+            const texts = {
+                'general': 'ผู้ขายทั่วไป',
+                'specialized': 'ผู้ขายเฉพาะทาง',
+                'limited': 'ผู้ขายจำกัด',
+                'single': 'ผู้ขายรายเดียว'
+            };
+            return texts[vendorType] || vendorType;
+        }
+
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #10b981;
+                color: white;
+                padding: 16px 24px;
+                border-radius: 12px;
+                font-size: 14px;
+                font-weight: 600;
+                z-index: 1000;
+                box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+                animation: slideIn 0.3s ease-out;
+            `;
+
+            // Add animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.3s ease-out reverse';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Load draft on page load
         document.addEventListener('DOMContentLoaded', function() {
             const draft = localStorage.getItem('procurementDraft');
             if (draft) {
