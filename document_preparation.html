@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Procure - การจัดเตรียมเอกสาร</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 16px 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            color: #64748b;
+            margin: 0;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .breadcrumb a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 32px 0;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .page-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .page-title p {
+            font-size: 16px;
+            color: #64748b;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 32px;
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .step-number.completed {
+            background: #10b981;
+            color: white;
+        }
+
+        .step-number.current {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .step-number.pending {
+            background: #e2e8f0;
+            color: #64748b;
+        }
+
+        .step-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .step-connector {
+            flex: 1;
+            height: 2px;
+            background: #e2e8f0;
+            margin: 0 12px;
+        }
+
+        .step-connector.completed {
+            background: #10b981;
+        }
+
+        /* Project Summary */
+        .project-summary {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .summary-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .summary-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .summary-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 14px;
+        }
+
+        .method-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Document List */
+        .document-section {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: #f8fafc;
+            padding: 24px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .document-list {
+            padding: 24px;
+        }
+
+        .document-item {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .document-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .document-item.completed {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .document-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .document-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .document-info p {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .document-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .document-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-download {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-download:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        /* File Upload */
+        .file-upload {
+            position: relative;
+            margin-top: 12px;
+        }
+
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-area {
+            border: 2px dashed #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: #fafbfc;
+        }
+
+        .file-upload-area:hover {
+            border-color: #3b82f6;
+            background: #f0f9ff;
+        }
+
+        .file-upload-area.dragover {
+            border-color: #3b82f6;
+            background: #dbeafe;
+        }
+
+        .upload-icon {
+            font-size: 24px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .upload-text {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+
+        .upload-hint {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .uploaded-file {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f0fdf4;
+            border: 1px solid #10b981;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-top: 8px;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #065f46;
+        }
+
+        .file-size {
+            font-size: 12px;
+            color: #059669;
+        }
+
+        .remove-file {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .remove-file:hover {
+            background: #fef2f2;
+        }
+
+        /* Progress Summary */
+        .progress-summary {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            padding: 24px;
+            margin-top: 32px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .progress-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .progress-percentage {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+
+        .progress-bar-container {
+            background: #f1f5f9;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .btn-primary {
+            background: #10b981;
+            color: white;
+            padding: 12px 24px;
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .progress-steps {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .step-connector {
+                display: none;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .document-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .document-actions {
+                flex-direction: column;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">EP</div>
+                    <div class="logo-text">
+                        <h1>Easy Procure</h1>
+                        <p>ระบบช่วยเลือกแบบจัดซื้ออัจฉริยะ</p>
+                    </div>
+                </div>
+                <div class="breadcrumb">
+                    <a href="index.html">Dashboard</a>
+                    <span>→</span>
+                    <a href="procurement_request_form.html">สร้างคำขอใหม่</a>
+                    <span>→</span>
+                    <span>การจัดเตรียมเอกสาร</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="page-header">
+                <div class="page-icon">📄</div>
+                <div class="page-title">
+                    <h1>การจัดเตรียมเอกสาร</h1>
+                    <p>เตรียมเอกสารที่จำเป็นสำหรับการจัดซื้อจัดจ้าง</p>
+                </div>
+            </div>
+
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step">
+                    <div class="step-number completed">✓</div>
+                    <span class="step-text">ข้อมูลโครงการ</span>
+                </div>
+                <div class="step-connector completed"></div>
+                <div class="step">
+                    <div class="step-number completed">✓</div>
+                    <span class="step-text">เลือกวิธีการจัดซื้อ</span>
+                </div>
+                <div class="step-connector completed"></div>
+                <div class="step">
+                    <div class="step-number current">3</div>
+                    <span class="step-text">จัดเตรียมเอกสาร</span>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step">
+                    <div class="step-number pending">4</div>
+                    <span class="step-text">ส่งคำขอ</span>
+                </div>
+            </div>
+
+            <!-- Project Summary -->
+            <div class="project-summary">
+                <div class="summary-header">
+                    <span class="summary-title">📋 สรุปข้อมูลโครงการ</span>
+                </div>
+                <div class="summary-grid" id="projectSummary">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Document List -->
+            <div class="document-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span>📁</span>
+                        <span>รายการเอกสารที่ต้องเตรียม</span>
+                    </div>
+                    <div class="section-subtitle">โหลด Template และอัพโหลดเอกสารที่เกี่ยวข้อง</div>
+                </div>
+                <div class="document-list" id="documentList">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Progress Summary -->
+            <div class="progress-summary">
+                <div class="progress-header">
+                    <span class="progress-text">ความคืบหน้าการเตรียมเอกสาร</span>
+                    <span class="progress-percentage" id="progressPercentage">0%</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="saveDraft()">
+                        💾 บันทึกร่าง
+                    </button>
+                    <button class="btn btn-primary" onclick="submitRequest()" id="submitBtn" disabled>
+                        🚀 ส่งคำขอ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentProject = {};
+        let uploadedFiles = {};
+        let documentTemplates = {
+            'เฉพาะเจาะจง': [
+                {
+                    id: 'tor',
+                    name: 'รายละเอียดคุณลักษณะเฉพาะ (TOR)',
+                    description: 'เอกสารระบุคุณสมบัติและรายละเอียดของสิ่งที่ต้องการจัดซื้อ',
+                    required: true,
+                    template: 'template_tor_specific.docx'
+                },
+                {
+                    id: 'market_survey',
+                    name: 'ใบสำรวจราคา',
+                    description: 'เอกสารแสดงการสำรวจราคาจากผู้ขายอย่างน้อย 3 ราย',
+                    required: true,
+                    template: 'template_market_survey.xlsx'
+                },
+                {
+                    id: 'comparison',
+                    name: 'ตารางเปรียบเทียบคุณสมบัติ',
+                    description: 'เปรียบเทียบคุณสมบัติและราคาของผู้เสนอ',
+                    required: true,
+                    template: 'template_comparison.xlsx'
+                },
+                {
+                    id: 'justification',
+                    name: 'เหตุผลความจำเป็น',
+                    description: 'เอกสารชี้แจงเหตุผลการใช้วิธีเฉพาะเจาะจง',
+                    required: true,
+                    template: 'template_justification.docx'
+                }
+            ],
+            'สืบราคา': [
+                {
+                    id: 'tor',
+                    name: 'รายละเอียดคุณลักษณะ (TOR)',
+                    description: 'เอกสารระบุคุณสมบัติและรายละเอียดของสิ่งที่ต้องการจัดซื้อ',
+                    required: true,
+                    template: 'template_tor_inquiry.docx'
+                },
+                {
+                    id: 'inquiry_form',
+                    name: 'หนังสือสืบราคา',
+                    description: 'เอกสารขอให้ผู้ขายเสนอราคา',
+                    required: true,
+                    template: 'template_inquiry.docx'
+                },
+                {
+                    id: 'vendor_list',
+                    name: 'รายชื่อผู้ขาย',
+                    description: 'รายชื่อผู้ขายที่จะส่งหนังสือสืบราคา (อย่างน้อย 3 ราย)',
+                    required: true,
+                    template: 'template_vendor_list.xlsx'
+                }
+            ],
+            'คัดเลือก': [
+                {
+                    id: 'tor',
+                    name: 'รายละเอียดคุณลักษณะ (TOR)',
+                    description: 'เอกสารระบุคุณสมบัติและรายละเอียดของสิ่งที่ต้องการจัดซื้อ',
+                    required: true,
+                    template: 'template_tor_selection.docx'
+                },
+                {
+                    id: 'evaluation_criteria',
+                    name: 'หลักเกณฑ์การประเมิน',
+                    description: 'เกณฑ์การพิจารณาและให้คะแนนผู้เสนอ',
+                    required: true,
+                    template: 'template_evaluation.xlsx'
+                },
+                {
+                    id: 'announcement',
+                    name: 'ประกาศเชิญชวน',
+                    description: 'ประกาศเชิญชวนให้ผู้สนใจเข้าร่วมการคัดเลือก',
+                    required: true,
+                    template: 'template_announcement.docx'
+                },
+                {
+                    id: 'committee',
+                    name: 'คำสั่งแต่งตั้งคณะกรรมการ',
+                    description: 'คำสั่งแต่งตั้งคณะกรรมการพิจารณาผลการคัดเลือก',
+                    required: true,
+                    template: 'template_committee.docx'
+                }
+            ],
+            'e-bidding': [
+                {
+                    id: 'tor',
+                    name: 'รายละเอียดคุณลักษณะ (TOR)',
+                    description: 'เอกสารระบุคุณสมบัติและรายละเอียดของสิ่งที่ต้องการจัดซื้อ',
+                    required: true,
+                    template: 'template_tor_ebidding.docx'
+                },
+                {
+                    id: 'bidding_conditions',
+                    name: 'เงื่อนไขการประมูล',
+                    description: 'เงื่อนไขและข้อกำหนดสำหรับการประมูลอิเล็กทรอนิกส์',
+                    required: true,
+                    template: 'template_bidding_conditions.docx'
+                },
+                {
+                    id: 'evaluation_criteria',
+                    name: 'หลักเกณฑ์การประเมิน',
+                    description: 'เกณฑ์การพิจารณาและให้คะแนนผู้เสนอ',
+                    required: true,
+                    template: 'template_evaluation_ebidding.xlsx'
+                },
+                {
+                    id: 'gpo_registration',
+                    name: 'หนังสือขอลงทะเบียน GPO',
+                    description: 'เอกสารขอลงทะเบียนในระบบ e-bidding ของ GPO',
+                    required: true,
+                    template: 'template_gpo_registration.docx'
+                }
+            ],
+            'e-market': [
+                {
+                    id: 'product_specs',
+                    name: 'รายละเอียดสินค้า',
+                    description: 'รายละเอียดและคุณสมบัติของสินค้าที่ต้องการสั่งซื้อ',
+                    required: true,
+                    template: 'template_product_specs.docx'
+                },
+                {
+                    id: 'emarket_account',
+                    name: 'เอกสารขอเปิดบัญชี e-market',
+                    description: 'หนังสือขอเปิดบัญชีและใช้งานระบบ e-market',
+                    required: true,
+                    template: 'template_emarket_account.docx'
+                },
+                {
+                    id: 'authorization',
+                    name: 'หนังสือมอบอำนาจ',
+                    description: 'หนังสือมอบอำนาจให้ผู้ดำเนินการสั่งซื้อ',
+                    required: false,
+                    template: 'template_authorization.docx'
+                }
+            ]
+        };
+
+        // Load project data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProjectData();
+            loadDocumentList();
+            updateProgress();
+        });
+
+        function loadProjectData() {
+            // Get project data from localStorage or URL params
+            const urlParams = new URLSearchParams(window.location.search);
+            const method = urlParams.get('method');
+            
+            const savedProject = localStorage.getItem('procurementDraft');
+            if (savedProject) {
+                currentProject = JSON.parse(savedProject);
+            } else {
+                // Fallback data
+                currentProject = {
+                    name: 'โครงการตัวอย่าง',
+                    budget: 500000,
+                    urgency: 'medium',
+                    category: 'goods',
+                    vendorType: 'specialized',
+                    selectedMethod: method || 'เฉพาะเจาะจง'
+                };
+            }
+
+            displayProjectSummary();
+        }
+
+        function displayProjectSummary() {
+            const container = document.getElementById('projectSummary');
+            container.innerHTML = `
+                <div class="summary-item">
+                    <span class="summary-label">ชื่อโครงการ:</span>
+                    <span class="summary-value">${currentProject.name || 'ไม่ระบุ'}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">วงเงิน:</span>
+                    <span class="summary-value">฿${(currentProject.budget || 0).toLocaleString()}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">วิธีการจัดซื้อ:</span>
+                    <span class="method-badge">${currentProject.selectedMethod || 'ไม่ระบุ'}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">ความเร่งด่วน:</span>
+                    <span class="summary-value">${getUrgencyText(currentProject.urgency)}</span>
+                </div>
+            `;
+        }
+
+        function loadDocumentList() {
+            const method = currentProject.selectedMethod || 'เฉพาะเจาะจง';
+            const documents = documentTemplates[method] || [];
+            const container = document.getElementById('documentList');
+            
+            container.innerHTML = '';
+            
+            documents.forEach(doc => {
+                const docElement = createDocumentElement(doc);
+                container.appendChild(docElement);
+            });
+        }
+
+        function createDocumentElement(doc) {
+            const isUploaded = uploadedFiles[doc.id];
+            const docDiv = document.createElement('div');
+            docDiv.className = `document-item ${isUploaded ? 'completed' : ''}`;
+            
+            docDiv.innerHTML = `
+                <div class="document-header">
+                    <div class="document-info">
+                        <h3>${doc.name} ${doc.required ? '<span style="color: #ef4444;">*</span>' : ''}</h3>
+                        <p>${doc.description}</p>
+                    </div>
+                    <div class="document-status ${isUploaded ? 'status-completed' : 'status-pending'}">
+                        <span>${isUploaded ? '✓' : '⏳'}</span>
+                        <span>${isUploaded ? 'เสร็จสิ้น' : 'รอดำเนินการ'}</span>
+                    </div>
+                </div>
+                
+                <div class="document-actions">
+                    <button class="btn btn-download" onclick="downloadTemplate('${doc.template}', '${doc.name}')">
+                        📥 โหลด Template
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewExample('${doc.id}')">
+                        👁️ ดูตัวอย่าง
+                    </button>
+                </div>
+                
+                <div class="file-upload">
+                    <input type="file" class="file-input" accept=".pdf,.doc,.docx,.xls,.xlsx" 
+                           onchange="handleFileUpload(event, '${doc.id}', '${doc.name}')" 
+                           id="file-${doc.id}">
+                    <div class="file-upload-area" onclick="document.getElementById('file-${doc.id}').click()">
+                        <div class="upload-icon">📎</div>
+                        <div class="upload-text">คลิกเพื่อเลือกไฟล์ หรือลากไฟล์มาวาง</div>
+                        <div class="upload-hint">รองรับไฟล์: PDF, Word, Excel (ขนาดไม่เกิน 10MB)</div>
+                    </div>
+                    ${isUploaded ? createUploadedFileDisplay(isUploaded, doc.id) : ''}
+                </div>
+            `;
+            
+            return docDiv;
+        }
+
+        function createUploadedFileDisplay(file, docId) {
+            return `
+                <div class="uploaded-file">
+                    <div class="file-info">
+                        <span>📄</span>
+                        <span class="file-name">${file.name}</span>
+                        <span class="file-size">(${formatFileSize(file.size)})</span>
+                    </div>
+                    <button class="remove-file" onclick="removeFile('${docId}')" title="ลบไฟล์">×</button>
+                </div>
+            `;
+        }
+
+        function handleFileUpload(event, docId, docName) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Validate file size (10MB limit)
+            if (file.size > 10 * 1024 * 1024) {
+                showNotification('❌ ไฟล์มีขนาดใหญ่เกินไป (เกิน 10MB)', 'error');
+                return;
+            }
+
+            // Validate file type
+            const allowedTypes = ['.pdf', '.doc', '.docx', '.xls', '.xlsx'];
+            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+            if (!allowedTypes.includes(fileExtension)) {
+                showNotification('❌ ประเภทไฟล์ไม่ถูกต้อง', 'error');
+                return;
+            }
+
+            // Store file information
+            uploadedFiles[docId] = {
+                name: file.name,
+                size: file.size,
+                type: file.type,
+                uploadDate: new Date()
+            };
+
+            // Update UI
+            loadDocumentList();
+            updateProgress();
+            
+            showNotification(`✅ อัพโหลดไฟล์ "${docName}" สำเร็จ`);
+        }
+
+        function removeFile(docId) {
+            delete uploadedFiles[docId];
+            loadDocumentList();
+            updateProgress();
+            showNotification('🗑️ ลบไฟล์สำเร็จ');
+        }
+
+        function downloadTemplate(templateFile, docName) {
+            // Simulate template download
+            showNotification(`📥 กำลังโหลด Template "${docName}"...`);
+            
+            // In a real application, this would trigger an actual file download
+            setTimeout(() => {
+                showNotification(`✅ โหลด Template "${docName}" สำเร็จ`);
+            }, 1000);
+        }
+
+        function viewExample(docId) {
+            showNotification('👁️ กำลังเปิดตัวอย่างเอกสาร...');
+            // In a real application, this would open a modal or new window with example
+        }
+
+        function updateProgress() {
+            const method = currentProject.selectedMethod || 'เฉพาะเจาะจง';
+            const documents = documentTemplates[method] || [];
+            const requiredDocs = documents.filter(doc => doc.required);
+            const uploadedRequiredDocs = requiredDocs.filter(doc => uploadedFiles[doc.id]);
+            
+            const progress = requiredDocs.length > 0 ? (uploadedRequiredDocs.length / requiredDocs.length) * 100 : 0;
+            
+            // Update progress bar
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressPercentage').textContent = Math.round(progress) + '%';
+            
+            // Update submit button
+            const submitBtn = document.getElementById('submitBtn');
+            if (progress === 100) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🚀 ส่งคำขอ';
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.textContent = `🚀 ส่งคำขอ (${uploadedRequiredDocs.length}/${requiredDocs.length})`;
+            }
+        }
+
+        function saveDraft() {
+            const draftData = {
+                ...currentProject,
+                uploadedFiles: uploadedFiles,
+                lastSaved: new Date()
+            };
+            
+            localStorage.setItem('procurementDraft', JSON.stringify(draftData));
+            showNotification('💾 บันทึกร่างเรียบร้อยแล้ว');
+        }
+
+        function submitRequest() {
+            const method = currentProject.selectedMethod || 'เฉพาะเจาะจง';
+            const documents = documentTemplates[method] || [];
+            const requiredDocs = documents.filter(doc => doc.required);
+            const uploadedRequiredDocs = requiredDocs.filter(doc => uploadedFiles[doc.id]);
+            
+            if (uploadedRequiredDocs.length < requiredDocs.length) {
+                showNotification('⚠️ กรุณาอัพโหลดเอกสารที่จำเป็นให้ครบถ้วน', 'error');
+                return;
+            }
+
+            // Create submission data
+            const submissionData = {
+                project: currentProject,
+                documents: uploadedFiles,
+                submissionDate: new Date(),
+                status: 'submitted'
+            };
+
+            // Save submission
+            localStorage.setItem('lastSubmission', JSON.stringify(submissionData));
+            
+            // Show success message
+            showNotification('🎉 ส่งคำขอสำเร็จ! กำลังไปหน้าสถานะ...', 'success');
+            
+            // Redirect after delay
+            setTimeout(() => {
+                window.location.href = 'request_status.html';
+            }, 2000);
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function getUrgencyText(urgency) {
+            const texts = {
+                'low': 'ไม่เร่งด่วน',
+                'medium': 'ปานกลาง',
+                'high': 'เร่งด่วน'
+            };
+            return texts[urgency] || urgency;
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            
+            if (type === 'error') {
+                notification.style.background = '#ef4444';
+            } else if (type === 'success') {
+                notification.style.background = '#10b981';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.3s ease-out reverse';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Load saved files on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedDraft = localStorage.getItem('procurementDraft');
+            if (savedDraft) {
+                const data = JSON.parse(savedDraft);
+                if (data.uploadedFiles) {
+                    uploadedFiles = data.uploadedFiles;
+                    updateProgress();
+                }
+            }
+        });
+
+        // Drag and drop functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadAreas = document.querySelectorAll('.file-upload-area');
+            
+            uploadAreas.forEach(area => {
+                area.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('dragover');
+                });
+                
+                area.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                });
+                
+                area.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        const fileInput = this.parentElement.querySelector('.file-input');
+                        fileInput.files = files;
+                        fileInput.dispatchEvent(new Event('change'));
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
