@@ -340,6 +340,7 @@
             display: flex;
             gap: 12px;
             margin-top: 16px;
+            align-items: center; /* จัดให้ไอเทมในบรรทัดเดียวกัน */
         }
 
         .btn {
@@ -376,6 +377,26 @@
             background: #e2e8f0;
         }
 
+        /* New CSS for Latest Tag */
+        .version-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .version-tag-latest {
+            background-color: #10b981; /* Green background */
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 10px; /* Smaller font size for the tag */
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+
+
         /* File Upload */
         .file-upload {
             position: relative;
@@ -388,6 +409,7 @@
             width: 100%;
             height: 100%;
             cursor: pointer;
+            z-index: 10; /* Make sure input is clickable */
         }
 
         .file-upload-area {
@@ -397,6 +419,7 @@
             text-align: center;
             transition: all 0.3s ease;
             background: #fafbfc;
+            cursor: pointer; /* Ensure cursor changes on hover */
         }
 
         .file-upload-area:hover {
@@ -580,6 +603,11 @@
             animation: slideIn 0.3s ease-out;
         }
 
+        .notification.error {
+            background: #ef4444;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
@@ -618,7 +646,6 @@
                 </div>
             </div>
 
-            <!-- Progress Steps -->
             <div class="progress-steps">
                 <div class="step">
                     <div class="step-number completed">✓</div>
@@ -641,17 +668,14 @@
                 </div>
             </div>
 
-            <!-- Project Summary -->
             <div class="project-summary">
                 <div class="summary-header">
                     <span class="summary-title">📋 สรุปข้อมูลโครงการ</span>
                 </div>
                 <div class="summary-grid" id="projectSummary">
-                    <!-- Will be populated by JavaScript -->
                 </div>
             </div>
 
-            <!-- Document List -->
             <div class="document-section">
                 <div class="section-header">
                     <div class="section-title">
@@ -661,11 +685,9 @@
                     <div class="section-subtitle">โหลด Template และอัพโหลดเอกสารที่เกี่ยวข้อง</div>
                 </div>
                 <div class="document-list" id="documentList">
-                    <!-- Will be populated by JavaScript -->
                 </div>
             </div>
 
-            <!-- Progress Summary -->
             <div class="progress-summary">
                 <div class="progress-header">
                     <span class="progress-text">ความคืบหน้าการเตรียมเอกสาร</span>
@@ -687,199 +709,391 @@
     </div>
 
     <script>
+        // ===== GLOBAL VARIABLES =====
+        // เก็บข้อมูลโครงการปัจจุบัน
         let currentProject = {};
+        // เก็บข้อมูลไฟล์ที่อัพโหลดแล้ว (key: docId, value: file info object)
         let uploadedFiles = {};
-        let documentTemplates = {
-            'เฉพาะเจาะจง': [
-                {
-                    id: 'tor',
-                    name: 'รายละเอียดคุณลักษณะเฉพาะ (TOR)',
-                    description: 'เอกสารระบุคุณสมบัติและรายละเอียดของสิ่งที่ต้องการจัดซื้อ',
-                    required: true,
-                    template: 'template_tor_specific.docx'
-                },
-                {
-                    id: 'market_survey',
-                    name: 'ใบสำรวจราคา',
-                    description: 'เอกสารแสดงการสำรวจราคาจากผู้ขายอย่างน้อย 3 ราย',
-                    required: true,
-                    template: 'template_market_survey.xlsx'
-                },
-                {
-                    id: 'comparison',
-                    name: 'ตารางเปรียบเทียบคุณสมบัติ',
-                    description: 'เปรียบเทียบคุณสมบัติและราคาของผู้เสนอ',
-                    required: true,
-                    template: 'template_comparison.xlsx'
-                },
-                {
-                    id: 'justification',
-                    name: 'เหตุผลความจำเป็น',
-                    description: 'เอกสารชี้แจงเหตุผลการใช้วิธีเฉพาะเจาะจง',
-                    required: true,
-                    template: 'template_justification.docx'
-                }
-            ],
-            'สืบราคา': [
-                {
-                    id: 'tor',
-                    name: 'รายละเอียดคุณลักษณะ (TOR)',
-                    description: 'เอกสารระบุคุณสมบัติและรายละเอียดของสิ่งที่ต้องการจัดซื้อ',
-                    required: true,
-                    template: 'template_tor_inquiry.docx'
-                },
-                {
-                    id: 'inquiry_form',
-                    name: 'หนังสือสืบราคา',
-                    description: 'เอกสารขอให้ผู้ขายเสนอราคา',
-                    required: true,
-                    template: 'template_inquiry.docx'
-                },
-                {
-                    id: 'vendor_list',
-                    name: 'รายชื่อผู้ขาย',
-                    description: 'รายชื่อผู้ขายที่จะส่งหนังสือสืบราคา (อย่างน้อย 3 ราย)',
-                    required: true,
-                    template: 'template_vendor_list.xlsx'
-                }
-            ],
-            'คัดเลือก': [
-                {
-                    id: 'tor',
-                    name: 'รายละเอียดคุณลักษณะ (TOR)',
-                    description: 'เอกสารระบุคุณสมบัติและรายละเอียดของสิ่งที่ต้องการจัดซื้อ',
-                    required: true,
-                    template: 'template_tor_selection.docx'
-                },
-                {
-                    id: 'evaluation_criteria',
-                    name: 'หลักเกณฑ์การประเมิน',
-                    description: 'เกณฑ์การพิจารณาและให้คะแนนผู้เสนอ',
-                    required: true,
-                    template: 'template_evaluation.xlsx'
-                },
-                {
-                    id: 'announcement',
-                    name: 'ประกาศเชิญชวน',
-                    description: 'ประกาศเชิญชวนให้ผู้สนใจเข้าร่วมการคัดเลือก',
-                    required: true,
-                    template: 'template_announcement.docx'
-                },
-                {
-                    id: 'committee',
-                    name: 'คำสั่งแต่งตั้งคณะกรรมการ',
-                    description: 'คำสั่งแต่งตั้งคณะกรรมการพิจารณาผลการคัดเลือก',
-                    required: true,
-                    template: 'template_committee.docx'
-                }
-            ],
-            'e-bidding': [
-                {
-                    id: 'tor',
-                    name: 'รายละเอียดคุณลักษณะ (TOR)',
-                    description: 'เอกสารระบุคุณสมบัติและรายละเอียดของสิ่งที่ต้องการจัดซื้อ',
-                    required: true,
-                    template: 'template_tor_ebidding.docx'
-                },
-                {
-                    id: 'bidding_conditions',
-                    name: 'เงื่อนไขการประมูล',
-                    description: 'เงื่อนไขและข้อกำหนดสำหรับการประมูลอิเล็กทรอนิกส์',
-                    required: true,
-                    template: 'template_bidding_conditions.docx'
-                },
-                {
-                    id: 'evaluation_criteria',
-                    name: 'หลักเกณฑ์การประเมิน',
-                    description: 'เกณฑ์การพิจารณาและให้คะแนนผู้เสนอ',
-                    required: true,
-                    template: 'template_evaluation_ebidding.xlsx'
-                },
-                {
-                    id: 'gpo_registration',
-                    name: 'หนังสือขอลงทะเบียน GPO',
-                    description: 'เอกสารขอลงทะเบียนในระบบ e-bidding ของ GPO',
-                    required: true,
-                    template: 'template_gpo_registration.docx'
-                }
-            ],
-            'e-market': [
-                {
-                    id: 'product_specs',
-                    name: 'รายละเอียดสินค้า',
-                    description: 'รายละเอียดและคุณสมบัติของสินค้าที่ต้องการสั่งซื้อ',
-                    required: true,
-                    template: 'template_product_specs.docx'
-                },
-                {
-                    id: 'emarket_account',
-                    name: 'เอกสารขอเปิดบัญชี e-market',
-                    description: 'หนังสือขอเปิดบัญชีและใช้งานระบบ e-market',
-                    required: true,
-                    template: 'template_emarket_account.docx'
-                },
-                {
-                    id: 'authorization',
-                    name: 'หนังสือมอบอำนาจ',
-                    description: 'หนังสือมอบอำนาจให้ผู้ดำเนินการสั่งซื้อ',
-                    required: false,
-                    template: 'template_authorization.docx'
-                }
-            ]
-        };
+        
+        // ===== DOCUMENT TEMPLATES CONFIGURATION =====
+// เอกสารที่ต้องใช้ตาม พ.ร.บ. การจัดซื้อจัดจ้างและการบริหารพัสดุภาครัฐ พ.ศ.2560
+let documentTemplates = {
+    'วิธีเฉพาะเจาะจง': [
+        {
+            id: 'pr_form',
+            name: 'รายงานขอความเห็นชอบ (PR)',
+            description: 'เอกสารขออนุมัติจัดซื้อจัดจ้าง รายละเอียดความจำเป็น และเหตุผลการใช้วิธีเฉพาะเจาะจง',
+            required: true,
+            template: 'PR_Form_Specific.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 56(2)(ข)',
+            category: 'หลัก'
+        },
+        {
+            id: 'tor_specific',
+            name: 'รายละเอียดคุณลักษณะเฉพาะ (TOR)',
+            description: 'เอกสารระบุคุณสมบัติ รายละเอียดทางเทคนิค และข้อกำหนดเฉพาะของพัสดุ',
+            required: true,
+            template: 'TOR_Specific_2024.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 7, 8',
+            category: 'หลัก'
+        },
+        {
+            id: 'market_survey',
+            name: 'ใบสำรวจราคาในท้องตลาด',
+            description: 'การสำรวจราคาจากผู้ขายอย่างน้อย 3 ราย เพื่อประกอบการพิจารณาราคากลาง',
+            required: true,
+            template: 'Market_Survey_Form.xlsx',
+            version: '2024.1',
+            lawReference: 'มาตรา 4',
+            category: 'หลัก'
+        },
+        {
+            id: 'comparison_table',
+            name: 'ตารางเปรียบเทียบคุณสมบัติและราคา',
+            description: 'เปรียบเทียบข้อเสนอจากผู้ขาย พร้อมเหตุผลการคัดเลือก',
+            required: true,
+            template: 'Comparison_Table.xlsx',
+            version: '2024.1',
+            lawReference: 'มาตรา 56',
+            category: 'หลัก'
+        },
+        {
+            id: 'justification_specific',
+            name: 'เหตุผลความจำเป็นในการใช้วิธีเฉพาะเจาะจง',
+            description: 'เอกสารชี้แจงเหตุผลและความจำเป็นในการใช้วิธีเฉพาะเจาะจง',
+            required: true,
+            template: 'Justification_Specific.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 56(2)',
+            category: 'สำคัญ'
+        },
+        {
+            id: 'vendor_verification',
+            name: 'หลักฐานการตรวจสอบผู้ขาย',
+            description: 'เอกสารยืนยันคุณสมบัติและความน่าเชื่อถือของผู้ขาย',
+            required: false,
+            template: 'Vendor_Verification.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 56',
+            category: 'เสริม'
+        }
+    ],
+    'วิธีประกาศเชิญชวนทั่วไป': [
+        {
+            id: 'pr_form',
+            name: 'รายงานขอความเห็นชอบ (PR)',
+            description: 'เอกสารขออนุมัติจัดซื้อจัดจ้าง พร้อมแผนการดำเนินงาน',
+            required: true,
+            template: 'PR_Form_General.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 55',
+            category: 'หลัก'
+        },
+        {
+            id: 'tor_general',
+            name: 'รายละเอียดคุณลักษณะ (TOR)',
+            description: 'เอกสารระบุคุณสมบัติและรายละเอียดของพัสดุที่ต้องการจัดซื้อ',
+            required: true,
+            template: 'TOR_General_2024.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 7, 8',
+            category: 'หลัก'
+        },
+        {
+            id: 'announcement',
+            name: 'ประกาศเชิญชวนทั่วไป',
+            description: 'ประกาศเชิญชวนให้ผู้สนใจเข้าร่วมการเสนอราคา',
+            required: true,
+            template: 'Public_Announcement.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 55, 56(1)',
+            category: 'หลัก'
+        },
+        {
+            id: 'evaluation_criteria',
+            name: 'หลักเกณฑ์การประเมิน',
+            description: 'เกณฑ์การพิจารณา การให้คะแนน และวิธีการประเมินผู้เสนอ',
+            required: true,
+            template: 'Evaluation_Criteria.xlsx',
+            version: '2024.1',
+            lawReference: 'มาตรา 55',
+            category: 'หลัก'
+        },
+        {
+            id: 'committee_appointment',
+            name: 'คำสั่งแต่งตั้งคณะกรรมการ',
+            description: 'คำสั่งแต่งตั้งคณะกรรมการพิจารณาผลการเสนอราคา',
+            required: true,
+            template: 'Committee_Appointment.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 55',
+            category: 'สำคัญ'
+        },
+        {
+            id: 'terms_conditions',
+            name: 'เงื่อนไขการเสนอราคา',
+            description: 'เงื่อนไขและข้อกำหนดในการเสนอราคา การส่งมอบ และการชำระเงิน',
+            required: true,
+            template: 'Terms_Conditions.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 55',
+            category: 'สำคัญ'
+        }
+    ],
+    'วิธีคัดเลือก': [
+        {
+            id: 'pr_form',
+            name: 'รายงานขอความเห็นชอบ (PR)',
+            description: 'เอกสารขออนุมัติจัดซื้อจัดจ้าง รายละเอียดโครงการ และแผนการดำเนินงาน',
+            required: true,
+            template: 'PR_Form_Selection.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 55, 56(1)',
+            category: 'หลัก'
+        },
+        {
+            id: 'tor_selection',
+            name: 'รายละเอียดคุณลักษณะ (TOR)',
+            description: 'เอกสารระบุคุณสมบัติ ขอบเขตงาน และรายละเอียดทางเทคนิค',
+            required: true,
+            template: 'TOR_Selection_2024.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 7, 8',
+            category: 'หลัก'
+        },
+        {
+            id: 'prequalification',
+            name: 'เกณฑ์คุณสมบัติผู้เข้าร่วม',
+            description: 'เกณฑ์การคัดเลือกและคุณสมบัติของผู้มีสิทธิ์เข้าร่วม',
+            required: true,
+            template: 'Prequalification_Criteria.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 55',
+            category: 'หลัก'
+        },
+        {
+            id: 'evaluation_method',
+            name: 'วิธีการประเมินและให้คะแนน',
+            description: 'วิธีการประเมิน เกณฑ์การให้คะแนน และกระบวนการพิจารณา',
+            required: true,
+            template: 'Evaluation_Method.xlsx',
+            version: '2024.1',
+            lawReference: 'มาตรา 55',
+            category: 'หลัก'
+        },
+        {
+            id: 'announcement_selection',
+            name: 'ประกาศเชิญชวนการคัดเลือก',
+            description: 'ประกาศเชิญชวนผู้สนใจเข้าร่วมการคัดเลือก',
+            required: true,
+            template: 'Selection_Announcement.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 55',
+            category: 'สำคัญ'
+        },
+        {
+            id: 'committee_selection',
+            name: 'คำสั่งแต่งตั้งคณะกรรมการคัดเลือก',
+            description: 'คำสั่งแต่งตั้งคณะกรรมการพิจารณาผลการคัดเลือก',
+            required: true,
+            template: 'Selection_Committee.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 55',
+            category: 'สำคัญ'
+        }
+    ],
+    'วิธี e-bidding': [
+        {
+            id: 'pr_form',
+            name: 'รายงานขอความเห็นชอบ (PR)',
+            description: 'เอกสารขออนุมัติจัดซื้อจัดจ้างผ่านระบบ e-bidding',
+            required: true,
+            template: 'PR_Form_eBidding.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 55 + e-Government',
+            category: 'หลัก'
+        },
+        {
+            id: 'tor_ebidding',
+            name: 'รายละเอียดคุณลักษณะ (TOR)',
+            description: 'เอกสารระบุคุณสมบัติสำหรับระบบประมูลอิเล็กทรอนิกส์',
+            required: true,
+            template: 'TOR_eBidding_2024.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 7, 8',
+            category: 'หลัก'
+        },
+        {
+            id: 'bidding_conditions',
+            name: 'เงื่อนไขการประมูลอิเล็กทรอนิกส์',
+            description: 'เงื่อนไขและข้อกำหนดสำหรับการประมูลผ่านระบบอิเล็กทรอนิกส์',
+            required: true,
+            template: 'eBidding_Conditions.docx',
+            version: '2024.1',
+            lawReference: 'ระเบียบ e-bidding',
+            category: 'หลัก'
+        },
+        {
+            id: 'gpo_registration',
+            name: 'หนังสือขอลงทะเบียน GPO',
+            description: 'เอกสารขอลงทะเบียนและใช้งานระบบ e-bidding ของสำนักงาน กพร.',
+            required: true,
+            template: 'GPO_Registration.docx',
+            version: '2024.1',
+            lawReference: 'ระเบียบ GPO',
+            category: 'สำคัญ'
+        },
+        {
+            id: 'evaluation_criteria_ebidding',
+            name: 'หลักเกณฑ์การประเมินแบบอิเล็กทรอนิกส์',
+            description: 'เกณฑ์การประเมินและให้คะแนนผ่านระบบอิเล็กทรอนิกส์',
+            required: true,
+            template: 'eBidding_Evaluation.xlsx',
+            version: '2024.1',
+            lawReference: 'มาตรา 55',
+            category: 'สำคัญ'
+        }
+    ],
+    'วิธี e-market': [
+        {
+            id: 'pr_form',
+            name: 'รายงานขอความเห็นชอบ (PR)',
+            description: 'เอกสารขออนุมัติซื้อผ่านระบบ e-market',
+            required: true,
+            template: 'PR_Form_eMarket.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 56(2)(ช)',
+            category: 'หลัก'
+        },
+        {
+            id: 'product_specs',
+            name: 'รายละเอียดสินค้า',
+            description: 'รายละเอียดและคุณสมบัติของสินค้าที่ต้องการสั่งซื้อผ่าน e-market',
+            required: true,
+            template: 'eMarket_Product_Specs.docx',
+            version: '2024.1',
+            lawReference: 'ระเบียบ e-market',
+            category: 'หลัก'
+        },
+        {
+            id: 'emarket_account',
+            name: 'เอกสารขอเปิดบัญชี e-market',
+            description: 'หนังสือขอเปิดบัญชีและขออนุญาตใช้งานระบบ e-market',
+            required: true,
+            template: 'eMarket_Account_Request.docx',
+            version: '2024.1',
+            lawReference: 'ระเบียบ GPO',
+            category: 'สำคัญ'
+        },
+        {
+            id: 'authorization',
+            name: 'หนังสือมอบอำนาจ',
+            description: 'หนังสือมอบอำนาจให้ผู้ดำเนินการสั่งซื้อผ่านระบบ',
+            required: false,
+            template: 'Authorization_Letter.docx',
+            version: '2024.1',
+            lawReference: 'มาตรา 56(2)',
+            category: 'เสริม'
+        }
+    ]
+};
 
-        // Load project data on page load
+        // ===== PAGE INITIALIZATION =====
+        // โหลดข้อมูลเมื่อหน้าเว็บพร้อม
         document.addEventListener('DOMContentLoaded', function() {
-            loadProjectData();
-            loadDocumentList();
-            updateProgress();
+            loadProjectData();     // โหลดข้อมูลโครงการจาก localStorage
+            loadUploadedFilesFromLocalStorage(); // โหลดไฟล์ที่อัปโหลดไว้ก่อนหน้า
+            loadDocumentList();    // แสดงรายการเอกสารตามวิธีการจัดซื้อ
+            updateProgress();      // อัพเดทแถบความคืบหน้า
+            setupDragAndDrop();    // ตั้งค่า Drag & Drop
         });
 
+        // ===== PROJECT DATA MANAGEMENT =====
+        // ฟังก์ชันโหลดข้อมูลโครงการจากหน้าก่อนหน้า
         function loadProjectData() {
-            // Get project data from localStorage or URL params
+            // ดึงข้อมูลจาก URL parameter (วิธีการจัดซื้อที่เลือก)
             const urlParams = new URLSearchParams(window.location.search);
             const method = urlParams.get('method');
             
+            // ดึงข้อมูลโครงการที่บันทึกไว้ใน localStorage
             const savedProject = localStorage.getItem('procurementDraft');
             if (savedProject) {
                 currentProject = JSON.parse(savedProject);
+                // ถ้ามี method ใน URL ให้ใช้ method จาก URL แทนในกรณีที่มีการเปลี่ยนหน้า
+                if (method && currentProject.selectedMethod !== method) {
+                    currentProject.selectedMethod = method;
+                }
             } else {
-                // Fallback data
+                // ข้อมูลสำรองในกรณีไม่มีข้อมูลใน localStorage
                 currentProject = {
                     name: 'โครงการตัวอย่าง',
                     budget: 500000,
                     urgency: 'medium',
                     category: 'goods',
                     vendorType: 'specialized',
-                    selectedMethod: method || 'เฉพาะเจาะจง'
+                    selectedMethod: method || 'เฉพาะเจาะจง', // ใช้ method จาก URL หรือ 'เฉพาะเจาะจง' เป็นค่าเริ่มต้น
+                    description: 'รายละเอียดโครงการตัวอย่างสำหรับการทดสอบระบบ',
+                    requiredDocumentsStatus: {} // เพิ่ม property สำหรับเก็บสถานะเอกสาร
                 };
             }
 
-            displayProjectSummary();
+            // ตรวจสอบให้แน่ใจว่า currentProject.requiredDocumentsStatus ถูก initialize
+            if (!currentProject.requiredDocumentsStatus) {
+                currentProject.requiredDocumentsStatus = {};
+            }
+
+            displayProjectSummary(); // แสดงสรุปข้อมูลโครงการ
         }
 
+        // ฟังก์ชันแสดงสรุปข้อมูลโครงการในส่วนบน
         function displayProjectSummary() {
-            const container = document.getElementById('projectSummary');
-            container.innerHTML = `
-                <div class="summary-item">
-                    <span class="summary-label">ชื่อโครงการ:</span>
-                    <span class="summary-value">${currentProject.name || 'ไม่ระบุ'}</span>
-                </div>
-                <div class="summary-item">
-                    <span class="summary-label">วงเงิน:</span>
-                    <span class="summary-value">฿${(currentProject.budget || 0).toLocaleString()}</span>
-                </div>
-                <div class="summary-item">
-                    <span class="summary-label">วิธีการจัดซื้อ:</span>
-                    <span class="method-badge">${currentProject.selectedMethod || 'ไม่ระบุ'}</span>
-                </div>
-                <div class="summary-item">
-                    <span class="summary-label">ความเร่งด่วน:</span>
-                    <span class="summary-value">${getUrgencyText(currentProject.urgency)}</span>
-                </div>
-            `;
+    const container = document.getElementById('projectSummary');
+    const method = currentProject.selectedMethod || 'วิธีเฉพาะเจาะจง';
+    const documents = documentTemplates[method] || [];
+    const lawRef = documents.length > 0 ? documents[0].lawReference : '';
+    
+    container.innerHTML = `
+        ${currentProject.requestId ? `
+        <div class="summary-item">
+            <span class="summary-label">รหัสคำขอ:</span>
+            <span class="summary-value" style="color: #3b82f6; font-weight: 700;">${currentProject.requestId}</span>
+        </div>
+        ` : ''}
+        <div class="summary-item">
+            <span class="summary-label">ชื่อโครงการ:</span>
+            <span class="summary-value">${currentProject.name || 'ไม่ระบุ'}</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">วงเงิน:</span>
+            <span class="summary-value">฿${(currentProject.budget || 0).toLocaleString()}</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">วิธีการจัดซื้อ:</span>
+            <span class="method-badge">${currentProject.selectedMethod || 'ไม่ระบุ'}
+                ${lawRef ? `<span class="law-reference">${lawRef}</span>` : ''}
+            </span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">ความเร่งด่วน:</span>
+            <span class="summary-value">${getUrgencyText(currentProject.urgency)}</span>
+        </div>
+    `;
+}
+
+        // ฟังก์ชันช่วยในการแสดงข้อความความเร่งด่วน
+        function getUrgencyText(urgency) {
+            switch (urgency) {
+                case 'low': return 'ต่ำ';
+                case 'medium': return 'ปานกลาง';
+                case 'high': return 'สูง';
+                default: return 'ไม่ระบุ';
+            }
         }
 
+        // ===== DOCUMENT LIST MANAGEMENT =====
+        // ฟังก์ชันโหลดรายการเอกสารตามวิธีการจัดซื้อที่เลือก
         function loadDocumentList() {
             const method = currentProject.selectedMethod || 'เฉพาะเจาะจง';
             const documents = documentTemplates[method] || [];
@@ -887,17 +1101,28 @@
             
             container.innerHTML = '';
             
+            // สร้าง Element สำหรับแต่ละเอกสาร
             documents.forEach(doc => {
                 const docElement = createDocumentElement(doc);
                 container.appendChild(docElement);
             });
         }
 
+        // ฟังก์ชันสร้าง HTML Element สำหรับเอกสารแต่ละรายการ
         function createDocumentElement(doc) {
-            const isUploaded = uploadedFiles[doc.id];
+            const isUploaded = uploadedFiles[doc.id]; // ตรวจสอบว่าอัพโหลดแล้วหรือยัง
             const docDiv = document.createElement('div');
             docDiv.className = `document-item ${isUploaded ? 'completed' : ''}`;
-            
+            docDiv.setAttribute('data-doc-id', doc.id); // เพิ่ม data-doc-id สำหรับการอ้างอิง
+
+            // ดึงวันที่ปัจจุบันและจัดรูปแบบ (วัน/เดือน/ปี พ.ศ.)
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // เดือนเริ่มจาก 0
+            const yearBuddhist = today.getFullYear() + 543; // ปีพ.ศ.
+            const formattedDate = `${day}/${month}/${yearBuddhist}`;
+
+
             docDiv.innerHTML = `
                 <div class="document-header">
                     <div class="document-info">
@@ -917,13 +1142,18 @@
                     <button class="btn btn-secondary" onclick="viewExample('${doc.id}')">
                         👁️ ดูตัวอย่าง
                     </button>
+                    <div class="version-info">
+                        <span>เวอร์ชัน: ${doc.version || 'N/A'}</span>
+                        <span class="version-tag-latest">ล่าสุด ${formattedDate}</span>
+                    </div>
                 </div>
                 
                 <div class="file-upload">
                     <input type="file" class="file-input" accept=".pdf,.doc,.docx,.xls,.xlsx" 
-                           onchange="handleFileUpload(event, '${doc.id}', '${doc.name}')" 
-                           id="file-${doc.id}">
-                    <div class="file-upload-area" onclick="document.getElementById('file-${doc.id}').click()">
+                            onchange="handleFileUpload(event, '${doc.id}')" 
+                            id="file-${doc.id}">
+                    <div class="file-upload-area" id="upload-area-${doc.id}" 
+                             onclick="document.getElementById('file-${doc.id}').click()">
                         <div class="upload-icon">📎</div>
                         <div class="upload-text">คลิกเพื่อเลือกไฟล์ หรือลากไฟล์มาวาง</div>
                         <div class="upload-hint">รองรับไฟล์: PDF, Word, Excel (ขนาดไม่เกิน 10MB)</div>
@@ -935,6 +1165,7 @@
             return docDiv;
         }
 
+        // ฟังก์ชันสร้างส่วนแสดงไฟล์ที่อัพโหลดแล้ว
         function createUploadedFileDisplay(file, docId) {
             return `
                 <div class="uploaded-file">
@@ -948,204 +1179,237 @@
             `;
         }
 
-        function handleFileUpload(event, docId, docName) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            // Validate file size (10MB limit)
-            if (file.size > 10 * 1024 * 1024) {
-                showNotification('❌ ไฟล์มีขนาดใหญ่เกินไป (เกิน 10MB)', 'error');
-                return;
-            }
-
-            // Validate file type
-            const allowedTypes = ['.pdf', '.doc', '.docx', '.xls', '.xlsx'];
-            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
-            if (!allowedTypes.includes(fileExtension)) {
-                showNotification('❌ ประเภทไฟล์ไม่ถูกต้อง', 'error');
-                return;
-            }
-
-            // Store file information
-            uploadedFiles[docId] = {
-                name: file.name,
-                size: file.size,
-                type: file.type,
-                uploadDate: new Date()
-            };
-
-            // Update UI
-            loadDocumentList();
-            updateProgress();
-            
-            showNotification(`✅ อัพโหลดไฟล์ "${docName}" สำเร็จ`);
-        }
-
-        function removeFile(docId) {
-            delete uploadedFiles[docId];
-            loadDocumentList();
-            updateProgress();
-            showNotification('🗑️ ลบไฟล์สำเร็จ');
-        }
-
-        function downloadTemplate(templateFile, docName) {
-            // Simulate template download
-            showNotification(`📥 กำลังโหลด Template "${docName}"...`);
-            
-            // In a real application, this would trigger an actual file download
-            setTimeout(() => {
-                showNotification(`✅ โหลด Template "${docName}" สำเร็จ`);
-            }, 1000);
-        }
-
-        function viewExample(docId) {
-            showNotification('👁️ กำลังเปิดตัวอย่างเอกสาร...');
-            // In a real application, this would open a modal or new window with example
-        }
-
-        function updateProgress() {
-            const method = currentProject.selectedMethod || 'เฉพาะเจาะจง';
-            const documents = documentTemplates[method] || [];
-            const requiredDocs = documents.filter(doc => doc.required);
-            const uploadedRequiredDocs = requiredDocs.filter(doc => uploadedFiles[doc.id]);
-            
-            const progress = requiredDocs.length > 0 ? (uploadedRequiredDocs.length / requiredDocs.length) * 100 : 0;
-            
-            // Update progress bar
-            document.getElementById('progressBar').style.width = progress + '%';
-            document.getElementById('progressPercentage').textContent = Math.round(progress) + '%';
-            
-            // Update submit button
-            const submitBtn = document.getElementById('submitBtn');
-            if (progress === 100) {
-                submitBtn.disabled = false;
-                submitBtn.textContent = '🚀 ส่งคำขอ';
-            } else {
-                submitBtn.disabled = true;
-                submitBtn.textContent = `🚀 ส่งคำขอ (${uploadedRequiredDocs.length}/${requiredDocs.length})`;
-            }
-        }
-
-        function saveDraft() {
-            const draftData = {
-                ...currentProject,
-                uploadedFiles: uploadedFiles,
-                lastSaved: new Date()
-            };
-            
-            localStorage.setItem('procurementDraft', JSON.stringify(draftData));
-            showNotification('💾 บันทึกร่างเรียบร้อยแล้ว');
-        }
-
-        function submitRequest() {
-            const method = currentProject.selectedMethod || 'เฉพาะเจาะจง';
-            const documents = documentTemplates[method] || [];
-            const requiredDocs = documents.filter(doc => doc.required);
-            const uploadedRequiredDocs = requiredDocs.filter(doc => uploadedFiles[doc.id]);
-            
-            if (uploadedRequiredDocs.length < requiredDocs.length) {
-                showNotification('⚠️ กรุณาอัพโหลดเอกสารที่จำเป็นให้ครบถ้วน', 'error');
-                return;
-            }
-
-            // Create submission data
-            const submissionData = {
-                project: currentProject,
-                documents: uploadedFiles,
-                submissionDate: new Date(),
-                status: 'submitted'
-            };
-
-            // Save submission
-            localStorage.setItem('lastSubmission', JSON.stringify(submissionData));
-            
-            // Show success message
-            showNotification('🎉 ส่งคำขอสำเร็จ! กำลังไปหน้าสถานะ...', 'success');
-            
-            // Redirect after delay
-            setTimeout(() => {
-                window.location.href = 'request_status.html';
-            }, 2000);
-        }
-
+        // ฟังก์ชันช่วยจัดรูปแบบขนาดไฟล์
         function formatFileSize(bytes) {
             if (bytes === 0) return '0 Bytes';
             const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
             const i = Math.floor(Math.log(bytes) / Math.log(k));
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
-        function getUrgencyText(urgency) {
-            const texts = {
-                'low': 'ไม่เร่งด่วน',
-                'medium': 'ปานกลาง',
-                'high': 'เร่งด่วน'
-            };
-            return texts[urgency] || urgency;
-        }
-
-        function showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            
-            if (type === 'error') {
-                notification.style.background = '#ef4444';
-            } else if (type === 'success') {
-                notification.style.background = '#10b981';
+        // ฟังก์ชันโหลดไฟล์ที่อัปโหลดไว้ก่อนหน้าจาก Local Storage
+        function loadUploadedFilesFromLocalStorage() {
+            const savedFiles = localStorage.getItem('uploadedFiles');
+            if (savedFiles) {
+                uploadedFiles = JSON.parse(savedFiles);
+            } else {
+                uploadedFiles = {};
             }
-            
-            notification.textContent = message;
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.style.animation = 'slideIn 0.3s ease-out reverse';
-                setTimeout(() => {
-                    notification.remove();
-                }, 300);
-            }, 3000);
         }
 
-        // Load saved files on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedDraft = localStorage.getItem('procurementDraft');
-            if (savedDraft) {
-                const data = JSON.parse(savedDraft);
-                if (data.uploadedFiles) {
-                    uploadedFiles = data.uploadedFiles;
-                    updateProgress();
+        // ฟังก์ชันบันทึกไฟล์ที่อัปโหลดลง Local Storage
+        function saveUploadedFilesToLocalStorage() {
+            localStorage.setItem('uploadedFiles', JSON.stringify(uploadedFiles));
+        }
+
+        // ฟังก์ชันจัดการการอัปโหลดไฟล์
+        function handleFileUpload(event, docId) {
+    		const file = event.target.files[0];
+    		if (file) {
+        		if (file.size > 10 * 1024 * 1024) {
+            		    showNotification('⚠️ ไฟล์มีขนาดใหญ่เกิน 10MB', true);
+                            event.target.value = '';
+                             return;
+        }
+
+        uploadedFiles[docId] = {
+            name: file.name,
+            size: file.size,
+            type: file.type
+        };
+        saveUploadedFilesToLocalStorage();  // เก็บไว้แค่นี้
+        updateDocumentStatus(docId);
+        updateProgress();
+        showNotification(`✅ อัปโหลดไฟล์ "${file.name}" แล้ว`);
+        // ลบ saveDraft() ออก
+    }
+}
+
+        // ฟังก์ชันลบไฟล์
+        function removeFile(docId) {
+            delete uploadedFiles[docId];
+            saveUploadedFilesToLocalStorage();
+            updateDocumentStatus(docId);
+            updateProgress();
+            showNotification('🗑️ ลบไฟล์เรียบร้อยแล้ว');
+            // Clear the file input visually as well
+            const fileInput = document.getElementById(`file-${docId}`);
+            if (fileInput) {
+                fileInput.value = '';
+            }
+        }
+
+        // ฟังก์ชันอัปเดตสถานะเอกสารและรีเรนเดอร์ส่วนนั้น
+        function updateDocumentStatus(docId) {
+            const docElement = document.querySelector(`.document-item[data-doc-id="${docId}"]`);
+            if (docElement) {
+                const docConfig = documentTemplates[currentProject.selectedMethod].find(d => d.id === docId);
+                if (docConfig) {
+                    const updatedDocElement = createDocumentElement(docConfig);
+                    docElement.replaceWith(updatedDocElement);
                 }
             }
-        });
+        }
 
-        // Drag and drop functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const uploadAreas = document.querySelectorAll('.file-upload-area');
+
+        // ===== PROGRESS TRACKING =====
+        // ฟังก์ชันอัปเดตแถบความคืบหน้า
+        function updateProgress() {
+            const method = currentProject.selectedMethod || 'เฉพาะเจาะจง';
+            const documents = documentTemplates[method] || [];
             
-            uploadAreas.forEach(area => {
-                area.addEventListener('dragover', function(e) {
+            const requiredDocs = documents.filter(doc => doc.required);
+            let completedRequiredDocs = 0;
+
+            requiredDocs.forEach(doc => {
+                if (uploadedFiles[doc.id]) {
+                    completedRequiredDocs++;
+                }
+            });
+
+            const totalRequiredDocs = requiredDocs.length;
+            const progressPercentage = totalRequiredDocs > 0 ? 
+                                       Math.round((completedRequiredDocs / totalRequiredDocs) * 100) : 100;
+
+            document.getElementById('progressPercentage').textContent = `${progressPercentage}%`;
+            document.getElementById('progressBar').style.width = `${progressPercentage}%`;
+
+            const submitBtn = document.getElementById('submitBtn');
+            if (progressPercentage === 100) {
+                submitBtn.disabled = false;
+                submitBtn.classList.add('btn-primary');
+                submitBtn.classList.remove('btn-secondary'); // Remove secondary styling if any
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.classList.remove('btn-primary');
+                // You might want to add a different disabled style or keep default
+                submitBtn.style.backgroundColor = '#94a3b8'; // Example disabled color
+                submitBtn.style.cursor = 'not-allowed';
+                submitBtn.style.transform = 'none';
+            }
+        }
+
+        // ===== ACTION BUTTONS =====
+        // ฟังก์ชันดาวน์โหลด Template
+        function downloadTemplate(templatePath, docName) {
+            // ในการใช้งานจริง คุณจะต้องมีไฟล์ template เหล่านี้บนเซิร์ฟเวอร์ของคุณ
+            // โค้ดนี้เป็นเพียงตัวอย่างการสร้างลิงก์ดาวน์โหลด
+            const link = document.createElement('a');
+            link.href = `./templates/${templatePath}`; // สมมติว่าไฟล์ template อยู่ในโฟลเดอร์ 'templates'
+            link.download = `${docName}_Template.docx`; // ชื่อไฟล์ที่จะดาวน์โหลด
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showNotification(`⬇️ กำลังดาวน์โหลด Template: ${docName}`);
+        }
+
+        // ฟังก์ชันดูตัวอย่าง (อาจแสดงใน Modal หรือเปิดหน้าใหม่)
+        function viewExample(docId) {
+            showNotification(`👀 ฟังก์ชันดูตัวอย่างสำหรับ ${docId} ยังไม่พร้อมใช้งาน`);
+            // ในการใช้งานจริง คุณอาจเปิด Modal หรือลิงก์ไปยังไฟล์ตัวอย่าง
+        }
+
+        // ฟังก์ชันบันทึกร่าง
+        function saveDraft() {
+    // สร้างรหัสคำขอถ้ายังไม่มี
+    if (!currentProject.requestId) {
+        currentProject.requestId = generateRequestId();
+    }
+    
+    localStorage.setItem('procurementDraft', JSON.stringify(currentProject));
+    saveUploadedFilesToLocalStorage();
+    showNotification(`✅ บันทึกร่างเรียบร้อยแล้ว! รหัสคำขอ: ${currentProject.requestId}`);
+    
+    // อัพเดทการแสดงผล
+    displayProjectSummary();
+}
+
+// ฟังก์ชันสร้างรหัสคำขอ
+function generateRequestId() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    
+    // สร้างเลขลำดับ (001, 002, 003...)
+    const existingRequests = JSON.parse(localStorage.getItem('savedRequests') || '[]');
+    const todayRequests = existingRequests.filter(req => 
+        req.requestId && req.requestId.includes(`${year}${month}${day}`)
+    );
+    const nextNumber = String(todayRequests.length + 1).padStart(3, '0');
+    
+    const requestId = `REQ-${year}${month}${day}-${nextNumber}`;
+    
+    // บันทึกรายการคำขอ
+    existingRequests.push({
+        requestId: requestId,
+        date: today.toISOString(),
+        name: currentProject.name,
+        method: currentProject.selectedMethod,
+        budget: currentProject.budget
+    });
+    localStorage.setItem('savedRequests', JSON.stringify(existingRequests));
+    
+    return requestId;
+}
+
+        // ฟังก์ชันส่งคำขอ (เมื่อเอกสารครบถ้วน)
+        function submitRequest() {
+            if (document.getElementById('submitBtn').disabled) {
+                showNotification('🚨 กรุณาอัปโหลดเอกสารที่จำเป็นทั้งหมดก่อนส่งคำขอ', true);
+                return;
+            }
+            showNotification('🚀 ส่งคำขอจัดซื้อเรียบร้อยแล้ว!');
+            // ในการใช้งานจริง คุณจะส่งข้อมูลไปยัง Server
+            // ตัวอย่าง: clear localStorage หลังจากส่งสำเร็จ
+            localStorage.removeItem('procurementDraft');
+            localStorage.removeItem('uploadedFiles');
+            // สามารถเปลี่ยนเส้นทางไปยังหน้าสรุปหรือหน้ายืนยันได้
+            // window.location.href = 'confirmation.html';
+        }
+
+        // ===== DRAG AND DROP FUNCTIONALITY =====
+        function setupDragAndDrop() {
+            document.querySelectorAll('.file-upload-area').forEach(dropArea => {
+                const docId = dropArea.id.replace('upload-area-', '');
+                const fileInput = document.getElementById(`file-${docId}`);
+
+                dropArea.addEventListener('dragover', (e) => {
                     e.preventDefault();
-                    this.classList.add('dragover');
+                    dropArea.classList.add('dragover');
                 });
-                
-                area.addEventListener('dragleave', function(e) {
-                    e.preventDefault();
-                    this.classList.remove('dragover');
+
+                dropArea.addEventListener('dragleave', () => {
+                    dropArea.classList.remove('dragover');
                 });
-                
-                area.addEventListener('drop', function(e) {
+
+                dropArea.addEventListener('drop', (e) => {
                     e.preventDefault();
-                    this.classList.remove('dragover');
-                    
+                    dropArea.classList.remove('dragover');
                     const files = e.dataTransfer.files;
                     if (files.length > 0) {
-                        const fileInput = this.parentElement.querySelector('.file-input');
-                        fileInput.files = files;
-                        fileInput.dispatchEvent(new Event('change'));
+                        fileInput.files = files; // Assign files to the hidden input
+                        handleFileUpload({ target: fileInput }, docId);
                     }
                 });
             });
-        });
+        }
+
+        // ===== NOTIFICATION SYSTEM =====
+        // ฟังก์ชันแสดง Notification
+        function showNotification(message, isError = false) {
+            const notificationDiv = document.createElement('div');
+            notificationDiv.className = `notification ${isError ? 'error' : ''}`;
+            notificationDiv.textContent = message;
+            document.body.appendChild(notificationDiv);
+
+            setTimeout(() => {
+                notificationDiv.remove();
+            }, 3000); // ซ่อน Notification หลังจาก 3 วินาที
+        }
+
+        
     </script>
 </body>
 </html>
