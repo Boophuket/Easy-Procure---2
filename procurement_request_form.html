@@ -217,6 +217,31 @@
             margin-top: 4px;
         }
 
+        /* Legal Notice */
+        .legal-notice {
+            background: #fef7cd;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .legal-notice h4 {
+            color: #92400e;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legal-notice p {
+            color: #92400e;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
         /* Form Section */
         .form-section {
             border-top: 1px solid #e2e8f0;
@@ -284,7 +309,7 @@
             transition: all 0.3s ease;
             cursor: pointer;
             background: white;
-            height: 220px;
+            height: 240px;
             display: flex;
             flex-direction: column;
             position: relative;
@@ -306,20 +331,20 @@
         .method-name {
             font-weight: 700;
             color: #1e293b;
-            font-size: 18px;
+            font-size: 16px;
             line-height: 1.2;
             max-width: 65%;
         }
 
         .method-badge {
             display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
             font-weight: 600;
             text-transform: uppercase;
             white-space: nowrap;
-            min-width: 70px;
+            min-width: 60px;
             text-align: center;
         }
 
@@ -333,37 +358,51 @@
             color: white;
         }
 
+        .badge-legal {
+            background: #f59e0b;
+            color: white;
+        }
+
         .method-description {
-            font-size: 14px;
+            font-size: 13px;
             color: #64748b;
-            margin-bottom: 24px;
-            line-height: 1.5;
+            margin-bottom: 16px;
+            line-height: 1.4;
             flex-grow: 1;
         }
 
         .method-details {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 8px;
             margin-top: auto;
         }
 
         .method-budget {
             color: #059669;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 12px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
 
         .method-time {
             color: #7c3aed;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 12px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
+        }
+
+        .method-law {
+            color: #dc2626;
+            font-weight: 600;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         /* Method Selected State */
@@ -378,7 +417,8 @@
         .method-selected .method-name,
         .method-selected .method-description,
         .method-selected .method-budget,
-        .method-selected .method-time {
+        .method-selected .method-time,
+        .method-selected .method-law {
             color: white !important;
         }
 
@@ -496,8 +536,8 @@
             }
             
             .method-card {
-                height: 240px;
-                padding: 28px;
+                height: 260px;
+                padding: 20px;
             }
         }
 
@@ -511,7 +551,7 @@
             }
 
             .form-section-body {
-                padding: 28px 32px;
+                padding: 28px 24px;
             }
             
             .method-recommendations {
@@ -520,39 +560,40 @@
             }
             
             .method-card {
-                height: 220px;
-                padding: 24px;
-            }
-            
-            .method-name {
-                font-size: 16px;
-                max-width: 60%;
-            }
-            
-            .method-badge {
-                font-size: 11px;
-                padding: 4px 8px;
-                min-width: 60px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .method-card {
-                height: 200px;
+                height: 240px;
                 padding: 20px;
             }
             
             .method-name {
                 font-size: 15px;
+                max-width: 60%;
+            }
+            
+            .method-badge {
+                font-size: 9px;
+                padding: 3px 6px;
+                min-width: 50px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .method-card {
+                height: 220px;
+                padding: 16px;
+            }
+            
+            .method-name {
+                font-size: 14px;
             }
             
             .method-description {
-                font-size: 13px;
+                font-size: 12px;
             }
             
             .method-budget,
-            .method-time {
-                font-size: 13px;
+            .method-time,
+            .method-law {
+                font-size: 11px;
             }
         }
     </style>
@@ -599,6 +640,11 @@
                 </div>
 
                 <div class="form-body">
+                    <div class="legal-notice">
+                        <h4>📋 ข้อมูลสำคัญ</h4>
+                        <p>ระบบจะแนะนำวิธีการจัดซื้อตาม <strong>พระราชบัญญัติการจัดซื้อจัดจ้างและการบริหารพัสดุภาครัฐ พ.ศ.2560</strong> และระเบียบที่เกี่ยวข้อง</p>
+                    </div>
+
                     <div class="form-group half">
                         <div>
                             <label class="form-label">ชื่อโครงการ <span class="required">*</span></label>
@@ -607,8 +653,8 @@
                         </div>
                         <div>
                             <label class="form-label">วงเงินประมาณ (บาท) <span class="required">*</span></label>
-                            <input type="number" class="form-input" id="budget" placeholder="เช่น 500000" oninput="analyzeProject()">
-                            <div class="form-help">วงเงินที่ประมาณการไว้</div>
+                            <input type="number" class="form-input" id="budget" placeholder="เช่น 80000" oninput="analyzeProject()">
+                            <div class="form-help">วงเงินที่ประมาณการไว้ (รวม VAT)</div>
                         </div>
                     </div>
 
@@ -623,32 +669,32 @@
                             </select>
                         </div>
                         <div>
-                            <label class="form-label">ประเภทพัสดุ/งาน <span class="required">*</span></label>
+                            <label class="form-label">ประเภทการจัดซื้อจัดจ้าง <span class="required">*</span></label>
                             <select class="form-select" id="category" onchange="analyzeProject()">
-                                <option value="">เลือกประเภทพัสดุ/งาน</option>
-                                <option value="goods">พัสดุ (สินค้า)</option>
-                                <option value="services">งานบริการ</option>
+                                <option value="">เลือกประเภท</option>
+                                <option value="goods">งานซื้อ (สินค้า/พัสดุ)</option>
+                                <option value="services">งานจ้าง (บริการ)</option>
                                 <option value="construction">งานก่อสร้าง</option>
-                                <option value="consulting">งานที่ปรึกษา</option>
+                                <option value="consulting">งานจ้างที่ปรึกษา</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">ลักษณะผู้ขาย <span class="required">*</span></label>
+                        <label class="form-label">ลักษณะของตลาด/ผู้ขาย <span class="required">*</span></label>
                         <select class="form-select" id="vendorType" onchange="analyzeProject()">
-                            <option value="">เลือกลักษณะผู้ขาย</option>
-                            <option value="general">ผู้ขายทั่วไป</option>
-                            <option value="specialized">ผู้ขายเฉพาะทาง</option>
-                            <option value="limited">ผู้ขายจำกัด</option>
-                            <option value="single">ผู้ขายรายเดียว</option>
+                            <option value="">เลือกลักษณะของตลาด</option>
+                            <option value="general">ผู้ขายทั่วไป (มีผู้ขายหลายราย)</option>
+                            <option value="specialized">ผู้ขายเฉพาะทาง (มีผู้ขายจำกัด)</option>
+                            <option value="limited">ผู้ขายจำกัด (มีผู้ขายน้อย 2-3 ราย)</option>
+                            <option value="single">ผู้ขายรายเดียว (Sole Source)</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">รายละเอียด/ขอบเขตงาน (TOR)</label>
-                        <textarea class="form-textarea" id="description" placeholder="ใส่รายละเอียดของโครงการ"></textarea>
-                        <div class="form-help">อธิบายรายละเอียดสิ่งที่ต้องการจัดซื้อ</div>
+                        <textarea class="form-textarea" id="description" placeholder="ระบุรายละเอียดของสิ่งที่ต้องการจัดซื้อ/จัดจ้าง"></textarea>
+                        <div class="form-help">อธิบายรายละเอียดสิ่งที่ต้องการจัดซื้อ คุณสมบัติ หรือขอบเขตการทำงาน</div>
                     </div>
 
                     <div class="form-group half">
@@ -668,7 +714,7 @@
                     <div class="form-section-header">
                         <div class="form-step">
                             <div class="step-number">2</div>
-                            <span>เลือกวิธีการจัดซื้อ</span>
+                            <span>เลือกวิธีการจัดซื้อจัดจ้าง</span>
                         </div>
                     </div>
                     <div class="form-section-body">
@@ -715,61 +761,87 @@
             selectedMethod: ''
         };
 
-        // Procurement Methods Configuration
+        // ✅ UPDATED: Procurement Methods Configuration ตามกฎหมาย พ.ศ.2560
         let procurementMethods = {
             'เฉพาะเจาะจง': {
-                name: 'เฉพาะเจาะจง',
-                budgetMin: 0,
-                budgetMax: 500000,
-                timeFrame: '15-30 วัน',
-                description: 'สำหรับพัสดุที่มีผู้ขายจำกัดหรือต้องการคุณสมบัติเฉพาะ',
-                suitable: ['specialized', 'limited', 'single'],
-                urgency: ['high', 'medium']
-            },
-            'สืบราคา': {
-                name: 'สืบราคา',
+                name: 'วิธีเฉพาะเจาะจง',
                 budgetMin: 0,
                 budgetMax: 100000,
                 timeFrame: '7-15 วัน',
-                description: 'สำหรับพัสดุทั่วไปที่มีผู้ขายหลายราย',
-                suitable: ['general'],
-                urgency: ['high', 'medium', 'low']
+                description: 'สำหรับพัสดุที่มีผู้ขายจำกัด หรือมีคุณสมบัติเฉพาะ ไม่เกิน 100,000 บาท',
+                suitable: ['specialized', 'limited', 'single'],
+                urgency: ['high', 'medium', 'low'],
+                lawReference: 'มาตรา 56(2)(ข)'
             },
-            'คัดเลือก': {
-                name: 'คัดเลือก',
-                budgetMin: 100000,
+            'เฉพาะเจาะจงราคา': {
+                name: 'วิธีเฉพาะเจาะจง (เหตุฉุกเฉิน)',
+                budgetMin: 100001,
+                budgetMax: 500000,
+                timeFrame: '5-10 วัน',
+                description: 'สำหรับกรณีเหตุฉุกเฉิน หรือมีผู้ขายที่มีคุณสมบัติเฉพาะเจาะจง',
+                suitable: ['specialized', 'limited', 'single'],
+                urgency: ['high'],
+                lawReference: 'มาตรา 56(2)(ข) พิเศษ'
+            },
+            'เฉพาะเจาะจงสาธารณ': {
+                name: 'วิธีเฉพาะเจาะจง (งานสาธารณูปโภค)',
+                budgetMin: 500001,
+                budgetMax: 5000000,
+                timeFrame: '15-30 วัน',
+                description: 'สำหรับงานสาธารณูปโภค หรืองานที่มีผู้ให้บริการจำกัด',
+                suitable: ['specialized', 'limited'],
+                urgency: ['medium', 'low'],
+                lawReference: 'มาตรา 56(2)(ข) ขยาย'
+            },
+            'ประกาศเชิญชวน': {
+                name: 'วิธีประกาศเชิญชวนทั่วไป',
+                budgetMin: 100001,
                 budgetMax: 2000000,
                 timeFrame: '30-45 วัน',
-                description: 'สำหรับโครงการขนาดกลางที่ต้องการเปรียบเทียบอย่างละเอียด',
+                description: 'สำหรับพัสดุทั่วไป 100,001-2,000,000 บาท ที่มีผู้ขายหลายราย',
                 suitable: ['general', 'specialized'],
-                urgency: ['medium', 'low']
+                urgency: ['medium', 'low'],
+                lawReference: 'มาตรา 55, 56(1)'
             },
-            'ประกวดราคา': {
-                name: 'ประกวดราคา',
-                budgetMin: 2000000,
+            'คัดเลือก': {
+                name: 'วิธีคัดเลือก',
+                budgetMin: 2000001,
                 budgetMax: 50000000,
                 timeFrame: '45-60 วัน',
-                description: 'สำหรับโครงการขนาดใหญ่ที่ต้องการความโปร่งใส',
+                description: 'สำหรับงานซับซ้อน มูลค่า 2-50 ล้านบาท ต้องผ่านคุณสมบัติ',
                 suitable: ['general', 'specialized'],
-                urgency: ['low']
+                urgency: ['low'],
+                lawReference: 'มาตรา 55, 56(1)'
+            },
+            'ประกวดแบบ': {
+                name: 'วิธีประกวดแบบ',
+                budgetMin: 50000001,
+                budgetMax: 999999999,
+                timeFrame: '60-90 วัน',
+                description: 'สำหรับงานก่อสร้างหรืองานออกแบบ มูลค่าเกิน 50 ล้านบาท',
+                suitable: ['construction', 'consulting'],
+                urgency: ['low'],
+                lawReference: 'มาตรา 55, 56(1)'
             },
             'e-bidding': {
-                name: 'e-bidding',
+                name: 'วิธี e-bidding',
                 budgetMin: 500000,
                 budgetMax: 999999999,
-                timeFrame: '30-45 วัน',
-                description: 'ระบบประมูลอิเล็กทรอนิกส์ สำหรับโครงการที่ต้องการความโปร่งใส',
+                timeFrame: '20-35 วัน',
+                description: 'ประมูลอิเล็กทรอนิกส์ เพิ่มความโปร่งใส ลดเวลาดำเนินการ',
                 suitable: ['general', 'specialized'],
-                urgency: ['medium', 'low']
+                urgency: ['medium', 'low'],
+                lawReference: 'มาตรา 55 + ระบบอิเล็กทรอนิกส์'
             },
             'e-market': {
-                name: 'e-market',
+                name: 'วิธี e-market',
                 budgetMin: 0,
-                budgetMax: 200000,
-                timeFrame: '7-14 วัน',
-                description: 'ซื้อผ่านตลาดกลางอิเล็กทรอนิกส์ รวดเร็วและสะดวก',
+                budgetMax: 100000,
+                timeFrame: '3-7 วัน',
+                description: 'ซื้อผ่านตลาดกลางอิเล็กทรอนิกส์ สำหรับสินค้ามาตรฐาน',
                 suitable: ['general'],
-                urgency: ['high', 'medium']
+                urgency: ['high', 'medium'],
+                lawReference: 'มาตรา 56(2)(ช)'
             }
         };
 
@@ -802,7 +874,7 @@
             
             section.style.display = 'block';
             status.className = 'recommendation-status analyzing';
-            status.innerHTML = '<div class="loading-spinner"></div><span>🔍 กำลังวิเคราะห์ข้อมูล...</span>';
+            status.innerHTML = '<div class="loading-spinner"></div><span>🔍 กำลังวิเคราะห์ตามกฎหมาย พ.ศ.2560...</span>';
         }
 
         function hideRecommendations() {
@@ -820,27 +892,60 @@
         function generateRecommendations() {
             const recommendations = [];
             
-            // Analyze each method
+            // ✅ UPDATED: Enhanced Analysis Logic
             for (const [key, method] of Object.entries(procurementMethods)) {
                 let score = 0;
                 let reasons = [];
 
-                // Budget suitability (40 points)
+                // 1. Budget Compliance (50 points) - ตรวจสอบตามกฎหมาย
                 if (currentProject.budget >= method.budgetMin && currentProject.budget <= method.budgetMax) {
-                    score += 40;
-                    reasons.push(`เหมาะสมกับงบประมาณ ${currentProject.budget.toLocaleString()} บาท`);
+                    score += 50;
+                    reasons.push(`ตรงตามวงเงิน ${currentProject.budget.toLocaleString()} บาท ตาม ${method.lawReference}`);
+                } else if (currentProject.budget > method.budgetMax && method.budgetMax < 999999999) {
+                    // ถ้าเกินวงเงิน ให้คะแนนบางส่วน
+                    score += 10;
+                    reasons.push(`เกินวงเงินที่กำหนด แต่สามารถใช้ได้ในกรณีพิเศษ`);
                 }
 
-                // Vendor type suitability (30 points)
+                // 2. Vendor Market Analysis (25 points)
                 if (method.suitable.includes(currentProject.vendorType)) {
-                    score += 30;
-                    reasons.push(`เหมาะสมกับลักษณะผู้ขาย`);
+                    score += 25;
+                    reasons.push(`เหมาะสมกับลักษณะตลาด: ${getVendorTypeText(currentProject.vendorType)}`);
                 }
 
-                // Urgency suitability (30 points)
+                // 3. Category Matching (15 points)
+                if (method.name.includes('ก่อสร้าง') && currentProject.category === 'construction') {
+                    score += 15;
+                    reasons.push(`เหมาะสำหรับงานก่อสร้าง`);
+                } else if (method.name.includes('ที่ปรึกษา') && currentProject.category === 'consulting') {
+                    score += 15;
+                    reasons.push(`เหมาะสำหรับงานที่ปรึกษา`);
+                } else if (['goods', 'services'].includes(currentProject.category) && !method.name.includes('ก่อสร้าง') && !method.name.includes('ที่ปรึกษา')) {
+                    score += 15;
+                    reasons.push(`เหมาะสำหรับ${getCategoryText(currentProject.category)}`);
+                }
+
+                // 4. Urgency Factor (10 points)
                 if (method.urgency.includes(currentProject.urgency)) {
-                    score += 30;
-                    reasons.push(`เหมาะสมกับระดับความเร่งด่วน`);
+                    score += 10;
+                    reasons.push(`เหมาะกับระดับความเร่งด่วน`);
+                }
+
+                // ✅ Special Rules Based on Legal Requirements
+                // กรณีพิเศษสำหรับเฉพาะเจาะจง
+                if (currentProject.budget <= 100000 && (currentProject.vendorType === 'single' || currentProject.vendorType === 'limited')) {
+                    if (key === 'เฉพาะเจาะจง') {
+                        score += 20; // Bonus for legal compliance
+                        reasons.push(`แนะนำตามมาตรา 56(2) สำหรับผู้ขายจำกัด`);
+                    }
+                }
+
+                // กรณี e-market สำหรับสินค้ามาตรฐาน
+                if (currentProject.budget <= 100000 && currentProject.vendorType === 'general' && currentProject.category === 'goods') {
+                    if (key === 'e-market') {
+                        score += 15;
+                        reasons.push(`เหมาะสำหรับสินค้ามาตรฐานผ่านระบบอิเล็กทรอนิกส์`);
+                    }
                 }
 
                 recommendations.push({
@@ -858,7 +963,7 @@
             // Show status as ready
             const status = document.getElementById('recommendationStatus');
             status.className = 'recommendation-status ready';
-            status.innerHTML = '<span>✅</span><span>วิเคราะห์เสร็จสิ้น - แนะนำวิธีการจัดซื้อแล้ว</span>';
+            status.innerHTML = '<span>✅</span><span>วิเคราะห์เสร็จสิ้น - แนะนำวิธีการตามกฎหมาย พ.ศ.2560</span>';
 
             // Update progress bar
             const progressBar = document.querySelector('.progress-bar');
@@ -878,10 +983,13 @@
                 let badgeClass = 'badge-suitable';
                 let badgeText = 'เหมาะสม';
 
-                // Only the first (highest scoring) gets "แนะนำ" badge
+                // แนะนำสำหรับอันดับแรกที่มีคะแนนสูง
                 if (index === 0 && rec.score >= 70) {
                     badgeClass = 'badge-recommended';
                     badgeText = 'แนะนำ';
+                } else if (rec.score >= 60) {
+                    badgeClass = 'badge-legal';
+                    badgeText = 'ถูกต้อง';
                 }
 
                 const card = document.createElement('div');
@@ -901,6 +1009,10 @@
                             <span>⏱️</span>
                             <span>${rec.method.timeFrame}</span>
                         </div>
+                        <div class="method-law">
+                            <span>📋</span>
+                            <span>${rec.method.lawReference}</span>
+                        </div>
                     </div>
                 `;
                 
@@ -910,9 +1022,9 @@
 
             // Show explanation for top recommendation
             const topRec = topRecommendations[0];
-            if (topRec && topRec.score >= 70) {
+            if (topRec && topRec.score >= 50) {
                 document.getElementById('explanationText').textContent = 
-                    `แนะนำวิธี "${topRec.method.name}" เพราะ ${topRec.reasons.join(', ')}. ระยะเวลาดำเนินการประมาณ ${topRec.method.timeFrame}`;
+                    `แนะนำ "${topRec.method.name}" เพราะ ${topRec.reasons.join(', ')}. ระยะเวลาดำเนินการประมาณ ${topRec.method.timeFrame} ตาม ${topRec.method.lawReference}`;
                 explanation.style.display = 'block';
             } else {
                 explanation.style.display = 'none';
@@ -941,7 +1053,7 @@
             const progressBar = document.querySelector('.progress-bar');
             progressBar.style.width = '100%';
             
-            showNotification(`✅ เลือกวิธี "${method.name}" แล้ว`);
+            showNotification(`✅ เลือก "${method.name}" แล้ว`);
         }
 
         // Button State Management
@@ -998,7 +1110,7 @@
 
             content.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                    <h2 style="margin: 0; color: #1e293b;">👁️ ตัวอย่างคำขอจัดซื้อ</h2>
+                    <h2 style="margin: 0; color: #1e293b;">👁️ ตัวอย่างคำขอจัดซื้อจัดจ้าง</h2>
                     <button onclick="this.closest('div').remove()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #64748b;">×</button>
                 </div>
                 
@@ -1008,16 +1120,21 @@
                     <p><strong>วงเงิน:</strong> ${currentProject.budget.toLocaleString()} บาท</p>
                     <p><strong>ความเร่งด่วน:</strong> ${getUrgencyText(currentProject.urgency)}</p>
                     <p><strong>ประเภท:</strong> ${getCategoryText(currentProject.category)}</p>
-                    <p><strong>ลักษณะผู้ขาย:</strong> ${getVendorTypeText(currentProject.vendorType)}</p>
+                    <p><strong>ลักษณะตลาด:</strong> ${getVendorTypeText(currentProject.vendorType)}</p>
                     ${currentProject.selectedMethod ? `<p><strong>วิธีการจัดซื้อ:</strong> ${currentProject.selectedMethod}</p>` : ''}
                 </div>
 
                 ${currentProject.description ? `
                 <div style="background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 16px;">
-                    <h3 style="margin: 0 0 12px 0; color: #1e293b;">📝 รายละเอียด</h3>
+                    <h3 style="margin: 0 0 12px 0; color: #1e293b;">📝 รายละเอียด/TOR</h3>
                     <p style="white-space: pre-wrap;">${currentProject.description}</p>
                 </div>
                 ` : ''}
+
+                <div style="background: #fef7cd; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+                    <h4 style="margin: 0 0 8px 0; color: #92400e; font-size: 14px;">⚖️ อ้างอิงกฎหมาย</h4>
+                    <p style="margin: 0; color: #92400e; font-size: 12px;">ตาม พระราชบัญญัติการจัดซื้อจัดจ้างและการบริหารพัสดุภาครัฐ พ.ศ.2560</p>
+                </div>
 
                 <div style="display: flex; gap: 12px; justify-content: flex-end;">
                     <button onclick="this.closest('div').remove()" style="padding: 8px 16px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer;">ปิด</button>
@@ -1044,7 +1161,7 @@
             // Save progress
             saveDraft();
             
-            showNotification('🎉 ดำเนินการต่อไปขั้นตอน "การสร้างเอกสาร" กำลังโหลด...');
+            showNotification('🎉 ดำเนินการต่อ - กำลังเตรียมเอกสารตามกฎหมาย...');
             
             // Simulate navigation to next page
             setTimeout(() => {
@@ -1064,20 +1181,20 @@
 
         function getCategoryText(category) {
             const texts = {
-                'goods': 'พัสดุ (สินค้า)',
-                'services': 'งานบริการ',
+                'goods': 'งานซื้อ (สินค้า/พัสดุ)',
+                'services': 'งานจ้าง (บริการ)',
                 'construction': 'งานก่อสร้าง',
-                'consulting': 'งานที่ปรึกษา'
+                'consulting': 'งานจ้างที่ปรึกษา'
             };
             return texts[category] || category;
         }
 
         function getVendorTypeText(vendorType) {
             const texts = {
-                'general': 'ผู้ขายทั่วไป',
-                'specialized': 'ผู้ขายเฉพาะทาง',
-                'limited': 'ผู้ขายจำกัด',
-                'single': 'ผู้ขายรายเดียว'
+                'general': 'ผู้ขายทั่วไป (มีผู้ขายหลายราย)',
+                'specialized': 'ผู้ขายเฉพาะทาง (มีผู้ขายจำกัด)',
+                'limited': 'ผู้ขายจำกัด (มีผู้ขายน้อย 2-3 ราย)',
+                'single': 'ผู้ขายรายเดียว (Sole Source)'
             };
             return texts[vendorType] || vendorType;
         }
