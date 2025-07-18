@@ -24,7 +24,8 @@
             padding: 0 24px;
         }
 
-        /* Header */
+        /* ===== HEADER STYLES ===== */
+        /* Header bar with logo and user info */
         .header {
             background: white;
             border-bottom: 1px solid #e2e8f0;
@@ -41,6 +42,7 @@
             align-items: center;
         }
 
+        /* Logo section on the left */
         .logo-section {
             display: flex;
             align-items: center;
@@ -74,6 +76,7 @@
             margin: 0;
         }
 
+        /* User info section on the right */
         .user-section {
             display: flex;
             align-items: center;
@@ -110,11 +113,13 @@
             margin: 0;
         }
 
-        /* Main Content */
+        /* ===== MAIN CONTENT STYLES ===== */
+        /* Main content area with padding */
         .main-content {
             padding: 32px 0;
         }
 
+        /* Page header with title and description */
         .page-header {
             margin-bottom: 32px;
         }
@@ -131,6 +136,7 @@
             color: #64748b;
         }
 
+        /* Two-column grid layout */
         .grid {
             display: grid;
             grid-template-columns: 1fr 400px;
@@ -149,7 +155,8 @@
             gap: 24px;
         }
 
-        /* Cards */
+        /* ===== CARD COMPONENTS ===== */
+        /* Base card styling with hover effects */
         .card {
             background: white;
             border-radius: 16px;
@@ -191,12 +198,14 @@
             padding: 24px;
         }
 
-        /* Action Buttons */
+        /* ===== ACTION BUTTONS ===== */
+        /* Grid layout for action buttons */
         .action-grid {
             display: grid;
             gap: 16px;
         }
 
+        /* Clickable action button with icon and content */
         .action-button {
             display: flex;
             align-items: center;
@@ -243,7 +252,8 @@
             line-height: 1.5;
         }
 
-        /* Stats */
+        /* ===== STATISTICS CARDS ===== */
+        /* Grid for statistics display */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -270,7 +280,8 @@
             opacity: 0.9;
         }
 
-        /* Table */
+        /* ===== DATA TABLE ===== */
+        /* Scrollable table container */
         .table-container {
             overflow-x: auto;
         }
@@ -300,6 +311,7 @@
             background: #f8fafc;
         }
 
+        /* Request code styling */
         .request-code {
             font-family: monospace;
             font-weight: 600;
@@ -310,6 +322,7 @@
             font-size: 12px;
         }
 
+        /* Method badges with different colors */
         .method-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -324,6 +337,7 @@
         .method-emarket { background: #f3e8ff; color: #7c2d12; }
         .method-select { background: #d1fae5; color: #065f46; }
 
+        /* Status badges with different colors */
         .status-badge {
             display: inline-block;
             padding: 6px 12px;
@@ -351,13 +365,15 @@
             text-decoration: underline;
         }
 
-        /* Knowledge Hub */
+        /* ===== KNOWLEDGE HUB ===== */
+        /* Grid layout for knowledge items */
         .knowledge-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
         }
 
+        /* Individual knowledge item card */
         .knowledge-item {
             display: flex;
             flex-direction: column;
@@ -395,7 +411,8 @@
             line-height: 1.4;
         }
 
-        /* Responsive */
+        /* ===== RESPONSIVE DESIGN ===== */
+        /* Tablet and smaller screens */
         @media (max-width: 1024px) {
             .grid {
                 grid-template-columns: 1fr;
@@ -406,6 +423,7 @@
             }
         }
 
+        /* Mobile screens */
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -426,7 +444,8 @@
             }
         }
 
-        /* Animations */
+        /* ===== ANIMATIONS ===== */
+        /* Fade in animation for cards */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -440,12 +459,13 @@
         .card:nth-child(2) { animation-delay: 0.2s; }
         .card:nth-child(3) { animation-delay: 0.3s; }
 
-        /* Notification styles */
+        /* ===== NOTIFICATION STYLES ===== */
+        /* Toast notification styling */
         .notification {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: #3b82f6; /* สีฟ้า */
+            background: #3b82f6;
             color: white;
             padding: 12px 20px;
             border-radius: 8px;
@@ -461,6 +481,7 @@
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+        
         @keyframes slideOut {
             from { transform: translateX(0); opacity: 1; }
             to { transform: translateX(100%); opacity: 0; }
@@ -468,9 +489,11 @@
     </style>
 </head>
 <body>
+    <!-- ===== HEADER SECTION ===== -->
     <div class="header">
         <div class="container">
             <div class="header-content">
+                <!-- Logo and brand name -->
                 <div class="logo-section">
                     <div class="logo">EP</div>
                     <div class="logo-text">
@@ -478,6 +501,7 @@
                         <p>ระบบช่วยเลือกแบบจัดซื้ออัจฉริยะ</p>
                     </div>
                 </div>
+                <!-- User information display -->
                 <div class="user-section">
                     <div class="user-avatar">จ</div>
                     <div class="user-info">
@@ -489,15 +513,20 @@
         </div>
     </div>
 
+    <!-- ===== MAIN CONTENT AREA ===== -->
     <div class="container">
         <div class="main-content">
+            <!-- Page title and description -->
             <div class="page-header">
                 <h1>Dashboard</h1>
                 <p>ภาพรวมระบบการจัดซื้อจัดจ้าง</p>
             </div>
 
+            <!-- Two-column layout: main content + sidebar -->
             <div class="grid">
+                <!-- Left column: main actions and data -->
                 <div class="main-column">
+                    <!-- Procurement actions card -->
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title">
@@ -507,6 +536,7 @@
                         </div>
                         <div class="card-body">
                             <div class="action-grid">
+                                <!-- Action: Create new request → Goes to page 2 -->
                                 <div class="action-button" onclick="createNewRequest()">
                                     <div class="action-icon">➕</div>
                                     <div class="action-content">
@@ -514,6 +544,7 @@
                                         <p>เริ่มต้นกระบวนการจัดซื้อจัดจ้างใหม่ เพื่อความรวดเร็วและถูกต้อง</p>
                                     </div>
                                 </div>
+                                <!-- Action: View pending requests (demo) -->
                                 <div class="action-button" onclick="viewPendingRequests()">
                                     <div class="action-icon">⏳</div>
                                     <div class="action-content">
@@ -521,6 +552,7 @@
                                         <p>คำขอที่ยังไม่ได้ส่ง หรือรออัปโหลด/แก้ไขเอกสารของคุณ</p>
                                     </div>
                                 </div>
+                                <!-- Action: View approval requests (demo) -->
                                 <div class="action-button" onclick="viewApprovalRequests()">
                                     <div class="action-icon">📋</div>
                                     <div class="action-content">
@@ -532,6 +564,7 @@
                         </div>
                     </div>
 
+                    <!-- Recent requests table -->
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title">
@@ -596,6 +629,7 @@
                         </div>
                     </div>
 
+                    <!-- Statistics overview -->
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title">
@@ -626,6 +660,7 @@
                     </div>
                 </div>
 
+                <!-- Right column: knowledge hub -->
                 <div class="sidebar">
                     <div class="card">
                         <div class="card-header">
@@ -636,31 +671,37 @@
                         </div>
                         <div class="card-body">
                             <div class="knowledge-grid">
+                                <!-- Knowledge item: Regulations (demo) -->
                                 <div class="knowledge-item" onclick="viewRegulations()">
                                     <div class="knowledge-icon">📋</div>
                                     <div class="knowledge-title">ระเบียบ & กฎหมาย</div>
                                     <div class="knowledge-desc">ระเบียบ พ.ศ. 2560</div>
                                 </div>
+                                <!-- Knowledge item: Templates (demo) -->
                                 <div class="knowledge-item" onclick="viewTemplates()">
                                     <div class="knowledge-icon">📄</div>
                                     <div class="knowledge-title">แบบฟอร์ม</div>
                                     <div class="knowledge-desc">Template เอกสาร</div>
                                 </div>
+                                <!-- Knowledge item: TOR Examples (demo) -->
                                 <div class="knowledge-item" onclick="viewExamples()">
                                     <div class="knowledge-icon">📖</div>
                                     <div class="knowledge-title">ตัวอย่าง TOR</div>
                                     <div class="knowledge-desc">แนวทางการเขียน</div>
                                 </div>
+                                <!-- Knowledge item: FAQ (demo) -->
                                 <div class="knowledge-item" onclick="viewFAQ()">
                                     <div class="knowledge-icon">❓</div>
                                     <div class="knowledge-title">คำถามที่พบบ่อย</div>
                                     <div class="knowledge-desc">FAQ & คำแนะนำ</div>
                                 </div>
+                                <!-- Knowledge item: Contacts (demo) -->
                                 <div class="knowledge-item" onclick="viewContacts()">
                                     <div class="knowledge-icon">👥</div>
                                     <div class="knowledge-title">ผู้ติดต่อ</div>
                                     <div class="knowledge-desc">ผู้เชี่ยวชาญ</div>
                                 </div>
+                                <!-- Knowledge item: Videos (demo) -->
                                 <div class="knowledge-item" onclick="viewVideos()">
                                     <div class="knowledge-icon">🎥</div>
                                     <div class="knowledge-title">วิดีโอสอน</div>
@@ -674,6 +715,7 @@
         </div>
     </div>
 
+    <!-- Footer section -->
     <div class="footer">
         <div class="container">
             <p>&copy; 2023 Easy Procure. All rights reserved.</p>
@@ -681,64 +723,93 @@
     </div>
 
     <script>
+        // ===== NAVIGATION FUNCTIONS =====
+        // ฟังก์ชันสร้างคำขอใหม่: ไปหน้าสร้างคำขอ (หน้าที่ 2)
         function createNewRequest() {
             showNotification('กำลังเปิดหน้าสร้างคำขอใหม่... 🚀');
             setTimeout(() => {
                 window.location.href = 'procurement_request_form.html';
-            }, 500); // หน่วง 0.5 วินาที
+            }, 500);
         }
 
+        // ฟังก์ชันดูคำขอที่รอดำเนินการ (จำลอง)
         function viewPendingRequests() {
             showNotification('แสดงคำขอของคุณที่รอดำเนินการ ⏳');
         }
 
+        // ฟังก์ชันดูคำขอที่รออนุมัติ (จำลอง)
         function viewApprovalRequests() {
             showNotification('แสดงคำขอของคุณที่รออนุมัติ 📋');
         }
 
+        // ===== KNOWLEDGE HUB FUNCTIONS =====
+        // ฟังก์ชันดูระเบียบและกฎหมาย (จำลอง)
         function viewRegulations() {
             showNotification('แสดงระเบียบและกฎหมายที่เกี่ยวข้อง 📋');
         }
 
+        // ฟังก์ชันดูแบบฟอร์ม Template (จำลอง)
         function viewTemplates() {
             showNotification('แสดงแบบฟอร์มและ Template ทั้งหมด 📄');
         }
 
+        // ฟังก์ชันดูตัวอย่าง TOR (จำลอง)
         function viewExamples() {
             showNotification('แสดงตัวอย่าง TOR และเอกสารต่างๆ 📖');
         }
 
+        // ฟังก์ชันดู FAQ (จำลอง)
         function viewFAQ() {
             showNotification('แสดงคำถามที่พบบ่อยและคำตอบ ❓');
         }
 
+        // ฟังก์ชันดูรายชื่อผู้ติดต่อ (จำลอง)
         function viewContacts() {
             showNotification('แสดงรายชื่อผู้ติดต่อและผู้เชี่ยวชาญ 👥');
         }
 
+        // ฟังก์ชันดูวิดีโอสอน (จำลอง)
         function viewVideos() {
             showNotification('แสดงวิดีโอสอนและคลิปแนะนำ 🎥');
         }
 
-        // ฟังก์ชันสำหรับแสดง Notification ที่ปรับปรุงแล้ว
+        // ===== NOTIFICATION SYSTEM =====
+        // ฟังก์ชันแสดงข้อความแจ้งเตือนพร้อม Animation
         function showNotification(message) {
             const notification = document.createElement('div');
-            notification.className = 'notification'; // ใช้ class ใหม่
+            notification.className = 'notification';
             notification.textContent = message;
             document.body.appendChild(notification);
 
-            // Remove after 3 seconds with fade out animation
+            // ลบ notification หลัง 2.5 วินาทีพร้อม fade out animation
             setTimeout(() => {
                 notification.style.animation = 'slideOut 0.3s ease-in forwards';
                 setTimeout(() => {
                     notification.remove();
                 }, 300);
-            }, 2500); // ลดเวลาแสดง Notification เล็กน้อย
+            }, 2500);
         }
 
-        // Initialize page
+        // ===== PAGE INITIALIZATION =====
+        // เริ่มต้นหน้าเว็บเมื่อโหลดเสร็จ
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Easy Procure Dashboard loaded');
+            
+            // เพิ่มการติดตามการคลิกสำหรับ analytics (ถ้าต้องการ)
+            const actionButtons = document.querySelectorAll('.action-button');
+            actionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    console.log('Action button clicked:', this.querySelector('h3').textContent);
+                });
+            });
+            
+            // เพิ่มการติดตามสำหรับ Knowledge Hub items
+            const knowledgeItems = document.querySelectorAll('.knowledge-item');
+            knowledgeItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    console.log('Knowledge item clicked:', this.querySelector('.knowledge-title').textContent);
+                });
+            });
         });
     </script>
 </body>
