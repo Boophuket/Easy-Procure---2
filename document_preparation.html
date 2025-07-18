@@ -1156,16 +1156,10 @@ let documentTemplates = {
             docDiv.className = `document-item ${isUploaded ? 'completed' : ''}`;
             docDiv.setAttribute('data-doc-id', doc.id); // เพิ่ม data-doc-id สำหรับการอ้างอิง
 
-            // ดึงวันที่ปัจจุบันและจัดรูปแบบ (YYYY-MM-DD) สำหรับ input type="date"
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const day = String(today.getDate()).padStart(2, '0');
-            const formattedDateForInput = `${year}-${month}-${day}`;
-
             // สำหรับเวอร์ชันล่าสุด (วัน/เดือน/ปี พ.ศ.)
+            const today = new Date();
             const yearBuddhist = today.getFullYear() + 543; // ปีพ.ศ.
-            const formattedDateForDisplay = `${day}/${month}/${yearBuddhist}`;
+            const formattedDateForDisplay = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${yearBuddhist}`;
 
             docDiv.innerHTML = `
                 <div class="document-header">
@@ -1209,7 +1203,7 @@ let documentTemplates = {
                     <label for="date-in-doc-${doc.id}">วันที่ในเอกสาร:<span style="color: #ef4444; margin-left: 4px;">*</span></label>
                     <input type="date" id="date-in-doc-${doc.id}" 
                            onchange="updateDocumentDate('${doc.id}', this.value)"
-                           value="${isUploaded && uploadedFiles[doc.id].documentDate ? uploadedFiles[doc.id].documentDate : formattedDateForInput}"
+                           value="${isUploaded && uploadedFiles[doc.id].documentDate ? uploadedFiles[doc.id].documentDate : ''}"
                            ${!isUploaded ? 'disabled' : ''}>
                     <span style="font-size: 12px; color: #64748b; margin-left: 8px;">ใช้สำหรับเรียงลำดับเอกสาร</span>
                 </div>
