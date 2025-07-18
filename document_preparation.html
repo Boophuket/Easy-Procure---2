@@ -491,6 +491,39 @@
             background: #fef2f2;
         }
 
+        /* New styles for date input */
+        .file-details-input {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px dashed #e2e8f0; /* Optional: Separator line */
+            display: flex; /* Use flexbox for alignment */
+            align-items: center; /* Vertically align items */
+            gap: 10px; /* Space between label and input */
+        }
+        .file-details-input label {
+            /* No longer display: block; to keep it inline with input */
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0; /* Remove bottom margin */
+            white-space: nowrap; /* Prevent label from wrapping */
+        }
+        .file-details-input input[type="date"] {
+            flex-grow: 1; /* Allow input to take available space */
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #1e293b;
+            background-color: white;
+            max-width: 200px; /* Limit width of date input */
+        }
+        .file-details-input input[type="date"]:disabled {
+            background-color: #f1f5f9;
+            cursor: not-allowed;
+        }
+
+
         /* Progress Summary */
         .progress-summary {
             background: white;
@@ -584,6 +617,14 @@
 
             .action-buttons {
                 flex-direction: column;
+            }
+
+            .file-details-input {
+                flex-direction: column; /* Stack label and input on small screens */
+                align-items: flex-start;
+            }
+            .file-details-input input[type="date"] {
+                max-width: 100%; /* Full width on small screens */
             }
         }
 
@@ -712,7 +753,7 @@
         // ===== GLOBAL VARIABLES =====
         // เก็บข้อมูลโครงการปัจจุบัน
         let currentProject = {};
-        // เก็บข้อมูลไฟล์ที่อัพโหลดแล้ว (key: docId, value: file info object)
+        // เก็บข้อมูลไฟล์ที่อัปโหลดแล้ว (key: docId, value: file info object)
         let uploadedFiles = {};
         
         // ===== DOCUMENT TEMPLATES CONFIGURATION =====
@@ -1049,38 +1090,38 @@ let documentTemplates = {
 
         // ฟังก์ชันแสดงสรุปข้อมูลโครงการในส่วนบน
         function displayProjectSummary() {
-    const container = document.getElementById('projectSummary');
-    const method = currentProject.selectedMethod || 'วิธีเฉพาะเจาะจง';
-    const documents = documentTemplates[method] || [];
-    const lawRef = documents.length > 0 ? documents[0].lawReference : '';
-    
-    container.innerHTML = `
-        ${currentProject.requestId ? `
-        <div class="summary-item">
-            <span class="summary-label">รหัสคำขอ:</span>
-            <span class="summary-value" style="color: #3b82f6; font-weight: 700;">${currentProject.requestId}</span>
-        </div>
-        ` : ''}
-        <div class="summary-item">
-            <span class="summary-label">ชื่อโครงการ:</span>
-            <span class="summary-value">${currentProject.name || 'ไม่ระบุ'}</span>
-        </div>
-        <div class="summary-item">
-            <span class="summary-label">วงเงิน:</span>
-            <span class="summary-value">฿${(currentProject.budget || 0).toLocaleString()}</span>
-        </div>
-        <div class="summary-item">
-            <span class="summary-label">วิธีการจัดซื้อ:</span>
-            <span class="method-badge">${currentProject.selectedMethod || 'ไม่ระบุ'}
-                ${lawRef ? `<span class="law-reference">${lawRef}</span>` : ''}
-            </span>
-        </div>
-        <div class="summary-item">
-            <span class="summary-label">ความเร่งด่วน:</span>
-            <span class="summary-value">${getUrgencyText(currentProject.urgency)}</span>
-        </div>
-    `;
-}
+            const container = document.getElementById('projectSummary');
+            const method = currentProject.selectedMethod || 'วิธีเฉพาะเจาะจง';
+            const documents = documentTemplates[method] || [];
+            const lawRef = documents.length > 0 ? documents[0].lawReference : '';
+            
+            container.innerHTML = `
+                ${currentProject.requestId ? `
+                <div class="summary-item">
+                    <span class="summary-label">รหัสคำขอ:</span>
+                    <span class="summary-value" style="color: #3b82f6; font-weight: 700;">${currentProject.requestId}</span>
+                </div>
+                ` : ''}
+                <div class="summary-item">
+                    <span class="summary-label">ชื่อโครงการ:</span>
+                    <span class="summary-value">${currentProject.name || 'ไม่ระบุ'}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">วงเงิน:</span>
+                    <span class="summary-value">฿${(currentProject.budget || 0).toLocaleString()}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">วิธีการจัดซื้อ:</span>
+                    <span class="method-badge">${currentProject.selectedMethod || 'ไม่ระบุ'}
+                        ${lawRef ? `<span class="law-reference">${lawRef}</span>` : ''}
+                    </span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">ความเร่งด่วน:</span>
+                    <span class="summary-value">${getUrgencyText(currentProject.urgency)}</span>
+                </div>
+            `;
+        }
 
         // ฟังก์ชันช่วยในการแสดงข้อความความเร่งด่วน
         function getUrgencyText(urgency) {
@@ -1115,13 +1156,16 @@ let documentTemplates = {
             docDiv.className = `document-item ${isUploaded ? 'completed' : ''}`;
             docDiv.setAttribute('data-doc-id', doc.id); // เพิ่ม data-doc-id สำหรับการอ้างอิง
 
-            // ดึงวันที่ปัจจุบันและจัดรูปแบบ (วัน/เดือน/ปี พ.ศ.)
+            // ดึงวันที่ปัจจุบันและจัดรูปแบบ (YYYY-MM-DD) สำหรับ input type="date"
             const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
             const day = String(today.getDate()).padStart(2, '0');
-            const month = String(today.getMonth() + 1).padStart(2, '0'); // เดือนเริ่มจาก 0
-            const yearBuddhist = today.getFullYear() + 543; // ปีพ.ศ.
-            const formattedDate = `${day}/${month}/${yearBuddhist}`;
+            const formattedDateForInput = `${year}-${month}-${day}`;
 
+            // สำหรับเวอร์ชันล่าสุด (วัน/เดือน/ปี พ.ศ.)
+            const yearBuddhist = today.getFullYear() + 543; // ปีพ.ศ.
+            const formattedDateForDisplay = `${day}/${month}/${yearBuddhist}`;
 
             docDiv.innerHTML = `
                 <div class="document-header">
@@ -1144,7 +1188,7 @@ let documentTemplates = {
                     </button>
                     <div class="version-info">
                         <span>เวอร์ชัน: ${doc.version || 'N/A'}</span>
-                        <span class="version-tag-latest">ล่าสุด ${formattedDate}</span>
+                        <span class="version-tag-latest">ล่าสุด ${formattedDateForDisplay}</span>
                     </div>
                 </div>
                 
@@ -1159,6 +1203,15 @@ let documentTemplates = {
                         <div class="upload-hint">รองรับไฟล์: PDF, Word, Excel (ขนาดไม่เกิน 10MB)</div>
                     </div>
                     ${isUploaded ? createUploadedFileDisplay(isUploaded, doc.id) : ''}
+                </div>
+
+                <div class="file-details-input" id="file-details-${doc.id}">
+                    <label for="date-in-doc-${doc.id}">วันที่ในเอกสาร:<span style="color: #ef4444; margin-left: 4px;">*</span></label>
+                    <input type="date" id="date-in-doc-${doc.id}" 
+                           onchange="updateDocumentDate('${doc.id}', this.value)"
+                           value="${isUploaded && uploadedFiles[doc.id].documentDate ? uploadedFiles[doc.id].documentDate : formattedDateForInput}"
+                           ${!isUploaded ? 'disabled' : ''}>
+                    <span style="font-size: 12px; color: #64748b; margin-left: 8px;">ใช้สำหรับเรียงลำดับเอกสาร</span>
                 </div>
             `;
             
@@ -1205,32 +1258,39 @@ let documentTemplates = {
 
         // ฟังก์ชันจัดการการอัปโหลดไฟล์
         function handleFileUpload(event, docId) {
-    		const file = event.target.files[0];
-    		if (file) {
-        		if (file.size > 10 * 1024 * 1024) {
-            		    showNotification('⚠️ ไฟล์มีขนาดใหญ่เกิน 10MB', true);
-                            event.target.value = '';
-                             return;
-        }
+            const file = event.target.files[0];
+            if (file) {
+                if (file.size > 10 * 1024 * 1024) {
+                    showNotification('⚠️ ไฟล์มีขนาดใหญ่เกิน 10MB', true);
+                    event.target.value = '';
+                    return;
+                }
 
-        uploadedFiles[docId] = {
-            name: file.name,
-            size: file.size,
-            type: file.type
-        };
-        saveUploadedFilesToLocalStorage();  // เก็บไว้แค่นี้
-        updateDocumentStatus(docId);
-        updateProgress();
-        showNotification(`✅ อัปโหลดไฟล์ "${file.name}" แล้ว`);
-        // ลบ saveDraft() ออก
-    }
-}
+                // Get current date for default date input value
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                const defaultDate = `${year}-${month}-${day}`;
+
+                uploadedFiles[docId] = {
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    documentDate: defaultDate // Set default date
+                };
+                saveUploadedFilesToLocalStorage();
+                updateDocumentStatus(docId); // This will re-render and enable fields
+                updateProgress();
+                showNotification(`✅ อัปโหลดไฟล์ "${file.name}" แล้ว`);
+            }
+        }
 
         // ฟังก์ชันลบไฟล์
         function removeFile(docId) {
             delete uploadedFiles[docId];
             saveUploadedFilesToLocalStorage();
-            updateDocumentStatus(docId);
+            updateDocumentStatus(docId); // This will re-render and disable fields
             updateProgress();
             showNotification('🗑️ ลบไฟล์เรียบร้อยแล้ว');
             // Clear the file input visually as well
@@ -1252,6 +1312,13 @@ let documentTemplates = {
             }
         }
 
+        // New functions to update date
+        function updateDocumentDate(docId, dateValue) {
+            if (uploadedFiles[docId]) {
+                uploadedFiles[docId].documentDate = dateValue;
+                saveUploadedFilesToLocalStorage();
+            }
+        }
 
         // ===== PROGRESS TRACKING =====
         // ฟังก์ชันอัปเดตแถบความคืบหน้า
@@ -1263,7 +1330,8 @@ let documentTemplates = {
             let completedRequiredDocs = 0;
 
             requiredDocs.forEach(doc => {
-                if (uploadedFiles[doc.id]) {
+                // ตรวจสอบว่าไฟล์ถูกอัปโหลดและมีการระบุวันที่ในเอกสารแล้ว
+                if (uploadedFiles[doc.id] && uploadedFiles[doc.id].documentDate) {
                     completedRequiredDocs++;
                 }
             });
@@ -1312,47 +1380,47 @@ let documentTemplates = {
 
         // ฟังก์ชันบันทึกร่าง
         function saveDraft() {
-    // สร้างรหัสคำขอถ้ายังไม่มี
-    if (!currentProject.requestId) {
-        currentProject.requestId = generateRequestId();
-    }
-    
-    localStorage.setItem('procurementDraft', JSON.stringify(currentProject));
-    saveUploadedFilesToLocalStorage();
-    showNotification(`✅ บันทึกร่างเรียบร้อยแล้ว! รหัสคำขอ: ${currentProject.requestId}`);
-    
-    // อัพเดทการแสดงผล
-    displayProjectSummary();
-}
+            // สร้างรหัสคำขอถ้ายังไม่มี
+            if (!currentProject.requestId) {
+                currentProject.requestId = generateRequestId();
+            }
+            
+            localStorage.setItem('procurementDraft', JSON.stringify(currentProject));
+            saveUploadedFilesToLocalStorage();
+            showNotification(`✅ บันทึกร่างเรียบร้อยแล้ว! รหัสคำขอ: ${currentProject.requestId}`);
+            
+            // อัพเดทการแสดงผล
+            displayProjectSummary();
+        }
 
-// ฟังก์ชันสร้างรหัสคำขอ
-function generateRequestId() {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    
-    // สร้างเลขลำดับ (001, 002, 003...)
-    const existingRequests = JSON.parse(localStorage.getItem('savedRequests') || '[]');
-    const todayRequests = existingRequests.filter(req => 
-        req.requestId && req.requestId.includes(`${year}${month}${day}`)
-    );
-    const nextNumber = String(todayRequests.length + 1).padStart(3, '0');
-    
-    const requestId = `REQ-${year}${month}${day}-${nextNumber}`;
-    
-    // บันทึกรายการคำขอ
-    existingRequests.push({
-        requestId: requestId,
-        date: today.toISOString(),
-        name: currentProject.name,
-        method: currentProject.selectedMethod,
-        budget: currentProject.budget
-    });
-    localStorage.setItem('savedRequests', JSON.stringify(existingRequests));
-    
-    return requestId;
-}
+        // ฟังก์ชันสร้างรหัสคำขอ
+        function generateRequestId() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            
+            // สร้างเลขลำดับ (001, 002, 003...)
+            const existingRequests = JSON.parse(localStorage.getItem('savedRequests') || '[]');
+            const todayRequests = existingRequests.filter(req => 
+                req.requestId && req.requestId.includes(`${year}${month}${day}`)
+            );
+            const nextNumber = String(todayRequests.length + 1).padStart(3, '0');
+            
+            const requestId = `REQ-${year}${month}${day}-${nextNumber}`;
+            
+            // บันทึกรายการคำขอ
+            existingRequests.push({
+                requestId: requestId,
+                date: today.toISOString(),
+                name: currentProject.name,
+                method: currentProject.selectedMethod,
+                budget: currentProject.budget
+            });
+            localStorage.setItem('savedRequests', JSON.stringify(existingRequests));
+            
+            return requestId;
+        }
 
         // ฟังก์ชันส่งคำขอ (เมื่อเอกสารครบถ้วน)
         function submitRequest() {
