@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Procure - รายการ Template เอกสาร</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 16px 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            color: #64748b;
+            margin: 0;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .breadcrumb a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Content Specific Styles */
+        .main-content {
+            padding: 32px 0;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .page-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); /* Orange gradient for this page */
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .page-title p {
+            font-size: 16px;
+            color: #64748b;
+        }
+
+        /* Search and Filter Bar */
+        .filter-section {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+            flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+        }
+
+        .search-input-group,
+        .filter-select-group {
+            flex: 1; /* Allow groups to grow and shrink */
+            min-width: 250px; /* Minimum width before wrapping */
+            position: relative;
+        }
+
+        .search-input,
+        .filter-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #1e293b;
+            background-color: white;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            -webkit-appearance: none; /* Remove default select arrow */
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .search-input:focus,
+        .filter-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+
+        .search-icon,
+        .select-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 20px;
+            pointer-events: none;
+        }
+        .select-icon {
+            font-size: 16px; /* Smaller arrow for select */
+        }
+
+        /* Table Styles */
+        .template-table-container {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow-x: auto; /* Allow horizontal scrolling on small screens */
+        }
+
+        .template-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+            min-width: 700px; /* Ensure table doesn't get too narrow */
+        }
+
+        .template-table th,
+        .template-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .template-table th {
+            background-color: #f1f5f9;
+            color: #475569;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        .template-table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .template-table .category-row td {
+            background-color: #e0f2fe; /* Light blue for category row */
+            font-weight: 700;
+            color: #1e40af;
+            font-size: 16px;
+            padding: 15px;
+            border-bottom: 2px solid #a7d9f8;
+            position: sticky;
+            top: 0; /* Make category headers sticky if table scrolls vertically */
+            z-index: 10;
+        }
+        /* Hide border-bottom for the last row in tbody just before next category or end */
+        .template-table tbody tr:last-child td {
+             border-bottom: none;
+        }
+
+        .template-table .category-row + tr td {
+            border-top: 1px solid #e2e8f0; /* Ensure a border after category row */
+        }
+
+        .download-btn {
+            display: inline-flex; /* Use flex for icon and text alignment */
+            align-items: center;
+            gap: 6px;
+            background: #10b981; /* Green for download */
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: #059669;
+        }
+
+        /* No results message */
+        .no-results {
+            text-align: center;
+            color: #64748b;
+            font-size: 18px;
+            padding: 40px;
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 32px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .filter-section {
+                flex-direction: column; /* Stack search and filter on small screens */
+                gap: 12px;
+            }
+            .search-input-group,
+            .filter-select-group {
+                min-width: unset; /* Remove min-width to allow full width */
+                width: 100%;
+            }
+            /* Adjust table specific styles for smaller screens if needed, 
+               but overflow-x: auto is usually sufficient for tables. */
+            .template-table {
+                min-width: 600px; /* Keep a minimum width for table on smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">EP</div>
+                    <div class="logo-text">
+                        <h1>Easy Procure</h1>
+                        <p>ระบบช่วยเลือกแบบจัดซื้ออัจฉริยะ</p>
+                    </div>
+                </div>
+                <div class="breadcrumb">
+                    <a href="index.html">Dashboard</a>
+                    <span>→</span>
+                    <span>รายการ Template เอกสาร</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="page-header">
+                <div class="page-icon">📄</div>
+                <div class="page-title">
+                    <h1>รายการ Template เอกสาร</h1>
+                    <p>ดาวน์โหลดแบบฟอร์มและ Template เอกสารที่เกี่ยวข้องกับการจัดซื้อจัดจ้าง</p>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="search-input-group">
+                    <input type="text" id="templateSearchInput" class="search-input" placeholder="ค้นหา Template เอกสาร..." onkeyup="filterTemplates()">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <div class="filter-select-group">
+                    <select id="templateCategoryFilter" class="filter-select" onchange="filterTemplates()">
+                        <option value="">-- ประเภทเอกสารทั้งหมด --</option>
+                        </select>
+                    <span class="select-icon">▼</span>
+                </div>
+            </div>
+
+            <div id="templateListContainer" class="template-table-container">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        // Define the document templates data
+        // IMPORTANT: Ensure these paths match your actual file locations!
+        const allDocumentTemplates = {
+            'เอกสารหลักและ TOR': [
+                {
+                    id: 'pr_form_specific',
+                    name: 'รายงานขอความเห็นชอบ (PR) เฉพาะเจาะจง',
+                    description: 'แบบฟอร์มรายงานขอความเห็นชอบสำหรับการจัดซื้อจัดจ้างด้วยวิธีเฉพาะเจาะจง',
+                    template: 'templates/PR_Form_Specific.docx',
+                    version: '2024.1',
+                    uploadDate: '15/05/2567',
+                    uploadedBy: 'Admin'
+                },
+                {
+                    id: 'tor_specific',
+                    name: 'รายละเอียดคุณลักษณะเฉพาะ (TOR) / แบบรูปรายการ',
+                    description: 'รายละเอียดขอบเขตงานและคุณสมบัติพัสดุสำหรับวิธีเฉพาะเจาะจง',
+                    template: 'templates/TOR_Specific.docx',
+                    version: '2024.1',
+                    uploadDate: '15/05/2567',
+                    uploadedBy: 'Admin'
+                },
+                {
+                    id: 'pr_form_general',
+                    name: 'รายงานขอความเห็นชอบ (PR) ทั่วไป',
+                    description: 'แบบฟอร์มรายงานขอความเห็นชอบสำหรับการจัดซื้อจัดจ้างด้วยวิธีประกาศเชิญชวนทั่วไป',
+                    template: 'templates/PR_Form_General.docx',
+                    version: '2024.1',
+                    uploadDate: '20/05/2567',
+                    uploadedBy: 'Admin'
+                }
+            ],
+            'หนังสือแต่งตั้งคณะกรรมการ': [
+                {
+                    id: 'appointment_buy',
+                    name: 'หนังสือแต่งตั้ง - งานซื้อ',
+                    description: 'แบบฟอร์มหนังสือแต่งตั้งคณะกรรมการ/ผู้รับผิดชอบสำหรับงานซื้อ',
+                    template: 'templates/appointments/01-แบบฟอร์มหนังสือแต่งตั้ง-งานซื้อ.docx',
+                    version: '2024.1',
+                    uploadDate: '10/06/2567',
+                    uploadedBy: 'Admin'
+                },
+                {
+                    id: 'appointment_general_service',
+                    name: 'หนังสือแต่งตั้ง - งานจ้างทั่วไป',
+                    description: 'แบบฟอร์มหนังสือแต่งตั้งคณะกรรมการ/ผู้รับผิดชอบสำหรับงานจ้างทั่วไป',
+                    template: 'templates/appointments/02-แบบฟอร์มหนังสือแต่งตั้ง-งานจ้างทั่วไป.docx',
+                    version: '2024.1',
+                    uploadDate: '10/06/2567',
+                    uploadedBy: 'Admin'
+                },
+                {
+                    id: 'appointment_construction',
+                    name: 'หนังสือแต่งตั้ง - งานก่อสร้าง',
+                    description: 'แบบฟอร์มหนังสือแต่งตั้งคณะกรรมการ/ผู้รับผิดชอบสำหรับงานก่อสร้าง',
+                    template: 'templates/appointments/03-แบบฟอร์มหนังสือแต่งตั้ง-งานก่อสร้าง.docx',
+                    version: '2024.1',
+                    uploadDate: '10/06/2567',
+                    uploadedBy: 'Admin'
+                },
+                {
+                    id: 'appointment_consulting',
+                    name: 'หนังสือแต่งตั้ง - งานจ้างที่ปรึกษา',
+                    description: 'แบบฟอร์มหนังสือแต่งตั้งคณะกรรมการ/ผู้รับผิดชอบสำหรับงานจ้างที่ปรึกษา',
+                    template: 'templates/appointments/04-แบบฟอร์มหนังสือแต่งตั้ง-ที่ปรึกษา.docx',
+                    version: '2024.1',
+                    uploadDate: '10/06/2567',
+                    uploadedBy: 'Admin'
+                },
+                {
+                    id: 'appointment_design_supervision',
+                    name: 'หนังสือแต่งตั้ง - งานจ้างออกแบบ/ควบคุมงาน',
+                    description: 'แบบฟอร์มหนังสือแต่งตั้งคณะกรรมการ/ผู้รับผิดชอบสำหรับงานจ้างออกแบบหรือควบคุมงานก่อสร้าง',
+                    template: 'templates/appointments/05-แบบฟอร์มหนังสือแต่งตั้ง- จ้างออกแบบ.docx',
+                    version: '2024.1',
+                    uploadDate: '10/06/2567',
+                    uploadedBy: 'Admin'
+                }
+            ]
+        };
+
+        function renderTemplates(filteredTemplates) {
+            const container = document.getElementById('templateListContainer');
+            container.innerHTML = ''; // Clear existing content
+
+            let totalTemplateCount = 0;
+            for (const category in filteredTemplates) {
+                if (filteredTemplates.hasOwnProperty(category)) {
+                    totalTemplateCount += filteredTemplates[category].length;
+                }
+            }
+
+            if (totalTemplateCount === 0) {
+                const noResultsDiv = document.createElement('div');
+                noResultsDiv.className = 'no-results';
+                noResultsDiv.textContent = 'ไม่พบ Template ที่ตรงกับคำค้นหาของคุณ';
+                container.appendChild(noResultsDiv);
+                return;
+            }
+
+            const table = document.createElement('table');
+            table.className = 'template-table';
+
+            const thead = document.createElement('thead');
+            thead.innerHTML = `
+                <tr>
+                    <th>ชื่อเอกสาร</th>
+                    <th style="width: 120px;">เวอร์ชัน</th>
+                    <th style="width: 150px;">วันที่อัปโหลด</th>
+                    <th style="width: 120px;">อัปโหลดโดย</th>
+                    <th style="width: 120px;">ดาวน์โหลด</th>
+                </tr>
+            `;
+            table.appendChild(thead);
+
+            const tbody = document.createElement('tbody');
+
+            for (const category in filteredTemplates) {
+                if (filteredTemplates.hasOwnProperty(category) && filteredTemplates[category].length > 0) {
+                    // Add category row
+                    const categoryRow = document.createElement('tr');
+                    categoryRow.className = 'category-row';
+                    // Span all 5 columns: Name, Version, Upload Date, Uploaded By, Download
+                    categoryRow.innerHTML = `<td colspan="5">${category}</td>`;
+                    tbody.appendChild(categoryRow);
+
+                    // Add templates within this category
+                    filteredTemplates[category].forEach(template => {
+                        const templateRow = document.createElement('tr');
+                        templateRow.innerHTML = `
+                            <td>${template.name}</td>
+                            <td>${template.version}</td>
+                            <td>${template.uploadDate}</td>
+                            <td>${template.uploadedBy}</td>
+                            <td>
+                                <a href="${template.template}" class="download-btn" download="${template.name}.docx">
+                                    ดาวน์โหลด
+                                </a>
+                            </td>
+                        `;
+                        tbody.appendChild(templateRow);
+                    });
+                }
+            }
+            table.appendChild(tbody);
+            container.appendChild(table);
+        }
+
+        function filterTemplates() {
+            const searchTerm = document.getElementById('templateSearchInput').value.toLowerCase();
+            const selectedCategory = document.getElementById('templateCategoryFilter').value;
+            const filtered = {};
+
+            for (const category in allDocumentTemplates) {
+                if (allDocumentTemplates.hasOwnProperty(category)) {
+                    // Filter by category first if one is selected
+                    if (selectedCategory && category !== selectedCategory) {
+                        continue; // Skip this category if it doesn't match the filter
+                    }
+
+                    // Then filter by search term within the relevant categories
+                    filtered[category] = allDocumentTemplates[category].filter(template => {
+                        return template.name.toLowerCase().includes(searchTerm) ||
+                               template.description.toLowerCase().includes(searchTerm) ||
+                               template.uploadDate.toLowerCase().includes(searchTerm) ||
+                               template.uploadedBy.toLowerCase().includes(searchTerm);
+                    });
+                }
+            }
+            renderTemplates(filtered);
+        }
+
+        function populateCategoryFilter() {
+            const selectElement = document.getElementById('templateCategoryFilter');
+            for (const category in allDocumentTemplates) {
+                if (allDocumentTemplates.hasOwnProperty(category)) {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    selectElement.appendChild(option);
+                }
+            }
+        }
+
+        // Initial load of all templates and populate filter when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            populateCategoryFilter(); // Populate the dropdown first
+            renderTemplates(allDocumentTemplates); // Then render all templates initially
+        });
+    </script>
+</body>
+</html>
