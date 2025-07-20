@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Procure - สรุปการส่งคำขอ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 16px 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            color: #64748b;
+            margin: 0;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .breadcrumb a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 32px 0;
+        }
+
+        /* Success Header */
+        .success-header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 48px 32px;
+            text-align: center;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+        }
+
+        .success-icon {
+            font-size: 72px;
+            margin-bottom: 16px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .success-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .success-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .request-id-display {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 20px;
+            font-weight: 700;
+            font-family: monospace;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Status Timeline */
+        .status-timeline {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .timeline-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .timeline-steps {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow-x: auto;
+            padding: 20px 0;
+        }
+
+        .timeline-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 200px;
+            position: relative;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-step.completed .step-circle {
+            background: #10b981;
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .timeline-step.current .step-circle {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+            50% { box-shadow: 0 4px 12px rgba(59, 130, 246, 0.6); }
+            100% { box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+        }
+
+        .timeline-step.pending .step-circle {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+        }
+
+        .step-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .step-description {
+            font-size: 14px;
+            color: #64748b;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .step-connector {
+            position: absolute;
+            top: 28px;
+            left: 50%;
+            right: -50%;
+            height: 3px;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+
+        .timeline-step.completed .step-connector {
+            background: #10b981;
+        }
+
+        .timeline-step:last-child .step-connector {
+            display: none;
+        }
+
+        /* Project Summary */
+        .project-summary {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .summary-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .submission-time {
+            background: #f0f9ff;
+            color: #1e40af;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .summary-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 15px;
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 15px;
+        }
+
+        .method-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Document Summary */
+        .document-summary {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .document-header {
+            background: #f8fafc;
+            padding: 24px 32px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .document-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .document-subtitle {
+            font-size: 16px;
+            color: #64748b;
+        }
+
+        .document-stats {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .stat-required {
+            color: #10b981;
+        }
+
+        .stat-optional {
+            color: #3b82f6;
+        }
+
+        .document-list {
+            padding: 24px 32px;
+        }
+
+        .document-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: #f0fdf4;
+            border: 1px solid #10b981;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .document-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .document-info {
+            flex: 1;
+        }
+
+        .document-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .document-meta {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .document-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #10b981;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Next Steps */
+        .next-steps {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .steps-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .steps-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .step-item:last-child {
+            border-bottom: none;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .step-description {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* Important Notice */
+        .important-notice {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #f59e0b;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .notice-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .notice-icon {
+            font-size: 24px;
+        }
+
+        .notice-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #92400e;
+        }
+
+        .notice-content {
+            color: #92400e;
+            line-height: 1.6;
+        }
+
+        .notice-list {
+            margin-top: 12px;
+            margin-left: 20px;
+        }
+
+        .notice-list li {
+            margin-bottom: 8px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            min-width: 180px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Contact Info */
+        .contact-info {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            padding: 32px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .contact-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .contact-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .contact-item-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .contact-item-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .success-header {
+                padding: 32px 24px;
+            }
+
+            .success-title {
+                font-size: 24px;
+            }
+
+            .success-subtitle {
+                font-size: 16px;
+            }
+
+            .request-id-display {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+
+            .timeline-steps {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .timeline-step {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .step-connector {
+                display: none;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .document-summary,
+            .project-summary,
+            .next-steps,
+            .contact-info {
+                padding: 20px;
+            }
+
+            .document-header {
+                padding: 20px;
+            }
+
+            .document-list {
+                padding: 20px;
+            }
+
+            .document-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .contact-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1001;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">EP</div>
+                    <div class="logo-text">
+                        <h1>Easy Procure</h1>
+                        <p>ระบบช่วยเลือกแบบจัดซื้ออัจฉริยะ</p>
+                    </div>
+                </div>
+                <div class="breadcrumb">
+                    <a href="index.html">Dashboard</a>
+                    <span>→</span>
+                    <a href="procurement_request_form.html">สร้างคำขอใหม่</a>
+                    <span>→</span>
+                    <a href="document_preparation.html">จัดเตรียมเอกสาร</a>
+                    <span>→</span>
+                    <span>สรุปการส่งคำขอ</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <!-- Success Header -->
+            <div class="success-header">
+                <div class="success-icon">🎉</div>
+                <div class="success-title">ส่งคำขอเรียบร้อยแล้ว!</div>
+                <div class="success-subtitle">คำขอจัดซื้อจัดจ้างของคุณได้ถูกส่งเข้าสู่ระบบเพื่อการตรวจสอบ</div>
+                <div class="request-id-display" id="requestIdDisplay">REQ-20250720-001</div>
+            </div>
+
+            <!-- Status Timeline -->
+            <div class="status-timeline">
+                <div class="timeline-title">
+                    🔄 สถานะการดำเนินการ
+                </div>
+                <div class="timeline-steps">
+                    <div class="timeline-step completed">
+                        <div class="step-circle">✓</div>
+                        <div class="step-title">ส่งคำขอแล้ว</div>
+                        <div class="step-description">เอกสารถูกส่งเข้าสู่ระบบเรียบร้อยแล้ว</div>
+                        <div class="step-connector"></div>
+                    </div>
+
+                    <div class="timeline-step current">
+                        <div class="step-circle">🔍</div>
+                        <div class="step-title">ตรวจสอบเอกสาร</div>
+                        <div class="step-description">เจ้าหน้าที่ธุรการกำลังตรวจสอบเอกสาร</div>
+                        <div class="step-connector"></div>
+                    </div>
+
+                    <div class="timeline-step pending">
+                        <div class="step-circle">📋</div>
+                        <div class="step-title">ตรวจสอบเอกสาร</div>
+                        <div class="step-description">เจ้าหน้าที่พัสดุจะตรวจสอบรายละเอียด</div>
+                        <div class="step-connector"></div>
+                    </div>
+
+                    <div class="timeline-step pending">
+                        <div class="step-circle">✅</div>
+                        <div class="step-title">อนุมัติ</div>
+                        <div class="step-description">ผู้ขอจัดซื้อจัดจ้างพิมพ์เอกสารเพื่อขออนุมัติ</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Summary -->
+            <div class="project-summary">
+                <div class="summary-header">
+                    <div class="summary-title">
+                        📋 สรุปข้อมูลโครงการ
+                    </div>
+                    <div class="submission-time" id="submissionTime">
+                        ส่งเมื่อ: 20/07/2568 - 15:45
+                    </div>
+                </div>
+                <div class="summary-grid" id="projectSummaryGrid">
+                    <!-- Data will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Document Summary -->
+            <div class="document-summary">
+                <div class="document-header">
+                    <div class="document-title">
+                        📁 เอกสารที่ส่งแล้ว
+                    </div>
+                    <div class="document-subtitle">รายการเอกสารทั้งหมดที่อัปโหลดและส่งเข้าสู่ระบบ</div>
+                    <div class="document-stats">
+                        <div class="stat-item stat-required">
+                            <span>✅</span>
+                            <span id="requiredDocsCount">5 เอกสารจำเป็น</span>
+                        </div>
+                        <div class="stat-item stat-optional">
+                            <span>📄</span>
+                            <span id="optionalDocsCount">0 เอกสารเสริม</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="document-list" id="documentList">
+                    <!-- Documents will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="next-steps">
+                <div class="steps-title">
+                    🚀 ขั้นตอนถัดไป
+                </div>
+                <ul class="steps-list">
+                    <li class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-text">ตรวจสอบเอกสารเบื้องต้น</div>
+                            <div class="step-description">เจ้าหน้าที่ธุรการจะตรวจสอบความครบถ้วนและถูกต้องของเอกสาร (ประมาณ 1-2 วันทำการ)</div>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-text">ตรวจสอบรายละเอียดพัสดุ</div>
+                            <div class="step-description">เจ้าหน้าที่พัสดุจะตรวจสอบ TOR และรายละเอียดทางเทคนิค (ประมาณ 2-3 วันทำการ)</div>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-text">อนุมัติและดำเนินการ</div>
+                            <div class="step-description">เจ้าหน้าที่ตรวจสอบเอกสารเสร็จสิ้น ผู้ขอจัดซื้อจัดจ้างพิมพ์เอกสารเพื่อขออนุมัติ
+</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Important Notice -->
+            <div class="important-notice">
+                <div class="notice-header">
+                    <div class="notice-icon">⚠️</div>
+                    <div class="notice-title">ข้อมูลสำคัญ</div>
+                </div>
+                <div class="notice-content">
+                    <p><strong>โปรดจำรหัสคำขอ:</strong> <span id="requestIdNotice">REQ-20250720-001</span> เพื่อใช้ในการติดตามสถานะ</p>
+                    <ul class="notice-list">
+                        <li>คุณจะได้รับการแจ้งเตือนทาง Email เมื่อมีการอัปเดตสถานะ</li>
+                        <li>หากมีเอกสารที่ต้องแก้ไข เจ้าหน้าที่จะติดต่อกลับภายใน 24 ชั่วโมง</li>
+                        <li>ระยะเวลาดำเนินการรวม: 5-7 วันทำการ (ขึ้นอยู่กับความซับซ้อนของโครงการ)</li>
+                        <li>สามารถติดตามสถานะได้ที่หน้า Dashboard หรือติดต่อเจ้าหน้าที่โดยตรง</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="index.html" class="btn btn-primary">
+                    🏠 กลับหน้าหลัก
+                </a>
+                <button class="btn btn-secondary" onclick="printSummary()">
+                    🖨️ พิมพ์สรุป
+                </button>
+                <button class="btn btn-success" onclick="trackStatus()">
+                    📍 ติดตามสถานะ
+                </button>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="contact-info">
+                <div class="contact-title">
+                    📞 ช่องทางติดต่อ
+                </div>
+                <p style="color: #64748b; margin-bottom: 20px;">หากมีข้อสงสัยหรือต้องการข้อมูลเพิ่มเติม</p>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-item-title">เจ้าหน้าที่ธุรการ</div>
+                        <div class="contact-item-value">นางสาวพิมพ์ใจ ใสใส</div>
+                        <div style="font-size: 14px; color: #64748b; margin-top: 4px;">
+                            📧 admin@organization.go.th<br>
+                            ☎️ 02-123-4567 ต่อ 101
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-item-title">เจ้าหน้าที่พัสดุ</div>
+                        <div class="contact-item-value">นายสมชาย จัดซื้อดี</div>
+                        <div style="font-size: 14px; color: #64748b; margin-top: 4px;">
+                            📧 procurement@organization.go.th<br>
+                            ☎️ 02-123-4567 ต่อ 201
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== GLOBAL VARIABLES =====
+        /**
+         * ข้อมูลโครงการปัจจุบัน - โหลดจาก localStorage
+         */
+        let currentProject = {};
+        
+        /**
+         * ข้อมูลเอกสารที่อัปโหลด - โหลดจาก localStorage
+         */
+        let uploadedDocuments = {};
+
+        // ===== DOCUMENT TEMPLATES CONFIGURATION =====
+        /**
+         * เอกสารที่ต้องใช้ตาม พ.ร.บ. การจัดซื้อจัดจ้างและการบริหารพัสดุภาครัฐ พ.ศ.2560
+         * โครงสร้างเดียวกับใน document_preparation.html
+         */
+        let documentTemplates = {
+            'วิธีเฉพาะเจาะจง': [
+                {
+                    id: 'pr_form',
+                    name: 'รายงานขอความเห็นชอบ (PR)',
+                    description: 'เอกสารขออนุมัติจัดซื้อจัดจ้าง รายละเอียดความจำเป็น และเหตุผลการใช้วิธีเฉพาะเจาะจง',
+                    required: true,
+                    template: 'PR_Form_Specific.docx',
+                    version: '2024.1',
+                    lawReference: 'มาตรา 56(2)(ข)',
+                    category: 'หลัก'
+                },
+                {
+                    id: 'tor_specific',
+                    name: 'รายละเอียดคุณลักษณะเฉพาะ (TOR)',
+                    description: 'เอกสารระบุคุณสมบัติ รายละเอียดทางเทคนิค และข้อกำหนดเฉพาะของพัสดุ',
+                    required: true,
+                    template: 'TOR_Specific_2024.docx',
+                    version: '2024.1',
+                    lawReference: 'มาตรา 7, 8',
+                    category: 'หลัก'
+                },
+                {
+                    id: 'market_survey',
+                    name: 'ใบสำรวจราคาในท้องตลาด',
+                    description: 'การสำรวจราคาจากผู้ขายอย่างน้อย 3 ราย เพื่อประกอบการพิจารณาราคากลาง',
+                    required: true,
+                    template: 'Market_Survey_Form.xlsx',
+                    version: '2024.1',
+                    lawReference: 'มาตรา 4',
+                    category: 'หลัก'
+                },
+                {
+                    id: 'comparison_table',
+                    name: 'ตารางเปรียบเทียบคุณสมบัติและราคา',
+                    description: 'เปรียบเทียบข้อเสนอจากผู้ขาย พร้อมเหตุผลการคัดเลือก',
+                    required: true,
+                    template: 'Comparison_Table.xlsx',
+                    version: '2024.1',
+                    lawReference: 'มาตรา 56',
+                    category: 'หลัก'
+                },
+                {
+                    id: 'justification_specific',
+                    name: 'เหตุผลความจำเป็นในการใช้วิธีเฉพาะเจาะจง',
+                    description: 'เอกสารชี้แจงเหตุผลและความจำเป็นในการใช้วิธีเฉพาะเจาะจง',
+                    required: true,
+                    template: 'Justification_Specific.docx',
+                    version: '2024.1',
+                    lawReference: 'มาตรา 56(2)',
+                    category: 'สำคัญ'
+                },
+                {
+                    id: 'vendor_verification',
+                    name: 'หลักฐานการตรวจสอบผู้ขาย',
+                    description: 'เอกสารยืนยันคุณสมบัติและความน่าเชื่อถือของผู้ขาย',
+                    required: false,
+                    template: 'Vendor_Verification.docx',
+                    version: '2024.1',
+                    lawReference: 'มาตรา 56',
+                    category: 'เสริม'
+                }
+            ]
+            // เพิ่มวิธีการอื่นๆ ตามต้องการ
+        };
+
+        // ===== PAGE INITIALIZATION =====
+        /**
+         * ฟังก์ชันเริ่มต้นหน้าเว็บ - โหลดข้อมูลและแสดงผล
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProjectData();        // โหลดข้อมูลโครงการ
+            loadUploadedDocuments();  // โหลดข้อมูลเอกสารที่อัปโหลด
+            updateProjectSummary();   // อัปเดตสรุปโครงการ
+            updateDocumentList();     // อัปเดตรายการเอกสาร
+            updateRequestId();        // อัปเดตรหัสคำขอ
+            updateSubmissionTime();   // อัปเดตเวลาส่ง
+            
+            // เล่นเสียงแจ้งเตือนความสำเร็จ (ถ้าต้องการ)
+            showSuccessNotification();
+        });
+
+        // ===== DATA LOADING FUNCTIONS =====
+        /**
+         * ฟังก์ชันโหลดข้อมูลโครงการจาก localStorage
+         */
+        function loadProjectData() {
+            const savedProject = localStorage.getItem('procurementDraft');
+            if (savedProject) {
+                currentProject = JSON.parse(savedProject);
+                
+                // สร้างรหัสคำขอถ้ายังไม่มี
+                if (!currentProject.requestId) {
+                    currentProject.requestId = generateRequestId();
+                    localStorage.setItem('procurementDraft', JSON.stringify(currentProject));
+                }
+            } else {
+                // ข้อมูลสำรองในกรณีไม่มีข้อมูลใน localStorage
+                currentProject = {
+                    requestId: generateRequestId(),
+                    name: 'จัดซื้อเครื่องคอมพิวเตอร์สำนักงาน',
+                    budget: 95000,
+                    selectedMethod: 'วิธีเฉพาะเจาะจง',
+                    urgency: 'medium',
+                    category: 'goods',
+                    vendorType: 'specialized',
+                    coordinator: 'นายจิฑาวัฒน์ ชาญปราณีต',
+                    phone: '081-234-5678',
+                    description: 'จัดซื้อเครื่องคอมพิวเตอร์สำนักงาน จำนวน 5 เครื่อง สำหรับใช้งานทั่วไป'
+                };
+            }
+        }
+
+        /**
+         * ฟังก์ชันโหลดข้อมูลเอกสารที่อัปโหลดจาก localStorage
+         */
+        function loadUploadedDocuments() {
+            const savedDocuments = localStorage.getItem('uploadedFiles');
+            if (savedDocuments) {
+                uploadedDocuments = JSON.parse(savedDocuments);
+            } else {
+                // ข้อมูลตัวอย่างในกรณีไม่มีข้อมูลใน localStorage
+                uploadedDocuments = {
+                    'pr_form': {
+                        name: 'รายงานขอความเห็นชอบ_คอมพิวเตอร์.docx',
+                        size: 245760,
+                        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        documentDate: '2025-07-20'
+                    },
+                    'tor_specific': {
+                        name: 'TOR_คุณลักษณะเครื่องคอมพิวเตอร์.docx',
+                        size: 189440,
+                        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        documentDate: '2025-07-19'
+                    },
+                    'market_survey': {
+                        name: 'สำรวจราคาคอมพิวเตอร์.xlsx',
+                        size: 156672,
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        documentDate: '2025-07-18'
+                    },
+                    'comparison_table': {
+                        name: 'ตารางเปรียบเทียบราคา.xlsx',
+                        size: 134144,
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        documentDate: '2025-07-17'
+                    },
+                    'justification_specific': {
+                        name: 'เหตุผลความจำเป็น_เฉพาะเจาะจง.docx',
+                        size: 198656,
+                        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        documentDate: '2025-07-16'
+                    }
+                };
+            }
+        }
+
+        // ===== UPDATE DISPLAY FUNCTIONS =====
+        /**
+         * ฟังก์ชันอัปเดตสรุปข้อมูลโครงการ
+         */
+        function updateProjectSummary() {
+            const container = document.getElementById('projectSummaryGrid');
+            container.innerHTML = `
+                <div class="summary-item">
+                    <span class="summary-label">ชื่อโครงการ:</span>
+                    <span class="summary-value">${currentProject.name || 'ไม่ระบุ'}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">วงเงินงบประมาณ:</span>
+                    <span class="summary-value">฿${(currentProject.budget || 0).toLocaleString()}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">วิธีการจัดซื้อ:</span>
+                    <span class="method-badge">${currentProject.selectedMethod || 'ไม่ระบุ'}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">ความเร่งด่วน:</span>
+                    <span class="summary-value">${getUrgencyText(currentProject.urgency)}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">ประเภทงาน:</span>
+                    <span class="summary-value">${getCategoryText(currentProject.category)}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">ผู้ประสานงาน:</span>
+                    <span class="summary-value">${currentProject.coordinator || 'ไม่ระบุ'}</span>
+                </div>
+            `;
+        }
+
+        /**
+         * ฟังก์ชันอัปเดตรายการเอกสาร
+         */
+        function updateDocumentList() {
+            const container = document.getElementById('documentList');
+            const method = currentProject.selectedMethod || 'วิธีเฉพาะเจาะจง';
+            const documents = documentTemplates[method] || [];
+            
+            let requiredCount = 0;
+            let optionalCount = 0;
+            
+            container.innerHTML = '';
+            
+            documents.forEach(doc => {
+                const uploadedFile = uploadedDocuments[doc.id];
+                
+                if (uploadedFile) {
+                    if (doc.required) {
+                        requiredCount++;
+                    } else {
+                        optionalCount++;
+                    }
+                    
+                    const docElement = document.createElement('div');
+                    docElement.className = 'document-item';
+                    docElement.innerHTML = `
+                        <div class="document-info">
+                            <div class="document-name">${doc.name}</div>
+                            <div class="document-meta">
+                                ไฟล์: ${uploadedFile.name} | 
+                                ขนาด: ${formatFileSize(uploadedFile.size)} | 
+                                วันที่: ${formatDate(uploadedFile.documentDate)}
+                            </div>
+                        </div>
+                        <div class="document-status">
+                            <span>✅</span>
+                            <span>ส่งแล้ว</span>
+                        </div>
+                    `;
+                    container.appendChild(docElement);
+                }
+            });
+            
+            // อัปเดตสถิติเอกสาร
+            document.getElementById('requiredDocsCount').textContent = `${requiredCount} เอกสารจำเป็น`;
+            document.getElementById('optionalDocsCount').textContent = `${optionalCount} เอกสารเสริม`;
+        }
+
+        /**
+         * ฟังก์ชันอัปเดตรหัสคำขอ
+         */
+        function updateRequestId() {
+            const requestId = currentProject.requestId || 'REQ-20250720-001';
+            document.getElementById('requestIdDisplay').textContent = requestId;
+            document.getElementById('requestIdNotice').textContent = requestId;
+        }
+
+        /**
+         * ฟังก์ชันอัปเดตเวลาส่งคำขอ
+         */
+        function updateSubmissionTime() {
+            const now = new Date();
+            const thaiDate = now.toLocaleDateString('th-TH');
+            const thaiTime = now.toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('submissionTime').textContent = `ส่งเมื่อ: ${thaiDate} - ${thaiTime}`;
+        }
+
+        // ===== ACTION FUNCTIONS =====
+        /**
+         * ฟังก์ชันพิมพ์สรุป
+         */
+        function printSummary() {
+            showNotification('🖨️ กำลังเตรียมการพิมพ์...');
+            
+            // ซ่อน elements ที่ไม่ต้องการพิมพ์
+            const elementsToHide = [
+                '.action-buttons',
+                '.breadcrumb',
+                'button'
+            ];
+            
+            elementsToHide.forEach(selector => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(el => el.style.display = 'none');
+            });
+            
+            // พิมพ์
+            setTimeout(() => {
+                window.print();
+                
+                // แสดง elements กลับมา
+                elementsToHide.forEach(selector => {
+                    const elements = document.querySelectorAll(selector);
+                    elements.forEach(el => el.style.display = '');
+                });
+            }, 500);
+        }
+
+        /**
+         * ฟังก์ชันติดตามสถานะ
+         */
+        function trackStatus() {
+            showNotification('📍 เปิดหน้าติดตามสถานะ...');
+            // ในการใช้งานจริง จะไปหน้าติดตามสถานะ
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+
+        /**
+         * ฟังก์ชันแสดงการแจ้งเตือนความสำเร็จ
+         */
+        function showSuccessNotification() {
+            setTimeout(() => {
+                showNotification('🎉 คำขอของคุณได้ถูกส่งเข้าสู่ระบบเรียบร้อยแล้ว!');
+            }, 1000);
+        }
+
+        // ===== UTILITY FUNCTIONS =====
+        /**
+         * ฟังก์ชันสร้างรหัสคำขอ
+         * @returns {string} รหัสคำขอที่สร้างขึ้น
+         */
+        function generateRequestId() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            
+            // สร้างเลขลำดับ (001, 002, 003...)
+            const existingRequests = JSON.parse(localStorage.getItem('savedRequests') || '[]');
+            const todayRequests = existingRequests.filter(req => 
+                req.requestId && req.requestId.includes(`${year}${month}${day}`)
+            );
+            const nextNumber = String(todayRequests.length + 1).padStart(3, '0');
+            
+            const requestId = `REQ-${year}${month}${day}-${nextNumber}`;
+            
+            // บันทึกรายการคำขอ
+            existingRequests.push({
+                requestId: requestId,
+                date: today.toISOString(),
+                name: currentProject.name,
+                method: currentProject.selectedMethod,
+                budget: currentProject.budget,
+                status: 'submitted'
+            });
+            localStorage.setItem('savedRequests', JSON.stringify(existingRequests));
+            
+            return requestId;
+        }
+
+        /**
+         * ฟังก์ชันจัดรูปแบบขนาดไฟล์
+         * @param {number} bytes - ขนาดไฟล์ในหน่วย bytes
+         * @returns {string} ขนาดไฟล์ที่จัดรูปแบบแล้ว
+         */
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        /**
+         * ฟังก์ชันจัดรูปแบบวันที่
+         * @param {string} dateString - วันที่ในรูปแบบ YYYY-MM-DD
+         * @returns {string} วันที่ในรูปแบบไทย
+         */
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('th-TH');
+        }
+
+        /**
+         * ฟังก์ชันแปลงข้อความความเร่งด่วน
+         * @param {string} urgency - ระดับความเร่งด่วน
+         * @returns {string} ข้อความความเร่งด่วนภาษาไทย
+         */
+        function getUrgencyText(urgency) {
+            const texts = {
+                'low': 'ไม่เร่งด่วน',
+                'medium': 'ปานกลาง',
+                'high': 'เร่งด่วน'
+            };
+            return texts[urgency] || 'ไม่ระบุ';
+        }
+
+        /**
+         * ฟังก์ชันแปลงข้อความประเภทงาน
+         * @param {string} category - ประเภทงาน
+         * @returns {string} ข้อความประเภทงานภาษาไทย
+         */
+        function getCategoryText(category) {
+            const texts = {
+                'goods': 'งานซื้อ (สินค้า/พัสดุ)',
+                'services': 'งานจ้าง (บริการ)',
+                'construction': 'งานก่อสร้าง',
+                'consulting': 'งานจ้างที่ปรึกษา'
+            };
+            return texts[category] || 'ไม่ระบุ';
+        }
+
+        /**
+         * ฟังก์ชันแสดงข้อความแจ้งเตือน
+         * @param {string} message - ข้อความที่จะแสดง
+         */
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // ===== CLEANUP =====
+        /**
+         * ฟังก์ชันล้างข้อมูลที่ไม่จำเป็น (เรียกใช้เมื่อกลับหน้าหลัก)
+         */
+        function cleanupDraftData() {
+            // เก็บข้อมูลที่ส่งแล้วไว้ในประวัติ
+            const submittedRequest = {
+                ...currentProject,
+                submittedAt: new Date().toISOString(),
+                documents: uploadedDocuments,
+                status: 'submitted'
+            };
+            
+            // บันทึกในประวัติ
+            const history = JSON.parse(localStorage.getItem('submissionHistory') || '[]');
+            history.push(submittedRequest);
+            localStorage.setItem('submissionHistory', JSON.stringify(history));
+            
+            // ล้างข้อมูลร่างและไฟล์ที่อัปโหลด
+            localStorage.removeItem('procurementDraft');
+            localStorage.removeItem('uploadedFiles');
+        }
+
+        // เรียกใช้ cleanup เมื่อผู้ใช้ออกจากหน้า (optional)
+        window.addEventListener('beforeunload', function() {
+            // สามารถเพิ่มการล้างข้อมูลหากต้องการ
+        });
+    </script>
+</body>
+</html>
