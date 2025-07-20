@@ -1,0 +1,2357 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Procure - ตรวจสอบและอนุมัติเอกสาร (Admin)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #1e293b;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 16px 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.4);
+        }
+
+        /* Breadcrumb Navigation Bar */
+        .breadcrumb-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.3);
+            padding: 16px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .breadcrumb-nav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .breadcrumb-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .back-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        }
+
+        .back-button:hover::before {
+            left: 100%;
+        }
+
+        .back-button:active {
+            transform: translateY(-1px);
+        }
+
+        .back-icon {
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .back-button:hover .back-icon {
+            transform: translateX(-4px);
+        }
+
+        /* Breadcrumb Trail */
+        .breadcrumb-trail {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        .breadcrumb-link {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        .breadcrumb-separator {
+            color: #cbd5e1;
+            font-weight: 300;
+        }
+
+        .breadcrumb-current {
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .breadcrumb-icon {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            color: #64748b;
+            margin: 0;
+        }
+
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .current-reviewer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .reviewer-avatar {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 32px 0;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-title-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .page-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .page-title p {
+            font-size: 16px;
+            color: #64748b;
+        }
+
+        .request-status {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-pending {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .status-review {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+        }
+
+        .status-approved {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .priority-indicator {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Enhanced Approval Progress */
+        .approval-workflow {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                0 1px 0 rgba(255, 255, 255, 0.5) inset;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .approval-workflow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+            animation: scan 3s infinite;
+        }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .workflow-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .workflow-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .workflow-timer {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .approval-timeline {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 20px 0;
+        }
+
+        .timeline-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 200px;
+            padding: 20px;
+            border-radius: 16px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-step.completed {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-color: #10b981;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .timeline-step.active {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        .timeline-step.rejected {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-color: #ef4444;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .step-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-step.completed .step-avatar {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .timeline-step.active .step-avatar {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+        }
+
+        .timeline-step.rejected .step-avatar {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .timeline-step:not(.active):not(.completed):not(.rejected) .step-avatar {
+            background: #e2e8f0;
+            color: #64748b;
+        }
+
+        .step-info h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .step-role {
+            font-size: 12px;
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .step-assignee {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .step-date {
+            font-size: 12px;
+            color: #64748b;
+            text-align: center;
+        }
+
+        .step-connector {
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 3px;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+
+        .timeline-step.completed .step-connector {
+            background: linear-gradient(90deg, #10b981, #059669);
+        }
+
+        /* Enhanced Project Summary */
+        .project-summary {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 20px;
+        }
+
+        .summary-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .request-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: #3b82f6;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            border: 1px solid #bfdbfe;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .summary-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .summary-value {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 14px;
+        }
+
+        /* Enhanced Document Review Section */
+        .document-review-section {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .review-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 32px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .review-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .review-subtitle {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .review-stats {
+            display: flex;
+            gap: 24px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .stat-icon.verified {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .stat-icon.pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .stat-icon.issues {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .stat-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .review-body {
+            padding: 32px;
+        }
+
+        /* Enhanced Document Cards */
+        .document-grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .document-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .document-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--status-color, #e2e8f0);
+        }
+
+        .document-card.verified {
+            --status-color: #10b981;
+            border-color: #10b981;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        }
+
+        .document-card.needs-review {
+            --status-color: #f59e0b;
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        }
+
+        .document-card.has-issues {
+            --status-color: #ef4444;
+            border-color: #ef4444;
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        }
+
+        .document-header {
+            display: flex;
+            justify-content: between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .document-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .document-info p {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .document-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .document-status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid;
+        }
+
+        .status-verified {
+            background: #d1fae5;
+            color: #065f46;
+            border-color: #10b981;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+            border-color: #f59e0b;
+        }
+
+        .status-issues {
+            background: #fee2e2;
+            color: #dc2626;
+            border-color: #ef4444;
+        }
+
+        /* Enhanced Actions */
+        .document-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .action-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-view {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-approve {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-revision {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .btn-reject {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        /* Enhanced Comment System */
+        .comment-system {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .comment-thread {
+            margin-bottom: 16px;
+        }
+
+        .comment-item {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--comment-color, #e2e8f0);
+        }
+
+        .comment-item.system {
+            --comment-color: #3b82f6;
+        }
+
+        .comment-item.reviewer {
+            --comment-color: #10b981;
+        }
+
+        .comment-item.user {
+            --comment-color: #f59e0b;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .comment-author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .author-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--comment-color, #e2e8f0);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .comment-date {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .comment-text {
+            font-size: 13px;
+            color: #374151;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .comment-action {
+            font-size: 11px;
+            color: #64748b;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .comment-action:hover {
+            background: #e2e8f0;
+            color: #374151;
+        }
+
+        .comment-form {
+            margin-top: 16px;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 13px;
+            resize: vertical;
+            min-height: 80px;
+            transition: all 0.3s ease;
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .comment-form-actions {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-top: 12px;
+        }
+
+        .comment-tools {
+            display: flex;
+            gap: 8px;
+        }
+
+        .comment-tool {
+            padding: 6px 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-size: 12px;
+            color: #64748b;
+            transition: all 0.2s ease;
+        }
+
+        .comment-tool:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        /* Final Review Actions */
+        .final-review-section {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .final-actions-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .final-actions-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .final-actions-subtitle {
+            font-size: 16px;
+            color: #64748b;
+        }
+
+        .final-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .final-action-card {
+            padding: 32px 24px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .final-action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .final-action-card.approve {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        }
+
+        .final-action-card.approve:hover {
+            border-color: #059669;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);
+        }
+
+        .final-action-card.revision {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        }
+
+        .final-action-card.revision:hover {
+            border-color: #d97706;
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.2);
+        }
+
+        .final-action-card.reject {
+            border-color: #ef4444;
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        }
+
+        .final-action-card.reject:hover {
+            border-color: #dc2626;
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.2);
+        }
+
+        .action-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .action-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .action-description {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* Enhanced Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: #1e293b;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #64748b;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: #f1f5f9;
+            color: #374151;
+        }
+
+        .modal-body {
+            margin-bottom: 32px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            .approval-timeline {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .timeline-step {
+                min-width: auto;
+                width: 100%;
+            }
+            
+            .step-connector {
+                display: none;
+            }
+            
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .breadcrumb-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .breadcrumb-trail {
+                overflow-x: auto;
+                white-space: nowrap;
+                padding-bottom: 4px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .admin-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .final-actions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .document-actions {
+                flex-direction: column;
+            }
+            
+            .review-stats {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .breadcrumb-content {
+                gap: 12px;
+            }
+            
+            .breadcrumb-trail {
+                font-size: 12px;
+                gap: 8px;
+            }
+            
+            .back-button {
+                font-size: 13px;
+                padding: 10px 16px;
+            }
+            
+            /* Hide breadcrumb trail on very small screens */
+            .breadcrumb-trail {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .back-button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .breadcrumb-nav {
+                padding: 12px 0;
+            }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1001;
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.3);
+        }
+
+        .notification.warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            box-shadow: 0 8px 32px rgba(245, 158, 11, 0.3);
+        }
+
+        @keyframes slideIn {
+            from { 
+                transform: translateX(100%); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateX(0); 
+                opacity: 1; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Header with Admin Info -->
+    <div class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">EA</div>
+                    <div class="logo-text">
+                        <h1>Easy Procure</h1>
+                        <p>ระบบบริหารจัดการหลังบ้าน</p>
+                    </div>
+                </div>
+                <div class="admin-info">
+                    <div class="current-reviewer">
+                        <div class="reviewer-avatar">AD</div>
+                        <div>
+                            <div>Admin Mode</div>
+                            <div style="font-size: 12px; opacity: 0.9;">นายจิฑาวัฒน์ ชาญปราณีต</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Breadcrumb Navigation -->
+    <div class="breadcrumb-nav">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <a href="admin_dashboard.html" class="back-button">
+                    <span class="back-icon">←</span>
+                    <span>กลับหน้าหลัก</span>
+                </a>
+                
+                <div class="breadcrumb-trail">
+                    <div class="breadcrumb-item">
+                        <span class="breadcrumb-icon">🏠</span>
+                        <a href="admin_dashboard.html" class="breadcrumb-link">Dashboard</a>
+                    </div>
+                    <span class="breadcrumb-separator">›</span>
+                    <div class="breadcrumb-item">
+                        <span class="breadcrumb-icon">📋</span>
+                        <a href="admin_requests.html" class="breadcrumb-link">จัดการคำขอ</a>
+                    </div>
+                    <span class="breadcrumb-separator">›</span>
+                    <div class="breadcrumb-item">
+                        <span class="breadcrumb-icon">🔍</span>
+                        <span class="breadcrumb-current">ตรวจสอบเอกสาร</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <!-- Enhanced Page Header -->
+            <div class="page-header">
+                <div class="page-title-section">
+                    <div class="page-icon">🔍</div>
+                    <div class="page-title">
+                        <h1>ตรวจสอบและอนุมัติเอกสาร</h1>
+                        <p>คำขอจัดซื้อเครื่องคอมพิวเตอร์สำนักงาน</p>
+                    </div>
+                </div>
+                <div class="request-status">
+                    <div class="status-badge status-review">
+                        🔍 กำลังตรวจสอบ
+                    </div>
+                    <div class="priority-indicator">ความสำคัญ: ปานกลาง • ส่งเมื่อ 2 ชั่วโมงที่แล้ว</div>
+                </div>
+            </div>
+
+            <!-- Enhanced Approval Workflow -->
+            <div class="approval-workflow">
+                <div class="workflow-header">
+                    <div class="workflow-title">
+                        🔄 ขั้นตอนการอนุมัติ
+                    </div>
+                    <div class="workflow-timer">
+                        ⏱️ เหลือเวลา 5 วันทำการ
+                    </div>
+                </div>
+                <div class="approval-timeline">
+                    <!-- Step 1: Submitted -->
+                    <div class="timeline-step completed">
+                        <div class="step-avatar">✓</div>
+                        <div class="step-info">
+                            <h3>ส่งคำขอแล้ว</h3>
+                            <div class="step-role">ผู้ขอ</div>
+                            <div class="step-assignee">นายจิฑาวัฒน์ ชาญปราณีต</div>
+                            <div class="step-date">20/07/2568 - 14:30</div>
+                        </div>
+                        <div class="step-connector"></div>
+                    </div>
+
+                    <!-- Step 2: Admin Review (Current) -->
+                    <div class="timeline-step active">
+                        <div class="step-avatar">📋</div>
+                        <div class="step-info">
+                            <h3>ตรวจสอบเอกสาร</h3>
+                            <div class="step-role">เจ้าหน้าที่ธุรการ</div>
+                            <div class="step-assignee">คุณวรรณา ใสส่าย</div>
+                            <div class="step-date">กำลังดำเนินการ</div>
+                        </div>
+                        <div class="step-connector"></div>
+                    </div>
+
+                    <!-- Step 3: Procurement Review -->
+                    <div class="timeline-step">
+                        <div class="step-avatar">📦</div>
+                        <div class="step-info">
+                            <h3>ตรวจสอบพัสดุ</h3>
+                            <div class="step-role">เจ้าหน้าที่พัสดุ</div>
+                            <div class="step-assignee">คุณสมชาย ใจดี</div>
+                            <div class="step-date">รอดำเนินการ</div>
+                        </div>
+                        <div class="step-connector"></div>
+                    </div>
+
+                    <!-- Step 4: Final Approval -->
+                    <div class="timeline-step">
+                        <div class="step-avatar">👑</div>
+                        <div class="step-info">
+                            <h3>อนุมัติสุดท้าย</h3>
+                            <div class="step-role">หัวหน้างานพัสดุ</div>
+                            <div class="step-assignee">นายอำนาจ ยุติธรรม</div>
+                            <div class="step-date">รอดำเนินการ</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Project Summary -->
+            <div class="project-summary">
+                <div class="summary-header">
+                    <div class="summary-title">
+                        📋 สรุปข้อมูลโครงการ
+                    </div>
+                    <div class="request-id">REQ-20250720-001</div>
+                </div>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <span class="summary-label">ชื่อโครงการ:</span>
+                        <span class="summary-value">จัดซื้อเครื่องคอมพิวเตอร์สำนักงาน</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">วงเงิน:</span>
+                        <span class="summary-value">฿95,000</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">วิธีการจัดซื้อ:</span>
+                        <span class="summary-value">วิธีเฉพาะเจาะจง</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">ความเร่งด่วน:</span>
+                        <span class="summary-value">ปานกลาง</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">ผู้ประสานงาน:</span>
+                        <span class="summary-value">นายจิฑาวัฒน์ ชาญปราณีต</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">เบอร์โทร:</span>
+                        <span class="summary-value">081-234-5678</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Document Review Section -->
+            <div class="document-review-section">
+                <div class="review-header">
+                    <div class="review-title">
+                        📁 ตรวจสอบเอกสาร
+                    </div>
+                    <div class="review-subtitle">ตรวจสอบความถูกต้องและครบถ้วนของเอกสารแต่ละรายการ</div>
+                    <div class="review-stats">
+                        <div class="stat-item">
+                            <div class="stat-icon verified">✓</div>
+                            <div class="stat-text">3 เอกสารผ่าน</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon pending">⏳</div>
+                            <div class="stat-text">2 รอตรวจสอบ</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon issues">⚠️</div>
+                            <div class="stat-text">0 มีปัญหา</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-body">
+                    <div class="document-grid" id="documentGrid">
+                        <!-- Documents will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Final Review Actions -->
+            <div class="final-review-section">
+                <div class="final-actions-header">
+                    <div class="final-actions-title">🎯 การดำเนินการสุดท้าย</div>
+                    <div class="final-actions-subtitle">เลือกการดำเนินการสำหรับคำขอนี้</div>
+                </div>
+                <div class="final-actions-grid">
+                    <div class="final-action-card approve" onclick="showApprovalModal('approve')">
+                        <div class="action-icon">✅</div>
+                        <div class="action-title">อนุมัติและส่งต่อ</div>
+                        <div class="action-description">
+                            เอกสารถูกต้องครบถ้วน<br>
+                            ส่งต่อไปยังเจ้าหน้าที่พัสดุ
+                        </div>
+                    </div>
+                    <div class="final-action-card revision" onclick="showApprovalModal('revision')">
+                        <div class="action-icon">📝</div>
+                        <div class="action-title">ขอแก้ไขเอกสาร</div>
+                        <div class="action-description">
+                            มีเอกสารที่ต้องแก้ไข<br>
+                            ส่งกลับให้ผู้ขอปรับปรุง
+                        </div>
+                    </div>
+                    <div class="final-action-card reject" onclick="showApprovalModal('reject')">
+                        <div class="action-icon">❌</div>
+                        <div class="action-title">ไม่อนุมัติ</div>
+                        <div class="action-description">
+                            เอกสารไม่ถูกต้อง<br>
+                            ยกเลิกคำขอทั้งหมด
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Approval Modal -->
+    <div id="approvalModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">การดำเนินการ</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">หมายเหตุ / ข้อคิดเห็น</label>
+                    <textarea class="form-textarea" id="approvalComment" 
+                              placeholder="กรอกข้อคิดเห็น เหตุผล หรือข้อเสนอแนะเพิ่มเติม..."></textarea>
+                </div>
+                <div class="form-group" id="nextAssigneeGroup" style="display: none;">
+                    <label class="form-label">ส่งต่อให้</label>
+                    <select class="form-select" id="nextAssignee">
+                        <option value="">เลือกผู้รับผิดชอบคนถัดไป</option>
+                        <option value="procurement">เจ้าหน้าที่พัสดุ - คุณสมชาย ใจดี</option>
+                        <option value="manager">หัวหน้างานพัสดุ - นายอำนาจ ยุติธรรม</option>
+                    </select>
+                </div>
+                <div class="form-group" id="priorityGroup" style="display: none;">
+                    <label class="form-label">ระดับความสำคัญ</label>
+                    <select class="form-select" id="priorityLevel">
+                        <option value="normal">ปกติ</option>
+                        <option value="urgent">เร่งด่วน</option>
+                        <option value="critical">วิกฤต</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="action-btn" style="background: #f1f5f9; color: #64748b;" onclick="closeModal()">
+                    ยกเลิก
+                </button>
+                <button class="action-btn btn-approve" id="confirmActionBtn" onclick="confirmAction()">
+                    ยืนยัน
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== ENHANCED GLOBAL VARIABLES =====
+        let currentProject = {};
+        let uploadedDocuments = {};
+        let currentApprovalAction = '';
+        let currentUser = {
+            name: 'นายจิฑาวัฒน์ ชาญปราณีต',
+            role: 'admin',
+            department: 'ธุรการ',
+            avatar: 'AD'
+        };
+
+        // ===== ENHANCED DOCUMENT TEMPLATES =====
+        let documentTemplates = {
+            'วิธีเฉพาะเจาะจง': [
+                {
+                    id: 'pr_form',
+                    name: 'รายงานขอความเห็นชอบ (PR)',
+                    description: 'เอกสารขออนุมัติจัดซื้อจัดจ้าง รายละเอียดความจำเป็น และเหตุผลการใช้วิธีเฉพาะเจาะจง',
+                    required: true,
+                    category: 'หลัก',
+                    reviewPoints: [
+                        'ความถูกต้องของข้อมูลโครงการ',
+                        'ความชัดเจนของเหตุผลความจำเป็น',
+                        'การอ้างอิงกฎหมายที่ถูกต้อง'
+                    ]
+                },
+                {
+                    id: 'tor_specific',
+                    name: 'รายละเอียดคุณลักษณะเฉพาะ (TOR)',
+                    description: 'เอกสารระบุคุณสมบัติ รายละเอียดทางเทคนิค และข้อกำหนดเฉพาะของพัสดุ',
+                    required: true,
+                    category: 'หลัก',
+                    reviewPoints: [
+                        'ความชัดเจนของคุณลักษณะทางเทคนิค',
+                        'ความเหมาะสมของข้อกำหนด',
+                        'การระบุมาตรฐานที่ถูกต้อง'
+                    ]
+                },
+                {
+                    id: 'market_survey',
+                    name: 'ใบสำรวจราคาในท้องตลาด',
+                    description: 'การสำรวจราคาจากผู้ขายอย่างน้อย 3 ราย เพื่อประกอบการพิจารณาราคากลาง',
+                    required: true,
+                    category: 'หลัก',
+                    reviewPoints: [
+                        'ความครบถ้วนของข้อมูลผู้ขาย',
+                        'ความสมเหตุสมผลของราคา',
+                        'การเปรียบเทียบคุณสมบัติ'
+                    ]
+                },
+                {
+                    id: 'comparison_table',
+                    name: 'ตารางเปรียบเทียบคุณสมบัติและราคา',
+                    description: 'เปรียบเทียบข้อเสนอจากผู้ขาย พร้อมเหตุผลการคัดเลือก',
+                    required: true,
+                    category: 'หลัก',
+                    reviewPoints: [
+                        'ความถูกต้องของการเปรียบเทียบ',
+                        'ความชัดเจนของเกณฑ์การตัดสินใจ',
+                        'เหตุผลการคัดเลือกผู้ขาย'
+                    ]
+                },
+                {
+                    id: 'justification_specific',
+                    name: 'เหตุผลความจำเป็นในการใช้วิธีเฉพาะเจาะจง',
+                    description: 'เอกสารชี้แจงเหตุผลและความจำเป็นในการใช้วิธีเฉพาะเจาะจง',
+                    required: true,
+                    category: 'สำคัญ',
+                    reviewPoints: [
+                        'ความชัดเจนของเหตุผล',
+                        'การอ้างอิงกฎหมายที่เกี่ยวข้อง',
+                        'ความสอดคล้องกับลักษณะงาน'
+                    ]
+                }
+            ]
+        };
+
+        // ===== ENHANCED PAGE INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProjectData();
+            loadUploadedDocuments();
+            renderEnhancedDocumentGrid();
+            updateReviewStats();
+            setupRealTimeFeatures();
+        });
+
+        // ===== ENHANCED DATA LOADING =====
+        function loadProjectData() {
+            const savedProject = localStorage.getItem('procurementDraft');
+            if (savedProject) {
+                currentProject = JSON.parse(savedProject);
+            } else {
+                currentProject = {
+                    requestId: 'REQ-20250720-001',
+                    name: 'จัดซื้อเครื่องคอมพิวเตอร์สำนักงาน',
+                    budget: 95000,
+                    selectedMethod: 'วิธีเฉพาะเจาะจง',
+                    urgency: 'medium',
+                    coordinator: 'นายจิฑาวัฒน์ ชาญปราณีต',
+                    phone: '081-234-5678',
+                    submittedDate: '2025-07-20T14:30:00',
+                    status: 'review'
+                };
+            }
+        }
+
+        function loadUploadedDocuments() {
+            const savedDocuments = localStorage.getItem('uploadedFiles');
+            if (savedDocuments) {
+                uploadedDocuments = JSON.parse(savedDocuments);
+            } else {
+                uploadedDocuments = {
+                    'pr_form': {
+                        name: 'รายงานขอความเห็นชอบ_คอมพิวเตอร์.docx',
+                        size: 245760,
+                        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        documentDate: '2025-07-20',
+                        uploadDate: '2025-07-20T14:30:00',
+                        status: 'verified',
+                        reviewedBy: 'ระบบตรวจสอบอัตโนมัติ',
+                        comments: []
+                    },
+                    'tor_specific': {
+                        name: 'TOR_คุณลักษณะเครื่องคอมพิวเตอร์.docx',
+                        size: 189440,
+                        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        documentDate: '2025-07-19',
+                        uploadDate: '2025-07-20T14:32:00',
+                        status: 'verified',
+                        reviewedBy: 'ระบบตรวจสอบอัตโนมัติ',
+                        comments: []
+                    },
+                    'market_survey': {
+                        name: 'สำรวจราคาคอมพิวเตอร์.xlsx',
+                        size: 156672,
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        documentDate: '2025-07-18',
+                        uploadDate: '2025-07-20T14:35:00',
+                        status: 'pending',
+                        reviewedBy: null,
+                        comments: []
+                    },
+                    'comparison_table': {
+                        name: 'ตารางเปรียบเทียบราคา.xlsx',
+                        size: 134144,
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        documentDate: '2025-07-17',
+                        uploadDate: '2025-07-20T14:37:00',
+                        status: 'pending',
+                        reviewedBy: null,
+                        comments: []
+                    },
+                    'justification_specific': {
+                        name: 'เหตุผลความจำเป็น_เฉพาะเจาะจง.docx',
+                        size: 198656,
+                        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        documentDate: '2025-07-16',
+                        uploadDate: '2025-07-20T14:40:00',
+                        status: 'verified',
+                        reviewedBy: 'คุณวรรณา ใสส่าย',
+                        comments: [
+                            {
+                                id: 1,
+                                author: 'ระบบตรวจสอบอัตโนมัติ',
+                                role: 'system',
+                                text: 'เอกสารผ่านการตรวจสอบเบื้องต้น: รูปแบบไฟล์ถูกต้อง, ขนาดไฟล์เหมาะสม, มีการระบุวันที่ในเอกสาร',
+                                timestamp: '2025-07-20T14:41:00'
+                            }
+                        ]
+                    }
+                };
+            }
+        }
+
+        // ===== ENHANCED DOCUMENT RENDERING =====
+        function renderEnhancedDocumentGrid() {
+            const container = document.getElementById('documentGrid');
+            const method = currentProject.selectedMethod || 'วิธีเฉพาะเจาะจง';
+            const documents = documentTemplates[method] || [];
+            
+            container.innerHTML = '';
+            
+            documents.forEach(doc => {
+                const uploadedFile = uploadedDocuments[doc.id];
+                const docCard = createEnhancedDocumentCard(doc, uploadedFile);
+                container.appendChild(docCard);
+            });
+        }
+
+        function createEnhancedDocumentCard(doc, uploadedFile) {
+            const cardDiv = document.createElement('div');
+            let statusClass = 'document-card';
+            let statusBadge = '';
+            let statusIcon = '';
+            
+            if (uploadedFile) {
+                switch (uploadedFile.status) {
+                    case 'verified':
+                        statusClass += ' verified';
+                        statusBadge = '<div class="document-status-badge status-verified"><span>✓</span> ตรวจสอบแล้ว</div>';
+                        statusIcon = '✅';
+                        break;
+                    case 'pending':
+                        statusClass += ' needs-review';
+                        statusBadge = '<div class="document-status-badge status-pending"><span>⏳</span> รอตรวจสอบ</div>';
+                        statusIcon = '⏳';
+                        break;
+                    case 'issues':
+                        statusClass += ' has-issues';
+                        statusBadge = '<div class="document-status-badge status-issues"><span>⚠️</span> มีปัญหา</div>';
+                        statusIcon = '⚠️';
+                        break;
+                }
+            } else {
+                statusBadge = '<div class="document-status-badge status-issues"><span>❌</span> ยังไม่ได้อัปโหลด</div>';
+                statusIcon = '❌';
+            }
+            
+            cardDiv.className = statusClass;
+            cardDiv.innerHTML = `
+                <div class="document-header">
+                    <div class="document-info">
+                        <h3>${statusIcon} ${doc.name} ${doc.required ? '<span style="color: #ef4444;">*</span>' : ''}</h3>
+                        <p>${doc.description}</p>
+                        ${uploadedFile ? `
+                            <div class="document-meta">
+                                <div class="meta-item">
+                                    <span>📄</span>
+                                    <strong>ไฟล์:</strong> ${uploadedFile.name}
+                                </div>
+                                <div class="meta-item">
+                                    <span>📏</span>
+                                    <strong>ขนาด:</strong> ${formatFileSize(uploadedFile.size)}
+                                </div>
+                                <div class="meta-item">
+                                    <span>📅</span>
+                                    <strong>วันที่ในเอกสาร:</strong> ${formatDate(uploadedFile.documentDate)}
+                                </div>
+                                <div class="meta-item">
+                                    <span>⬆️</span>
+                                    <strong>อัปโหลดเมื่อ:</strong> ${formatDateTime(uploadedFile.uploadDate)}
+                                </div>
+                                ${uploadedFile.reviewedBy ? `
+                                <div class="meta-item">
+                                    <span>👤</span>
+                                    <strong>ตรวจสอบโดย:</strong> ${uploadedFile.reviewedBy}
+                                </div>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+                    </div>
+                    ${statusBadge}
+                </div>
+                
+                <div class="document-actions">
+                    ${uploadedFile ? `
+                        <button class="action-btn btn-view" onclick="viewDocument('${doc.id}')">
+                            👁️ ดูเอกสาร
+                        </button>
+                        <button class="action-btn btn-download" onclick="downloadDocument('${doc.id}')">
+                            📥 ดาวน์โหลด
+                        </button>
+                        ${uploadedFile.status === 'pending' ? `
+                            <button class="action-btn btn-approve" onclick="approveDocument('${doc.id}')">
+                                ✅ อนุมัติ
+                            </button>
+                            <button class="action-btn btn-revision" onclick="requestDocumentRevision('${doc.id}')">
+                                📝 ขอแก้ไข
+                            </button>
+                            <button class="action-btn btn-reject" onclick="rejectDocument('${doc.id}')">
+                                ❌ ไม่อนุมัติ
+                            </button>
+                        ` : uploadedFile.status === 'verified' ? `
+                            <button class="action-btn btn-revision" onclick="requestDocumentRevision('${doc.id}')">
+                                📝 ขอแก้ไข
+                            </button>
+                        ` : ''}
+                    ` : `
+                        <span style="color: #64748b; font-size: 14px; font-style: italic;">ยังไม่ได้อัปโหลดเอกสาร</span>
+                    `}
+                </div>
+                
+                ${uploadedFile ? `
+                    <div class="comment-system">
+                        <div class="comment-thread" id="comments-${doc.id}">
+                            ${renderComments(uploadedFile.comments || [])}
+                        </div>
+                        
+                        <div class="comment-form">
+                            <textarea class="comment-input" placeholder="เพิ่มความคิดเห็น หรือข้อเสนอแนะ..." 
+                                      id="comment-input-${doc.id}"></textarea>
+                            <div class="comment-form-actions">
+                                <div class="comment-tools">
+                                    <button class="comment-tool" onclick="addCommentTag('${doc.id}', '@user')" title="แท็กผู้ใช้">@</button>
+                                    <button class="comment-tool" onclick="addCommentTag('${doc.id}', '⚠️')" title="ปัญหา">⚠️</button>
+                                    <button class="comment-tool" onclick="addCommentTag('${doc.id}', '✅')" title="ถูกต้อง">✅</button>
+                                    <button class="comment-tool" onclick="addCommentTag('${doc.id}', '📝')" title="แก้ไข">📝</button>
+                                </div>
+                                <button class="action-btn btn-approve" onclick="addEnhancedComment('${doc.id}')">
+                                    💬 เพิ่มความคิดเห็น
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+            
+            return cardDiv;
+        }
+
+        // ===== ENHANCED COMMENT SYSTEM =====
+        function renderComments(comments) {
+            return comments.map(comment => `
+                <div class="comment-item ${comment.role || 'user'}">
+                    <div class="comment-header">
+                        <div class="comment-author">
+                            <div class="author-avatar">${getAuthorInitials(comment.author)}</div>
+                            <span>${comment.author}</span>
+                        </div>
+                        <div class="comment-date">${formatDateTime(comment.timestamp)}</div>
+                    </div>
+                    <div class="comment-text">${comment.text}</div>
+                    <div class="comment-actions">
+                        <span class="comment-action" onclick="replyToComment(${comment.id})">ตอบกลับ</span>
+                        <span class="comment-action" onclick="likeComment(${comment.id})">👍</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addEnhancedComment(docId) {
+            const commentInput = document.getElementById(`comment-input-${docId}`);
+            const commentText = commentInput.value.trim();
+            
+            if (commentText) {
+                const newComment = {
+                    id: Date.now(),
+                    author: currentUser.name,
+                    role: 'reviewer',
+                    text: commentText,
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Add to document comments
+                if (!uploadedDocuments[docId].comments) {
+                    uploadedDocuments[docId].comments = [];
+                }
+                uploadedDocuments[docId].comments.push(newComment);
+                
+                // Re-render comments
+                const commentsContainer = document.getElementById(`comments-${docId}`);
+                commentsContainer.innerHTML = renderComments(uploadedDocuments[docId].comments);
+                
+                // Clear input
+                commentInput.value = '';
+                
+                // Auto-save
+                localStorage.setItem('uploadedFiles', JSON.stringify(uploadedDocuments));
+                
+                showNotification('💬 เพิ่มความคิดเห็นแล้ว', false);
+                
+                // Send notification to user (simulate)
+                setTimeout(() => {
+                    showNotification('📧 ส่งการแจ้งเตือนให้ผู้ขอแล้ว', false);
+                }, 1000);
+            }
+        }
+
+        function addCommentTag(docId, tag) {
+            const commentInput = document.getElementById(`comment-input-${docId}`);
+            commentInput.value += tag + ' ';
+            commentInput.focus();
+        }
+
+        // ===== ENHANCED DOCUMENT ACTIONS =====
+        function approveDocument(docId) {
+            if (uploadedDocuments[docId]) {
+                uploadedDocuments[docId].status = 'verified';
+                uploadedDocuments[docId].reviewedBy = currentUser.name;
+                uploadedDocuments[docId].reviewDate = new Date().toISOString();
+                
+                // Add system comment
+                const systemComment = {
+                    id: Date.now(),
+                    author: `${currentUser.name} (${currentUser.role})`,
+                    role: 'reviewer',
+                    text: '✅ เอกสารได้รับการอนุมัติแล้ว - ตรวจสอบเรียบร้อย',
+                    timestamp: new Date().toISOString()
+                };
+                
+                if (!uploadedDocuments[docId].comments) {
+                    uploadedDocuments[docId].comments = [];
+                }
+                uploadedDocuments[docId].comments.push(systemComment);
+                
+                // Save and re-render
+                localStorage.setItem('uploadedFiles', JSON.stringify(uploadedDocuments));
+                renderEnhancedDocumentGrid();
+                updateReviewStats();
+                
+                showNotification(`✅ อนุมัติเอกสาร: ${uploadedDocuments[docId].name}`, false);
+            }
+        }
+
+        function requestDocumentRevision(docId) {
+            const reason = prompt('กรุณาระบุเหตุผลที่ต้องแก้ไข:');
+            if (reason && uploadedDocuments[docId]) {
+                uploadedDocuments[docId].status = 'issues';
+                uploadedDocuments[docId].reviewedBy = currentUser.name;
+                uploadedDocuments[docId].reviewDate = new Date().toISOString();
+                
+                // Add revision comment
+                const revisionComment = {
+                    id: Date.now(),
+                    author: `${currentUser.name} (${currentUser.role})`,
+                    role: 'reviewer',
+                    text: `📝 ขอแก้ไขเอกสาร: ${reason}`,
+                    timestamp: new Date().toISOString()
+                };
+                
+                if (!uploadedDocuments[docId].comments) {
+                    uploadedDocuments[docId].comments = [];
+                }
+                uploadedDocuments[docId].comments.push(revisionComment);
+                
+                // Save and re-render
+                localStorage.setItem('uploadedFiles', JSON.stringify(uploadedDocuments));
+                renderEnhancedDocumentGrid();
+                updateReviewStats();
+                
+                showNotification(`📝 ขอแก้ไขเอกสาร: ${uploadedDocuments[docId].name}`, false);
+                setTimeout(() => {
+                    showNotification('📧 ส่งการแจ้งเตือนให้ผู้ขอแล้ว', false);
+                }, 1000);
+            }
+        }
+
+        function rejectDocument(docId) {
+            const reason = prompt('กรุณาระบุเหตุผลในการไม่อนุมัติ:');
+            if (reason && uploadedDocuments[docId]) {
+                uploadedDocuments[docId].status = 'rejected';
+                uploadedDocuments[docId].reviewedBy = currentUser.name;
+                uploadedDocuments[docId].reviewDate = new Date().toISOString();
+                
+                // Add rejection comment
+                const rejectionComment = {
+                    id: Date.now(),
+                    author: `${currentUser.name} (${currentUser.role})`,
+                    role: 'reviewer',
+                    text: `❌ ไม่อนุมัติเอกสาร: ${reason}`,
+                    timestamp: new Date().toISOString()
+                };
+                
+                if (!uploadedDocuments[docId].comments) {
+                    uploadedDocuments[docId].comments = [];
+                }
+                uploadedDocuments[docId].comments.push(rejectionComment);
+                
+                // Save and re-render
+                localStorage.setItem('uploadedFiles', JSON.stringify(uploadedDocuments));
+                renderEnhancedDocumentGrid();
+                updateReviewStats();
+                
+                showNotification(`❌ ไม่อนุมัติเอกสาร: ${uploadedDocuments[docId].name}`, true);
+                setTimeout(() => {
+                    showNotification('📧 ส่งการแจ้งเตือนให้ผู้ขอแล้ว', false);
+                }, 1000);
+            }
+        }
+
+        // ===== ENHANCED STATISTICS =====
+        function updateReviewStats() {
+            const documents = Object.values(uploadedDocuments);
+            const verified = documents.filter(doc => doc.status === 'verified').length;
+            const pending = documents.filter(doc => doc.status === 'pending').length;
+            const issues = documents.filter(doc => doc.status === 'issues' || doc.status === 'rejected').length;
+            
+            // Update stats in UI (if elements exist)
+            const verifiedStat = document.querySelector('.stat-icon.verified').parentElement.querySelector('.stat-text');
+            const pendingStat = document.querySelector('.stat-icon.pending').parentElement.querySelector('.stat-text');
+            const issuesStat = document.querySelector('.stat-icon.issues').parentElement.querySelector('.stat-text');
+            
+            if (verifiedStat) verifiedStat.textContent = `${verified} เอกสารผ่าน`;
+            if (pendingStat) pendingStat.textContent = `${pending} รอตรวจสอบ`;
+            if (issuesStat) issuesStat.textContent = `${issues} มีปัญหา`;
+        }
+
+        // ===== ENHANCED APPROVAL MODAL =====
+        function showApprovalModal(action) {
+            currentApprovalAction = action;
+            const modal = document.getElementById('approvalModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const confirmBtn = document.getElementById('confirmActionBtn');
+            const nextAssigneeGroup = document.getElementById('nextAssigneeGroup');
+            const priorityGroup = document.getElementById('priorityGroup');
+            
+            switch (action) {
+                case 'approve':
+                    modalTitle.textContent = '✅ อนุมัติและส่งต่อ';
+                    confirmBtn.textContent = 'อนุมัติและส่งต่อ';
+                    confirmBtn.className = 'action-btn btn-approve';
+                    nextAssigneeGroup.style.display = 'block';
+                    priorityGroup.style.display = 'block';
+                    break;
+                case 'revision':
+                    modalTitle.textContent = '📝 ขอแก้ไขเอกสาร';
+                    confirmBtn.textContent = 'ส่งกลับเพื่อแก้ไข';
+                    confirmBtn.className = 'action-btn btn-revision';
+                    nextAssigneeGroup.style.display = 'none';
+                    priorityGroup.style.display = 'block';
+                    break;
+                case 'reject':
+                    modalTitle.textContent = '❌ ไม่อนุมัติคำขอ';
+                    confirmBtn.textContent = 'ไม่อนุมัติและยกเลิก';
+                    confirmBtn.className = 'action-btn btn-reject';
+                    nextAssigneeGroup.style.display = 'none';
+                    priorityGroup.style.display = 'none';
+                    break;
+            }
+            
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('approvalModal');
+            modal.classList.remove('show');
+            
+            // Clear form
+            document.getElementById('approvalComment').value = '';
+            document.getElementById('nextAssignee').value = '';
+            document.getElementById('priorityLevel').value = 'normal';
+        }
+
+        function confirmAction() {
+            const comment = document.getElementById('approvalComment').value;
+            const nextAssignee = document.getElementById('nextAssignee').value;
+            const priority = document.getElementById('priorityLevel').value;
+            
+            // Validation
+            if (currentApprovalAction === 'approve' && !nextAssignee) {
+                showNotification('⚠️ กรุณาเลือกผู้รับผิดชอบคนถัดไป', true);
+                return;
+            }
+            
+            // Process action
+            switch (currentApprovalAction) {
+                case 'approve':
+                    handleFullApproval(comment, nextAssignee, priority);
+                    break;
+                case 'revision':
+                    handleFullRevision(comment, priority);
+                    break;
+                case 'reject':
+                    handleFullRejection(comment);
+                    break;
+            }
+            
+            closeModal();
+        }
+
+        function handleFullApproval(comment, nextAssignee, priority) {
+            showNotification('✅ อนุมัติเอกสารเรียบร้อยแล้ว ส่งต่อให้ผู้รับผิดชอบคนถัดไป', false);
+            
+            // Update project status
+            currentProject.status = 'forwarded';
+            currentProject.currentStep = nextAssignee;
+            currentProject.priority = priority;
+            
+            // Save to localStorage
+            localStorage.setItem('procurementDraft', JSON.stringify(currentProject));
+            
+            // Simulate notification
+            setTimeout(() => {
+                const assigneeName = nextAssignee === 'procurement' ? 'คุณสมชาย ใจดี' : 'นายอำนาจ ยุติธรรม';
+                showNotification(`📧 ส่งการแจ้งเตือนให้ ${assigneeName} แล้ว`, false);
+            }, 1500);
+            
+            // Update timeline
+            updateApprovalTimeline('approved');
+            
+            console.log('Full approval:', { comment, nextAssignee, priority });
+        }
+
+        function handleFullRevision(comment, priority) {
+            showNotification('📝 ส่งกลับเพื่อแก้ไขแล้ว ผู้ขอจะได้รับการแจ้งเตือน', false);
+            
+            // Update project status
+            currentProject.status = 'revision';
+            currentProject.priority = priority;
+            
+            // Save to localStorage
+            localStorage.setItem('procurementDraft', JSON.stringify(currentProject));
+            
+            // Simulate notification
+            setTimeout(() => {
+                showNotification('📧 ส่งการแจ้งเตือนให้ผู้ขอแล้ว', false);
+            }, 1000);
+            
+            console.log('Revision requested:', { comment, priority });
+        }
+
+        function handleFullRejection(comment) {
+            showNotification('❌ ไม่อนุมัติคำขอ ยกเลิกแล้ว', true);
+            
+            // Update project status
+            currentProject.status = 'rejected';
+            
+            // Save to localStorage
+            localStorage.setItem('procurementDraft', JSON.stringify(currentProject));
+            
+            // Simulate notification
+            setTimeout(() => {
+                showNotification('📧 ส่งการแจ้งเตือนให้ผู้ขอแล้ว', false);
+            }, 1000);
+            
+            // Update timeline
+            updateApprovalTimeline('rejected');
+            
+            console.log('Request rejected:', { comment });
+        }
+
+        function updateApprovalTimeline(status) {
+            const currentStep = document.querySelector('.timeline-step.active');
+            if (currentStep) {
+                currentStep.classList.remove('active');
+                
+                if (status === 'approved') {
+                    currentStep.classList.add('completed');
+                    
+                    // Activate next step
+                    const nextStep = currentStep.nextElementSibling;
+                    if (nextStep && nextStep.classList.contains('timeline-step')) {
+                        nextStep.classList.add('active');
+                    }
+                } else if (status === 'rejected') {
+                    currentStep.classList.add('rejected');
+                }
+                
+                // Update date
+                const dateElement = currentStep.querySelector('.step-date');
+                if (dateElement) {
+                    dateElement.textContent = formatDateTime(new Date().toISOString());
+                }
+            }
+        }
+
+        // ===== REAL-TIME FEATURES =====
+        function setupRealTimeFeatures() {
+            // Simulate real-time updates
+            setInterval(() => {
+                updateReviewStats();
+            }, 30000); // Update every 30 seconds
+            
+            // Auto-save comments
+            document.addEventListener('input', function(e) {
+                if (e.target.classList.contains('comment-input')) {
+                    // Auto-save draft comment
+                    const docId = e.target.id.replace('comment-input-', '');
+                    localStorage.setItem(`comment-draft-${docId}`, e.target.value);
+                }
+            });
+        }
+
+        // ===== UTILITY FUNCTIONS =====
+        function getAuthorInitials(name) {
+            return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('th-TH');
+        }
+
+        function formatDateTime(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('th-TH') + ' ' + 
+                   date.toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'});
+        }
+
+        function viewDocument(docId) {
+            const file = uploadedDocuments[docId];
+            if (file) {
+                showNotification(`👁️ เปิดดูเอกสาร: ${file.name}`, false);
+                // In real implementation, would open file viewer
+            }
+        }
+
+        function downloadDocument(docId) {
+            const file = uploadedDocuments[docId];
+            if (file) {
+                showNotification(`📥 ดาวน์โหลดเอกสาร: ${file.name}`, false);
+                // In real implementation, would trigger download
+            }
+        }
+
+        function showNotification(message, isError = false) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${isError ? 'error' : ''}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 4000);
+        }
+
+        // ===== EVENT LISTENERS =====
+        document.getElementById('approvalModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('approvalModal');
+                if (modal.classList.contains('show')) {
+                    closeModal();
+                }
+            }
+        });
+
+        // Load draft comments on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.querySelectorAll('.comment-input').forEach(input => {
+                    const docId = input.id.replace('comment-input-', '');
+                    const draft = localStorage.getItem(`comment-draft-${docId}`);
+                    if (draft) {
+                        input.value = draft;
+                    }
+                });
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
