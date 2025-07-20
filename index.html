@@ -25,7 +25,6 @@
         }
 
         /* ===== HEADER STYLES ===== */
-        /* Header bar with logo and user info */
         .header {
             background: white;
             border-bottom: 1px solid #e2e8f0;
@@ -39,10 +38,18 @@
         .header-content {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
-        /* Logo section on the left */
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
         .logo-section {
             display: flex;
             align-items: center;
@@ -76,8 +83,83 @@
             margin: 0;
         }
 
-        /* User info section on the right */
+        /* Toggle Switch for Admin Mode */
+        .admin-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            padding: 8px 16px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            margin-right: 16px;
+        }
+
+        .toggle-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background: #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(24px);
+        }
+
+        .admin-mode-indicator {
+            display: none;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+        }
+
+        .admin-mode-indicator.active {
+            display: block;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
         .user-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-info-container {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -113,13 +195,178 @@
             margin: 0;
         }
 
+        /* ===== FLOATING ADMIN TOGGLE BUTTON ===== */
+        .floating-toggle {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 1000;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(100px) scale(0.8);
+            animation: floatIn 0.8s ease-out 0.5s forwards;
+        }
+
+        @keyframes floatIn {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .toggle-button {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .toggle-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            border-radius: 50%;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.4s ease;
+        }
+
+        .toggle-button.admin-mode::before {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .toggle-icon {
+            font-size: 28px;
+            z-index: 1;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-button:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 12px 48px rgba(59, 130, 246, 0.6);
+        }
+
+        .toggle-button.admin-mode:hover {
+            box-shadow: 0 12px 48px rgba(220, 38, 38, 0.6);
+        }
+
+        .toggle-tooltip {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(12px);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .toggle-tooltip::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            right: 20px;
+            border: 8px solid transparent;
+            border-top-color: rgba(30, 41, 59, 0.95);
+        }
+
+        .floating-toggle:hover .toggle-tooltip {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mode-indicator {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            font-weight: 700;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+            border: 2px solid white;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+        }
+
+        .mode-indicator.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .toggle-button.admin-mode .mode-indicator {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
+        }
+
+        /* Ripple Effect */
+        .toggle-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .toggle-button.ripple::after {
+            width: 120px;
+            height: 120px;
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .toggle-button {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .toggle-button:hover {
+            animation-play-state: paused;
+        }
+
         /* ===== MAIN CONTENT STYLES ===== */
-        /* Main content area with padding */
         .main-content {
             padding: 32px 0;
         }
 
-        /* Page header with title and description */
         .page-header {
             margin-bottom: 32px;
         }
@@ -136,7 +383,6 @@
             color: #64748b;
         }
 
-        /* Two-column grid layout */
         .grid {
             display: grid;
             grid-template-columns: 1fr 400px;
@@ -156,7 +402,6 @@
         }
 
         /* ===== CARD COMPONENTS ===== */
-        /* Base card styling with hover effects */
         .card {
             background: white;
             border-radius: 16px;
@@ -199,13 +444,11 @@
         }
 
         /* ===== ACTION BUTTONS ===== */
-        /* Grid layout for action buttons */
         .action-grid {
             display: grid;
             gap: 16px;
         }
 
-        /* Clickable action button with icon and content */
         .action-button {
             display: flex;
             align-items: center;
@@ -253,7 +496,6 @@
         }
 
         /* ===== STATISTICS CARDS ===== */
-        /* Grid for statistics display */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -281,7 +523,6 @@
         }
 
         /* ===== DATA TABLE ===== */
-        /* Scrollable table container */
         .table-container {
             overflow-x: auto;
         }
@@ -311,7 +552,6 @@
             background: #f8fafc;
         }
 
-        /* Request code styling */
         .request-code {
             font-family: monospace;
             font-weight: 600;
@@ -322,7 +562,6 @@
             font-size: 12px;
         }
 
-        /* Method badges with different colors */
         .method-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -337,7 +576,6 @@
         .method-emarket { background: #f3e8ff; color: #7c2d12; }
         .method-select { background: #d1fae5; color: #065f46; }
 
-        /* Status badges with different colors */
         .status-badge {
             display: inline-block;
             padding: 6px 12px;
@@ -366,14 +604,12 @@
         }
 
         /* ===== KNOWLEDGE HUB ===== */
-        /* Grid layout for knowledge items */
         .knowledge-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
         }
 
-        /* Individual knowledge item card */
         .knowledge-item {
             display: flex;
             flex-direction: column;
@@ -412,7 +648,6 @@
         }
 
         /* ===== RESPONSIVE DESIGN ===== */
-        /* Tablet and smaller screens */
         @media (max-width: 1024px) {
             .grid {
                 grid-template-columns: 1fr;
@@ -423,7 +658,6 @@
             }
         }
 
-        /* Mobile screens */
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -442,10 +676,15 @@
                 flex-direction: column;
                 text-align: center;
             }
+
+            .admin-toggle {
+                order: -1;
+                margin-right: 0;
+                margin-bottom: 12px;
+            }
         }
 
         /* ===== ANIMATIONS ===== */
-        /* Fade in animation for cards */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -460,7 +699,6 @@
         .card:nth-child(3) { animation-delay: 0.3s; }
 
         /* ===== NOTIFICATION STYLES ===== */
-        /* Toast notification styling */
         .notification {
             position: fixed;
             top: 20px;
@@ -501,12 +739,22 @@
                         <p>ระบบช่วยเลือกแบบจัดซื้ออัจฉริยะ</p>
                     </div>
                 </div>
-                <!-- User information display -->
-                <div class="user-section">
-                    <div class="user-avatar">จ</div>
-                    <div class="user-info">
-                        <h3>นายจิฑาวัฒน์ ชาญปราณีต</h3>
-                        <p>จนท.วรค.3 สรล.ฝบร.ทภก.</p>
+                
+                <!-- Right side with user info and toggle -->
+                <div class="header-right">
+                    <!-- User section -->
+                    <div class="user-section">
+                        <!-- User information display -->
+                        <div class="user-info-container">
+                            <div class="user-avatar">จ</div>
+                            <div class="user-info">
+                                <h3>นายจิฑาวัฒน์ ชาญปราณีต</h3>
+                                <p>จนท.วรค.3 สรล.ฝบร.ทภก.</p>
+                            </div>
+                        </div>
+                    </div>
+                                 
+                             </div>
                     </div>
                 </div>
             </div>
@@ -715,16 +963,57 @@
         </div>
     </div>
 
-    <!-- Footer section -->
-    <div class="footer">
-        <div class="container">
-            <p>&copy; 2023 Easy Procure. All rights reserved.</p>
+    <!-- ===== FLOATING ADMIN TOGGLE ===== -->
+    <div class="floating-toggle" onclick="toggleAdminMode()">
+        <div class="toggle-button" id="toggleButton">
+            <div class="toggle-icon" id="toggleIcon">👤</div>
+            <div class="mode-indicator" id="modeIndicator">U</div>
+        </div>
+        <div class="toggle-tooltip" id="toggleTooltip">
+            คลิกเพื่อเข้าสู่ Admin Mode
         </div>
     </div>
 
     <script>
+        // ===== FLOATING ADMIN TOGGLE =====
+        let isAdminMode = false;
+
+        function toggleAdminMode() {
+            const button = document.getElementById('toggleButton');
+            const icon = document.getElementById('toggleIcon');
+            const indicator = document.getElementById('modeIndicator');
+            const tooltip = document.getElementById('toggleTooltip');
+            
+            isAdminMode = !isAdminMode;
+            
+            // Add ripple effect
+            button.classList.add('ripple');
+            setTimeout(() => button.classList.remove('ripple'), 600);
+            
+            if (isAdminMode) {
+                button.classList.add('admin-mode');
+                icon.textContent = '🛡️';
+                indicator.textContent = 'A';
+                indicator.classList.add('show');
+                tooltip.textContent = 'คลิกเพื่อกลับสู่ User Mode';
+                
+                showNotification('🛡️ เข้าสู่ Admin Mode - กำลังเปลี่ยนเส้นทาง...');
+                
+                setTimeout(() => {
+                    window.location.href = 'admin_dashboard.html';
+                }, 1000);
+            } else {
+                button.classList.remove('admin-mode');
+                icon.textContent = '👤';
+                indicator.textContent = 'U';
+                indicator.classList.remove('show');
+                tooltip.textContent = 'คลิกเพื่อเข้าสู่ Admin Mode';
+                
+                showNotification('👤 กลับสู่ User Mode');
+            }
+        }
+
         // ===== NAVIGATION FUNCTIONS =====
-        // ฟังก์ชันสร้างคำขอใหม่: ไปหน้าสร้างคำขอ (หน้าที่ 2)
         function createNewRequest() {
             showNotification('กำลังเปิดหน้าสร้างคำขอใหม่... 🚀');
             setTimeout(() => {
@@ -732,56 +1021,46 @@
             }, 500);
         }
 
-        // ฟังก์ชันดูคำขอที่รอดำเนินการ (จำลอง)
         function viewPendingRequests() {
             showNotification('แสดงคำขอของคุณที่รอดำเนินการ ⏳');
         }
 
-        // ฟังก์ชันดูคำขอที่รออนุมัติ (จำลอง)
         function viewApprovalRequests() {
             showNotification('แสดงคำขอของคุณที่รออนุมัติ 📋');
         }
 
         // ===== KNOWLEDGE HUB FUNCTIONS =====
-        // ฟังก์ชันดูระเบียบและกฎหมาย (จำลอง)
         function viewRegulations() {
             showNotification('แสดงระเบียบและกฎหมายที่เกี่ยวข้อง 📋');
         }
 
-        // ฟังก์ชันดูแบบฟอร์ม Template (จำลอง)
         function viewTemplates() {
             showNotification('แสดงแบบฟอร์มและ Template ทั้งหมด 📄');
         }
 
-        // ฟังก์ชันดูตัวอย่าง TOR (จำลอง)
         function viewExamples() {
             showNotification('แสดงตัวอย่าง TOR และเอกสารต่างๆ 📖');
         }
 
-        // ฟังก์ชันดู FAQ (จำลอง)
         function viewFAQ() {
             showNotification('แสดงคำถามที่พบบ่อยและคำตอบ ❓');
         }
 
-        // ฟังก์ชันดูรายชื่อผู้ติดต่อ (จำลอง)
         function viewContacts() {
             showNotification('แสดงรายชื่อผู้ติดต่อและผู้เชี่ยวชาญ 👥');
         }
 
-        // ฟังก์ชันดูวิดีโอสอน (จำลอง)
         function viewVideos() {
             showNotification('แสดงวิดีโอสอนและคลิปแนะนำ 🎥');
         }
 
         // ===== NOTIFICATION SYSTEM =====
-        // ฟังก์ชันแสดงข้อความแจ้งเตือนพร้อม Animation
         function showNotification(message) {
             const notification = document.createElement('div');
             notification.className = 'notification';
             notification.textContent = message;
             document.body.appendChild(notification);
 
-            // ลบ notification หลัง 2.5 วินาทีพร้อม fade out animation
             setTimeout(() => {
                 notification.style.animation = 'slideOut 0.3s ease-in forwards';
                 setTimeout(() => {
@@ -791,11 +1070,15 @@
         }
 
         // ===== PAGE INITIALIZATION =====
-        // เริ่มต้นหน้าเว็บเมื่อโหลดเสร็จ
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Easy Procure Dashboard loaded');
             
-            // เพิ่มการติดตามการคลิกสำหรับ analytics (ถ้าต้องการ)
+            // Show floating toggle with delay for smooth entrance
+            setTimeout(() => {
+                const indicator = document.getElementById('modeIndicator');
+                indicator.classList.add('show');
+            }, 1000);
+            
             const actionButtons = document.querySelectorAll('.action-button');
             actionButtons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -803,7 +1086,6 @@
                 });
             });
             
-            // เพิ่มการติดตามสำหรับ Knowledge Hub items
             const knowledgeItems = document.querySelectorAll('.knowledge-item');
             knowledgeItems.forEach(item => {
                 item.addEventListener('click', function() {
