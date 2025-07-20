@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Procure - ตัวอย่าง TOR</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 16px 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            color: #64748b;
+            margin: 0;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .breadcrumb a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Content Specific Styles */
+        .main-content {
+            padding: 32px 0;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .page-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #059669 0%, #047857 100%); /* Green gradient for TOR examples */
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .page-title p {
+            font-size: 16px;
+            color: #64748b;
+        }
+
+        /* Search and Filter Bar */
+        .filter-section {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+            flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+        }
+
+        .search-input-group,
+        .filter-select-group {
+            flex: 1; /* Allow groups to grow and shrink */
+            min-width: 250px; /* Minimum width before wrapping */
+            position: relative;
+        }
+
+        .search-input,
+        .filter-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #1e293b;
+            background-color: white;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            -webkit-appearance: none; /* Remove default select arrow */
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .search-input:focus,
+        .filter-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+
+        .search-icon,
+        .select-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 20px;
+            pointer-events: none;
+        }
+        .select-icon {
+            font-size: 16px; /* Smaller arrow for select */
+        }
+
+        /* Statistics Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #059669;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        /* Table Styles */
+        .tor-table-container {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow-x: auto; /* Allow horizontal scrolling on small screens */
+        }
+
+        .tor-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+            min-width: 900px; /* Ensure table doesn't get too narrow */
+        }
+
+        .tor-table th,
+        .tor-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .tor-table th {
+            background-color: #f1f5f9;
+            color: #475569;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        .tor-table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .tor-table .category-row td {
+            background-color: #ecfdf5; /* Light green for category row */
+            font-weight: 700;
+            color: #047857;
+            font-size: 16px;
+            padding: 15px;
+            border-bottom: 2px solid #a7f3d0;
+            position: sticky;
+            top: 0; /* Make category headers sticky if table scrolls vertically */
+            z-index: 10;
+        }
+
+        /* Download button styles */
+        .download-btn {
+            display: inline-flex; /* Use flex for icon and text alignment */
+            align-items: center;
+            gap: 6px;
+            background: #059669; /* Green for download */
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            margin-right: 8px;
+            margin-bottom: 4px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            background: #047857;
+        }
+
+        .view-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #3b82f6;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            margin-right: 8px;
+            margin-bottom: 4px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .view-btn:hover {
+            background: #2563eb;
+        }
+
+        /* Category Badge */
+        .category-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .category-maintenance { background: #fef3c7; color: #92400e; }
+        .category-purchase { background: #dbeafe; color: #1e40af; }
+        .category-goods { background: #f3e8ff; color: #7c2d12; }
+        .category-service { background: #d1fae5; color: #065f46; }
+        .category-consulting { background: #fce7f3; color: #be185d; }
+
+        /* Download count badge */
+        .download-count {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #64748b;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        /* No results message */
+        .no-results {
+            text-align: center;
+            color: #64748b;
+            font-size: 18px;
+            padding: 40px;
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 32px;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 16px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #1e293b;
+            font-size: 20px;
+        }
+
+        .modal-close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #64748b;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .modal-close-btn:hover {
+            background: #f1f5f9;
+        }
+
+        .modal-info-section {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .modal-info-section h3 {
+            margin: 0 0 12px 0;
+            color: #1e293b;
+            font-size: 16px;
+        }
+
+        .modal-info-section p {
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .modal-info-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #059669;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #047857;
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .content-preview {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .filter-section {
+                flex-direction: column; /* Stack search and filter on small screens */
+                gap: 12px;
+            }
+            .search-input-group,
+            .filter-select-group {
+                min-width: unset; /* Remove min-width to allow full width */
+                width: 100%;
+            }
+            .tor-table {
+                min-width: 700px; /* Keep a minimum width for table on smaller screens */
+            }
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <div class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">EP</div>
+                    <div class="logo-text">
+                        <h1>Easy Procure</h1>
+                        <p>ระบบช่วยเลือกแบบจัดซื้ออัจฉริยะ</p>
+                    </div>
+                </div>
+                <div class="breadcrumb">
+                    <a href="index.html">Dashboard</a>
+                    <span>→</span>
+                    <span>ตัวอย่าง TOR</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-icon">📖</div>
+                <div class="page-title">
+                    <h1>ตัวอย่าง TOR</h1>
+                    <p>ตัวอย่างการเขียน Terms of Reference (TOR) สำหรับการจัดซื้อจัดจ้างต่างๆ</p>
+                </div>
+            </div>
+
+            <!-- Statistics Section -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalTorCount">5</div>
+                    <div class="stat-label">ตัวอย่าง TOR ทั้งหมด</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalDownloads">1,247</div>
+                    <div class="stat-label">จำนวนดาวน์โหลดทั้งหมด</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="categoriesCount">5</div>
+                    <div class="stat-label">หมวดหมู่</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="recentlyAdded">2</div>
+                    <div class="stat-label">เพิ่มใหม่เดือนนี้</div>
+                </div>
+            </div>
+
+            <!-- Search and Filter Section -->
+            <div class="filter-section">
+                <div class="search-input-group">
+                    <input type="text" id="torSearchInput" class="search-input" placeholder="ค้นหาตัวอย่าง TOR..." onkeyup="filterTORExamples()">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <div class="filter-select-group">
+                    <select id="torCategoryFilter" class="filter-select" onchange="filterTORExamples()">
+                        <option value="">-- หมวดหมู่ทั้งหมด --</option>
+                        <option value="maintenance">งานซ่อมบำรุง</option>
+                        <option value="purchase">งานซื้อติดตั้ง</option>
+                        <option value="goods">งานซื้อสินค้า</option>
+                        <option value="service">งานจ้างเหมาบริการ</option>
+                        <option value="consulting">งานจ้างที่ปรึกษา</option>
+                    </select>
+                    <span class="select-icon">▼</span>
+                </div>
+            </div>
+
+            <!-- TOR Examples Table -->
+            <div id="torListContainer" class="tor-table-container">
+                <table class="tor-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 40%;">ชื่อ TOR</th>
+                            <th style="width: 15%;">หมวดหมู่</th>
+                            <th style="width: 12%;">วันที่อัปโหลด</th>
+                            <th style="width: 10%;">ผู้อัปโหลด</th>
+                            <th style="width: 10%;">ดาวน์โหลด</th>
+                            <th style="width: 13%;">การดำเนินการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="torTableBody">
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOR Detail Modal -->
+    <div id="torDetailModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTorTitle"></h2>
+                <button class="modal-close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-info-section">
+                <h3>📋 ข้อมูล TOR</h3>
+                <p><strong>หมวดหมู่:</strong> <span id="modalTorCategory"></span></p>
+                <p><strong>วันที่อัปโหลด:</strong> <span id="modalTorDate"></span></p>
+                <p><strong>ผู้อัปโหลด:</strong> <span id="modalTorUploader"></span></p>
+                <p><strong>จำนวนการดาวน์โหลด:</strong> <span id="modalTorDownloads"></span> ครั้ง</p>
+            </div>
+            <div class="modal-info-section">
+                <h3>📝 คำอธิบาย</h3>
+                <p id="modalTorDescription"></p>
+            </div>
+            <div class="modal-info-section">
+                <h3>👁️ ตัวอย่างเนื้อหา</h3>
+                <div class="content-preview" id="modalTorPreview"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="modalDownloadDocx">
+                    📄 ดาวน์โหลด DOCX
+                </button>
+                <button class="btn btn-primary" id="modalDownloadPdf">
+                    📑 ดาวน์โหลด PDF
+                </button>
+                <button class="btn btn-secondary" onclick="closeModal()">ปิด</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== DATA CONFIGURATION =====
+        // ข้อมูล TOR ตัวอย่าง - ดึงข้อมูลจาก folder tor_examples/
+        // โครงสร้าง folder: tor_examples/[category]/[filename].docx และ [filename].pdf
+        // IMPORTANT: ให้แน่ใจว่าไฟล์ทั้งหมดอยู่ใน folder tor_examples/ และ path ถูกต้อง!
+        const allTORExamples = {
+            'งานซ่อมบำรุง': [
+                {
+                    id: 'tor_maintenance_001',
+                    title: 'ข้อกำหนดและรายละเอียดงานจ้างซ่อม บำรุงรักษาระบบสายพานลำเลียงกระเป๋าสัมภาระ',
+                    category: 'maintenance',
+                    categoryText: 'งานซ่อมบำรุง',
+                    description: 'TOR สำหรับการจ้างซ่อมบำรุงรักษาระบบสายพานลำเลียงกระเป๋าสัมภาระ ครอบคลุมการตรวจสอบ ซ่อมแซม และบำรุงรักษาระบบทั้งหมด',
+                    docxFile: 'tor_examples/maintenance/งานซ่อมบำรุงระบบสายพานลำเลียง.docx',
+                    pdfFile: 'tor_examples/maintenance/งานซ่อมบำรุงระบบสายพานลำเลียง.pdf',
+                    uploadDate: '15/11/2567',
+                    uploader: 'Admin',
+                    downloads: 342,
+                    preview: `1. วัตถุประสงค์
+   เพื่อจ้างเหมาบริการซ่อมบำรุงรักษาระบบสายพานลำเลียงกระเป๋าสัมภาระ
+
+2. ขอบเขตงาน
+   2.1 การตรวจสอบระบบสายพานลำเลียง
+   2.2 การซ่อมแซมอุปกรณ์ที่ชำรุด
+   2.3 การเปลี่ยนชิ้นส่วนที่สึกหรอ
+
+3. คุณสมบัติของผู้รับจ้าง
+   3.1 มีใบอนุญาตประกอบกิจการ
+   3.2 มีประสบการณ์ไม่น้อยกว่า 3 ปี`
+                }
+            ],
+            'งานซื้อติดตั้ง': [
+                {
+                    id: 'tor_purchase_001',
+                    title: 'ข้อกำหนดและรายละเอียดงานจ้างซื้อติดตั้งจอแสดงผลข้อมูลเที่ยวบิน',
+                    category: 'purchase',
+                    categoryText: 'งานซื้อติดตั้ง',
+                    description: 'TOR สำหรับการจัดซื้อและติดตั้งจอแสดงผลข้อมูลเที่ยวบิน รวมถึงระบบซอฟต์แวร์และการเชื่อมต่อกับฐานข้อมูล',
+                    docxFile: 'tor_examples/purchase/งานซื้อติดตั้งจอแสดงผลเที่ยวบิน.docx',
+                    pdfFile: 'tor_examples/purchase/งานซื้อติดตั้งจอแสดงผลเที่ยวบิน.pdf',
+                    uploadDate: '22/10/2567',
+                    uploader: 'Admin',
+                    downloads: 156,
+                    preview: `1. วัตถุประสงค์
+   เพื่อจัดซื้อและติดตั้งจอแสดงผลข้อมูลเที่ยวบิน
+
+2. รายการพัสดุ
+   2.1 จอ LED ขนาด 55 นิ้ว จำนวน 10 หน่วย
+   2.2 ระบบควบคุมและซอฟต์แวร์
+   2.3 อุปกรณ์ติดตั้งและสายเคเบิล
+
+3. คุณสมบัติจอแสดงผล
+   3.1 ความละเอียด Full HD 1920x1080
+   3.2 ความสว่าง ไม่น้อยกว่า 500 cd/m²`
+                }
+            ],
+            'งานซื้อสินค้า': [
+                {
+                    id: 'tor_goods_001',
+                    title: 'ข้อกำหนดและรายละเอียดงานซื้อน้ำดื่ม',
+                    category: 'goods',
+                    categoryText: 'งานซื้อสินค้า',
+                    description: 'TOR สำหรับการจัดซื้อน้ำดื่มสำหรับสำนักงาน กำหนดคุณภาพ มาตรฐาน และปริมาณที่ต้องการ',
+                    docxFile: 'tor_examples/goods/งานซื้อน้ำดื่ม.docx',
+                    pdfFile: 'tor_examples/goods/งานซื้อน้ำดื่ม.pdf',
+                    uploadDate: '08/11/2567',
+                    uploader: 'Admin',
+                    downloads: 489,
+                    preview: `1. วัตถุประสงค์
+   เพื่อจัดซื้อน้ำดื่มสำหรับบุคลากรและผู้มาติดต่อราชการ
+
+2. รายการและปริมาณ
+   2.1 น้ำดื่มบรรจุขวด ขนาด 600 มล.
+   2.2 น้ำดื่มบรรจุแกลลอน ขนาด 20 ลิตร
+
+3. คุณสมบัติน้ำดื่ม
+   3.1 ได้รับมาตรฐาน อย.
+   3.2 วันหมดอายุไม่น้อยกว่า 6 เดือน`
+                }
+            ],
+            'งานจ้างเหมาบริการ': [
+                {
+                    id: 'tor_service_001',
+                    title: 'ข้อกำหนดและรายละเอียดงานจ้างเหมาบริการผู้โดยสาร',
+                    category: 'service',
+                    categoryText: 'งานจ้างเหมาบริการ',
+                    description: 'TOR สำหรับการจ้างเหมาบริการดูแลและอำนวยความสะดวกแก่ผู้โดยสาร ณ อาคารสถานีขนส่ง',
+                    docxFile: 'tor_examples/service/งานจ้างเหมาบริการผู้โดยสาร.docx',
+                    pdfFile: 'tor_examples/service/งานจ้างเหมาบริการผู้โดยสาร.pdf',
+                    uploadDate: '01/12/2567',
+                    uploader: 'Admin',
+                    downloads: 223,
+                    preview: `1. วัตถุประสงค์
+   เพื่อจ้างเหมาบริการดูแลและอำนวยความสะดวกแก่ผู้โดยสาร
+
+2. ขอบเขตการให้บริการ
+   2.1 ให้ข้อมูลและแนะนำแก่ผู้โดยสาร
+   2.2 ช่วยเหลือผู้โดยสารที่มีความต้องการพิเศษ
+   2.3 รักษาความสะอาดและความเป็นระเบียบ
+
+3. จำนวนบุคลากร
+   3.1 พนักงานต้อนรับ 4 คน
+   3.2 พนักงานรักษาความปลอดภัย 2 คน`
+                }
+            ],
+            'งานจ้างที่ปรึกษา': [
+                {
+                    id: 'tor_consulting_001',
+                    title: 'ข้อกำหนดและรายละเอียดงานจ้างที่ปรึกษาโครงการปรับปรุงระบบฯ',
+                    category: 'consulting',
+                    categoryText: 'งานจ้างที่ปรึกษา',
+                    description: 'TOR สำหรับการจ้างที่ปรึกษาศึกษาและออกแบบระบบปรับปรุงโครงสร้างพื้นฐานด้านเทคโนโลยีสารสนเทศ',
+                    docxFile: 'tor_examples/consulting/งานจ้างที่ปรึกษาโครงการปรับปรุงระบบ.docx',
+                    pdfFile: 'tor_examples/consulting/งานจ้างที่ปรึกษาโครงการปรับปรุงระบบ.pdf',
+                    uploadDate: '28/11/2567',
+                    uploader: 'Admin',
+                    downloads: 87,
+                    preview: `1. วัตถุประสงค์
+   เพื่อจ้างที่ปรึกษาศึกษาและออกแบบโครงการปรับปรุงระบบ IT
+
+2. ขอบเขตงานที่ปรึกษา
+   2.1 ศึกษาระบบปัจจุบันและวิเคราะห์ปัญหา
+   2.2 ออกแบบระบบใหม่และแผนการดำเนินงาน
+   2.3 จัดทำรายงานความเป็นไปได้
+
+3. คุณสมบัติที่ปรึกษา
+   3.1 ปริญญาโทด้านเทคโนโลยีสารสนเทศ
+   3.2 ประสบการณ์ไม่น้อยกว่า 5 ปี`
+                }
+            ]
+        };
+
+        // แปลงข้อมูลจากโครงสร้างแบบ object เป็น array เหมือน document_templates_list.html
+        let torExamplesData = [];
+        Object.keys(allTORExamples).forEach(category => {
+            torExamplesData = torExamplesData.concat(allTORExamples[category]);
+        });
+
+        // ===== GLOBAL VARIABLES =====
+        let filteredTorData = [...torExamplesData]; // เก็บข้อมูลที่ผ่านการกรอง
+
+        // ===== PAGE INITIALIZATION =====
+        /**
+         * ฟังก์ชันเริ่มต้นหน้าเว็บ - โหลดข้อมูลและแสดงผล
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTORTable(torExamplesData); // แสดงข้อมูลทั้งหมดเมื่อเริ่มต้น
+            updateStatistics(); // อัปเดตสถิติ
+        });
+
+        // ===== RENDER FUNCTIONS =====
+        /**
+         * ฟังก์ชันแสดงข้อมูล TOR ในตาราง
+         * @param {Array} dataToRender - ข้อมูล TOR ที่จะแสดง
+         */
+        function renderTORTable(dataToRender) {
+            const tableBody = document.getElementById('torTableBody');
+            tableBody.innerHTML = ''; // เคลียร์ข้อมูลเก่า
+
+            // ตรวจสอบว่ามีข้อมูลหรือไม่
+            if (dataToRender.length === 0) {
+                showNoResultsMessage();
+                return;
+            }
+
+            // จัดกลุ่มข้อมูลตามหมวดหมู่
+            const groupedData = groupDataByCategory(dataToRender);
+
+            // สร้างแถวในตารางสำหรับแต่ละหมวดหมู่
+            Object.keys(groupedData).forEach(category => {
+                // สร้างแถวหัวข้อหมวดหมู่
+                const categoryRow = tableBody.insertRow();
+                categoryRow.className = 'category-row';
+                categoryRow.innerHTML = `<td colspan="6">${getCategoryDisplayName(category)}</td>`;
+
+                // สร้างแถวข้อมูลในหมวดหมู่นั้น
+                groupedData[category].forEach(tor => {
+                    const row = tableBody.insertRow();
+                    row.innerHTML = `
+                        <td>${tor.title}</td>
+                        <td><span class="category-badge category-${tor.category}">${tor.categoryText}</span></td>
+                        <td>${tor.uploadDate}</td>
+                        <td>${tor.uploader}</td>
+                        <td>${tor.downloads} <span class="download-count">ครั้ง</span></td>
+                        <td>
+                            <button class="view-btn" onclick="viewTORDetail('${tor.id}')">
+                                👁️ ดูรายละเอียด
+                            </button>
+                            <button class="download-btn" onclick="downloadFile('${tor.docxFile}', '${tor.title}', 'docx', '${tor.id}')">
+                                📄 DOCX
+                            </button>
+                            <button class="download-btn" onclick="downloadFile('${tor.pdfFile}', '${tor.title}', 'pdf', '${tor.id}')">
+                                📑 PDF
+                            </button>
+                        </td>
+                    `;
+                });
+            });
+
+            hideNoResultsMessage();
+        }
+
+        /**
+         * ฟังก์ชันจัดกลุ่มข้อมูลตามหมวดหมู่
+         * @param {Array} data - ข้อมูลที่จะจัดกลุ่ม
+         * @returns {Object} ข้อมูลที่จัดกลุ่มแล้ว
+         */
+        function groupDataByCategory(data) {
+            return data.reduce((groups, tor) => {
+                const category = tor.category;
+                if (!groups[category]) {
+                    groups[category] = [];
+                }
+                groups[category].push(tor);
+                return groups;
+            }, {});
+        }
+
+        /**
+         * ฟังก์ชันแปลงชื่อหมวดหมู่เป็นภาษาไทย
+         * @param {string} category - รหัสหมวดหมู่
+         * @returns {string} ชื่อหมวดหมู่ภาษาไทย
+         */
+        function getCategoryDisplayName(category) {
+            const categoryNames = {
+                'maintenance': '🔧 งานซ่อมบำรุง',
+                'purchase': '🛒 งานซื้อติดตั้ง',
+                'goods': '📦 งานซื้อสินค้า',
+                'service': '🤝 งานจ้างเหมาบริการ',
+                'consulting': '💼 งานจ้างที่ปรึกษา'
+            };
+            return categoryNames[category] || category;
+        }
+
+        // ===== FILTER FUNCTIONS =====
+        /**
+         * ฟังก์ชันกรองข้อมูล TOR ตามเงื่อนไขต่างๆ
+         */
+        function filterTORExamples() {
+            const searchTerm = document.getElementById('torSearchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('torCategoryFilter').value;
+
+            // กรองข้อมูลตามเงื่อนไข
+            filteredTorData = torExamplesData.filter(tor => {
+                const matchesSearch = tor.title.toLowerCase().includes(searchTerm) ||
+                                      tor.description.toLowerCase().includes(searchTerm) ||
+                                      tor.categoryText.toLowerCase().includes(searchTerm);
+                const matchesCategory = categoryFilter === '' || tor.category === categoryFilter;
+
+                return matchesSearch && matchesCategory;
+            });
+
+            renderTORTable(filteredTorData); // แสดงข้อมูลที่กรองแล้ว
+            updateStatistics(); // อัปเดตสถิติ
+        }
+
+        // ===== STATISTICS FUNCTIONS =====
+        /**
+         * ฟังก์ชันอัปเดตสถิติต่างๆ
+         */
+        function updateStatistics() {
+            const totalTor = filteredTorData.length;
+            const totalDownloads = filteredTorData.reduce((sum, tor) => sum + tor.downloads, 0);
+            const categories = [...new Set(filteredTorData.map(tor => tor.category))].length;
+            
+            // คำนวณจำนวนที่เพิ่มใหม่เดือนนี้ (สมมติตัวอย่าง)
+            const currentMonth = new Date().getMonth() + 1;
+            const recentlyAdded = filteredTorData.filter(tor => {
+                const torMonth = parseInt(tor.uploadDate.split('/')[1]);
+                return torMonth === currentMonth;
+            }).length;
+
+            // อัปเดตค่าในหน้าเว็บ
+            document.getElementById('totalTorCount').textContent = totalTor;
+            document.getElementById('totalDownloads').textContent = totalDownloads.toLocaleString();
+            document.getElementById('categoriesCount').textContent = categories;
+            document.getElementById('recentlyAdded').textContent = recentlyAdded;
+        }
+
+        // ===== MODAL FUNCTIONS =====
+        /**
+         * ฟังก์ชันแสดงรายละเอียด TOR ใน Modal
+         * @param {string} torId - รหัส TOR ที่จะแสดง
+         */
+        function viewTORDetail(torId) {
+            const tor = torExamplesData.find(t => t.id === torId);
+            if (!tor) return;
+
+            // กรอกข้อมูลใน Modal
+            document.getElementById('modalTorTitle').textContent = tor.title;
+            document.getElementById('modalTorCategory').textContent = tor.categoryText;
+            document.getElementById('modalTorDate').textContent = tor.uploadDate;
+            document.getElementById('modalTorUploader').textContent = tor.uploader;
+            document.getElementById('modalTorDownloads').textContent = tor.downloads;
+            document.getElementById('modalTorDescription').textContent = tor.description;
+            document.getElementById('modalTorPreview').textContent = tor.preview;
+
+            // กำหนดฟังก์ชันดาวน์โหลดสำหรับปุ่มใน Modal
+            document.getElementById('modalDownloadDocx').onclick = () => downloadFile(tor.docxFile, tor.title, 'docx', tor.id);
+            document.getElementById('modalDownloadPdf').onclick = () => downloadFile(tor.pdfFile, tor.title, 'pdf', tor.id);
+
+            // แสดง Modal
+            showModal();
+        }
+
+        /**
+         * ฟังก์ชันแสดง Modal
+         */
+        function showModal() {
+            const modal = document.getElementById('torDetailModal');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+        }
+
+        /**
+         * ฟังก์ชันปิด Modal
+         */
+        function closeModal() {
+            const modal = document.getElementById('torDetailModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        // ===== DOWNLOAD FUNCTIONS =====
+        /**
+         * ฟังก์ชันดาวน์โหลดไฟล์
+         * @param {string} filePath - ที่อยู่ไฟล์
+         * @param {string} fileName - ชื่อไฟล์
+         * @param {string} fileType - ประเภทไฟล์ (docx/pdf)
+         * @param {string} torId - รหัส TOR สำหรับอัปเดตจำนวนดาวน์โหลด
+         */
+        function downloadFile(filePath, fileName, fileType, torId) {
+            // สร้างลิงก์ดาวน์โหลด
+            const link = document.createElement('a');
+            link.href = filePath;
+            link.download = `${fileName}.${fileType}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // อัปเดตจำนวนการดาวน์โหลด
+            updateDownloadCount(torId);
+
+            // แสดงข้อความแจ้งเตือน
+            const fileTypeText = fileType.toUpperCase();
+            showNotification(`⬇️ กำลังดาวน์โหลด ${fileTypeText}: ${fileName}`);
+        }
+
+        /**
+         * ฟังก์ชันอัปเดตจำนวนการดาวน์โหลด
+         * @param {string} torId - รหัส TOR
+         */
+        function updateDownloadCount(torId) {
+            const torIndex = torExamplesData.findIndex(tor => tor.id === torId);
+            if (torIndex !== -1) {
+                torExamplesData[torIndex].downloads += 1;
+                
+                // อัปเดตตารางและสถิติ
+                filterTORExamples(); // รีเฟรชการแสดงผล
+            }
+        }
+
+        // ===== UTILITY FUNCTIONS =====
+        /**
+         * ฟังก์ชันแสดงข้อความเมื่อไม่มีผลลัพธ์
+         */
+        function showNoResultsMessage() {
+            const container = document.getElementById('torListContainer');
+            container.innerHTML = `
+                <div class="no-results">
+                    <h3>😔 ไม่พบตัวอย่าง TOR</h3>
+                    <p>ไม่พบตัวอย่าง TOR ที่ตรงกับคำค้นหาของคุณ กรุณาลองใช้คำค้นหาอื่น</p>
+                </div>
+            `;
+        }
+
+        /**
+         * ฟังก์ชันซ่อนข้อความเมื่อไม่มีผลลัพธ์
+         */
+        function hideNoResultsMessage() {
+            const container = document.getElementById('torListContainer');
+            // ตรวจสอบว่ามีข้อความ no-results หรือไม่
+            if (container.querySelector('.no-results')) {
+                // กลับไปแสดงตารางปกติ
+                container.innerHTML = `
+                    <table class="tor-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%;">ชื่อ TOR</th>
+                                <th style="width: 15%;">หมวดหมู่</th>
+                                <th style="width: 12%;">วันที่อัปโหลด</th>
+                                <th style="width: 10%;">ผู้อัปโหลด</th>
+                                <th style="width: 10%;">ดาวน์โหลด</th>
+                                <th style="width: 13%;">การดำเนินการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="torTableBody">
+                        </tbody>
+                    </table>
+                `;
+            }
+        }
+
+        /**
+         * ฟังก์ชันแสดงข้อความแจ้งเตือน
+         * @param {string} message - ข้อความที่จะแสดง
+         */
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #059669;
+                color: white;
+                padding: 16px 24px;
+                border-radius: 12px;
+                font-size: 14px;
+                font-weight: 600;
+                z-index: 1001;
+                box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+                animation: slideIn 0.3s ease-out;
+            `;
+
+            // เพิ่ม CSS animation ถ้ายังไม่มี
+            if (!document.querySelector('#notificationStyle')) {
+                const style = document.createElement('style');
+                style.id = 'notificationStyle';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // ลบ notification หลัง 3 วินาที
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.3s ease-out reverse';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // ===== EVENT LISTENERS =====
+        /**
+         * ปิด Modal เมื่อคลิกนอกพื้นที่เนื้อหา
+         */
+        document.getElementById('torDetailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        /**
+         * ปิด Modal เมื่อกดปุ่ม Escape
+         */
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('torDetailModal');
+                if (modal.classList.contains('show')) {
+                    closeModal();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
