@@ -195,7 +195,159 @@
             margin: 0;
         }
 
-        /* ===== FLOATING ADMIN TOGGLE BUTTON ===== */
+        /* ===== UPDATE NOTIFICATION POPUP ===== */
+        .update-notification-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .update-notification-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .update-notification-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            transform: translateY(30px) scale(0.95);
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            border: 1px solid #e2e8f0;
+        }
+
+        .update-notification-overlay.show .update-notification-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .update-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            margin: 0 auto 24px;
+            animation: bounce 1s ease-out;
+        }
+
+        @keyframes bounce {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .update-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 16px;
+        }
+
+        .update-description {
+            font-size: 16px;
+            color: #64748b;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .update-list {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .update-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .update-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .update-item-icon {
+            color: #10b981;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .update-version {
+            display: inline-block;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .update-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .update-btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .update-btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .update-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .update-btn-secondary {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .update-btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        /* ===== FLOATING ADMIN TOGGLE ===== */
         .floating-toggle {
             position: fixed;
             bottom: 32px;
@@ -682,6 +834,14 @@
                 margin-right: 0;
                 margin-bottom: 12px;
             }
+
+            .update-notification-modal {
+                padding: 24px;
+            }
+
+            .update-buttons {
+                flex-direction: column;
+            }
         }
 
         /* ===== ANIMATIONS ===== */
@@ -753,10 +913,49 @@
                             </div>
                         </div>
                     </div>
-                                 
-                             </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== UPDATE NOTIFICATION POPUP ===== -->
+    <div class="update-notification-overlay" id="updateNotificationPopup">
+        <div class="update-notification-modal">
+            <div class="update-icon">🎉</div>
+            <div class="update-title">Template ใหม่พร้อมแล้ว!</div>
+            <div class="update-description">
+                มี Template และเอกสารใหม่ที่อัปเดตแล้ว เพื่อความถูกต้องและประสิทธิภาพในการทำงาน
+            </div>
+            <div class="update-list">
+                <div class="update-item">
+                    <div class="update-item-icon">✨</div>
+                    <div>
+                        รายงานขอความเห็นชอบ (PR) เฉพาะเจาะจง
+                        <span class="update-version">v2024.2</span>
                     </div>
                 </div>
+                <div class="update-item">
+                    <div class="update-item-icon">✨</div>
+                    <div>
+                        รายละเอียดคุณลักษณะเฉพาะ (TOR)
+                        <span class="update-version">v2024.2</span>
+                    </div>
+                </div>
+                <div class="update-item">
+                    <div class="update-item-icon">✨</div>
+                    <div>
+                        แบบฟอร์มสำรวจราคาในท้องตลาด
+                        <span class="update-version">v2024.2</span>
+                    </div>
+                </div>
+            </div>
+            <div class="update-buttons">
+                <button class="update-btn update-btn-primary" onclick="viewTemplates()">
+                    📄 ดู Template ใหม่
+                </button>
+                <button class="update-btn update-btn-secondary" onclick="closeUpdateNotification()">
+                    ปิด
+                </button>
             </div>
         </div>
     </div>
@@ -975,6 +1174,47 @@
     </div>
 
     <script>
+        // ===== TEMPLATE VERSION MANAGEMENT =====
+        const templateVersions = {
+            'PR_Form_Specific.docx': { version: '2024.2', lastUpdate: '22/07/2568' },
+            'TOR_Specific_2024.docx': { version: '2024.2', lastUpdate: '22/07/2568' },
+            'Market_Survey_Form.xlsx': { version: '2024.2', lastUpdate: '22/07/2568' },
+            'PR_Form_General.docx': { version: '2024.1', lastUpdate: '15/07/2568' },
+            'TOR_General_2024.docx': { version: '2024.1', lastUpdate: '15/07/2568' }
+        };
+
+        // ===== UPDATE NOTIFICATION SYSTEM =====
+        function checkForUpdates() {
+            const lastChecked = localStorage.getItem('lastUpdateCheck');
+            const currentVersion = '2024.2'; // เวอร์ชันปัจจุบันของระบบ
+            const lastVersion = localStorage.getItem('lastKnownVersion');
+            
+            // ถ้าไม่เคยเช็ค หรือมีเวอร์ชันใหม่
+            if (!lastChecked || lastVersion !== currentVersion) {
+                showUpdateNotification();
+                localStorage.setItem('lastUpdateCheck', new Date().toISOString());
+                localStorage.setItem('lastKnownVersion', currentVersion);
+            }
+        }
+
+        function showUpdateNotification() {
+            const popup = document.getElementById('updateNotificationPopup');
+            popup.classList.add('show');
+        }
+
+        function closeUpdateNotification() {
+            const popup = document.getElementById('updateNotificationPopup');
+            popup.classList.remove('show');
+        }
+
+        function viewTemplates() {
+            showNotification('🔄 กำลังไปยังหน้า Template ใหม่...');
+            setTimeout(() => {
+                window.location.href = 'document_templates_list.html';
+            }, 1000);
+            closeUpdateNotification();
+        }
+
         // ===== FLOATING ADMIN TOGGLE =====
         let isAdminMode = false;
 
@@ -1034,14 +1274,6 @@
             showNotification('แสดงระเบียบและกฎหมายที่เกี่ยวข้อง 📋');
         }
 
-        function viewTemplates() {
-            showNotification('แสดงแบบฟอร์มและ Template ทั้งหมด 📄');
-        }
-
-        function viewExamples() {
-            showNotification('แสดงตัวอย่าง TOR และเอกสารต่างๆ 📖');
-        }
-
         function viewFAQ() {
             showNotification('แสดงคำถามที่พบบ่อยและคำตอบ ❓');
         }
@@ -1073,6 +1305,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Easy Procure Dashboard loaded');
             
+            // Check for updates after page loads
+            setTimeout(checkForUpdates, 2000);
+            
             // Show floating toggle with delay for smooth entrance
             setTimeout(() => {
                 const indicator = document.getElementById('modeIndicator');
@@ -1091,6 +1326,14 @@
                 item.addEventListener('click', function() {
                     console.log('Knowledge item clicked:', this.querySelector('.knowledge-title').textContent);
                 });
+            });
+
+            // Close popup when clicking outside
+            const popup = document.getElementById('updateNotificationPopup');
+            popup.addEventListener('click', function(e) {
+                if (e.target === popup) {
+                    closeUpdateNotification();
+                }
             });
         });
     </script>
